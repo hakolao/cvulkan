@@ -31,7 +31,9 @@ INCL = -I ./include \
 
 FLAGS = -Wall -Wextra -Werror -O3
 SOURCES = main.c \
-			app.c
+			app.c \
+			window.c \
+			error.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

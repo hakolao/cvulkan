@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/07 17:58:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/07 20:26:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
+
+# define ENABLE_VALIDATION_LAYERS 1
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -36,12 +38,19 @@ typedef struct		s_cvulkan {
 	bool			frame_buffer_resized;
 	SDL_Window		*window;
 	t_window_info	window_info;
+	VkInstance		vk_instance;
+	uint32_t		vk_enabled_extension_count;
+	uint32_t		vk_enabled_layer_count;
+	char*			vk_extension_names[64];
+	char*			vk_enabled_layers[64];
 }					t_cvulkan;
 
 /*
 ** Error checking
 */
 void				error_check(int test, const char *message);
+void				populate_debug_messenger_create_info(
+					VkDebugUtilsMessengerCreateInfoEXT *create_info);
 
 /*
 ** App
@@ -52,5 +61,14 @@ void				app_run(t_cvulkan *app);
 ** Window
 */
 void				window_init(t_cvulkan *app);
+
+/*
+** Vulkan instance
+*/
+void				vulkan_create_instance(t_cvulkan *app);
+void				populate_create_info(
+					t_cvulkan *app, VkInstanceCreateInfo *create_info,
+					VkApplicationInfo *app_info,
+					VkDebugUtilsMessengerCreateInfoEXT *debug_create_info);
 
 #endif

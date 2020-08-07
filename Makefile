@@ -33,7 +33,9 @@ FLAGS = -Wall -Wextra -Werror -O3
 SOURCES = main.c \
 			app.c \
 			window.c \
-			error.c
+			debug.c \
+			vulkan_instance.c \
+			vulkan_instance_info.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
@@ -66,5 +68,7 @@ fclean: clean
 	@/bin/rm -f $(NAME)
 
 re: fclean all
+
+norm: norminette $(DIR_SRC) ./include
 
 .PHONY: all, $(DIR_OBJ), clean, fclean

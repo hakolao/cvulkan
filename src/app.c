@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/07 17:58:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/07 19:05:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,16 @@ static void		main_loop(t_cvulkan *app) {
 	// vkDeviceWaitIdle(device);
 }
 
+void			vulkan_init(t_cvulkan *app)
+{
+	vulkan_create_instance(app);
+}
+
 void			app_run(t_cvulkan *app)
 {
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	window_init(app);
-	// vulkan_init();
+	vulkan_init(app);
 	main_loop(app);
 	// cleanup()
 }

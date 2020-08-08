@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 18:04:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/07 20:26:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/08 17:28:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static void			get_required_extensions(t_cvulkan *app) {
 	if (ENABLE_VALIDATION_LAYERS) {
 		app->vk_extension_names[app->vk_enabled_extension_count] =
 			VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
+		app->vk_enabled_extension_count++;
 	}
 }
 

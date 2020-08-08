@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 20:26:04 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/07 20:26:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/08 17:28:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void				populate_create_info(
 		create_info->enabledLayerCount = app->vk_enabled_layer_count;
 		create_info->ppEnabledLayerNames = (const char**)app->vk_enabled_layers;
 		populate_debug_messenger_create_info(debug_create_info);
-		create_info->pNext =
-			(VkDebugUtilsMessengerCreateInfoEXT*)debug_create_info;
+		create_info->pNext = debug_create_info;
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:35:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/07 19:46:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/08 17:30:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,38 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL	debug_callback(
 	return (VK_FALSE);
 }
 
+static VkResult 						create_debug_utils_messenger_ext(
+	VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *p_create_info,
+	const VkAllocationCallbacks *p_allocator,
+	VkDebugUtilsMessengerEXT *p_debug_messenger) {
+	PFN_vkCreateDebugUtilsMessengerEXT func =
+		(PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance,
+		"vkCreateDebugUtilsMessengerEXT");
+	if (func != NULL) {
+		return func(instance,
+			p_create_info, p_allocator, p_debug_messenger);
+	} else {
+		return VK_ERROR_EXTENSION_NOT_PRESENT;
+	}
+}
+
+void									destroy_debug_utils_messenger_ext(
+	VkInstance instance, VkDebugUtilsMessengerEXT p_debug_messenger,
+	const VkAllocationCallbacks *p_allocator) {
+	PFN_vkDestroyDebugUtilsMessengerEXT func =
+		(PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+		instance, "vkDestroyDebugUtilsMessengerEXT");
+	if (func != NULL) {
+		func(instance, p_debug_messenger, p_allocator);
+	}
+}
+
 void									error_check(int test,
 										const char *message)
 {
 	if (test)
 	{
-		ft_printf(message);
+		ft_printf("%s\n", message);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -51,4 +77,16 @@ void									populate_debug_messenger_create_info(
 	create_info->flags = 0;
 	create_info->pNext = NULL;
 	create_info->pUserData = NULL;
+}
+
+void									vulkan_setup_debug_messenger(t_cvulkan
+										*app)
+{
+	VkDebugUtilsMessengerCreateInfoEXT create_info;
+
+	if (!ENABLE_VALIDATION_LAYERS) return;
+	populate_debug_messenger_create_info(&create_info);
+	error_check(create_debug_utils_messenger_ext(app->vk_instance, &create_info,
+		NULL, &app->vk_debug_utils_messenger) != VK_SUCCESS,
+				"failed to set up debug messenger!");
 }

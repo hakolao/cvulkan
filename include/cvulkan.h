@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/07 20:26:34 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/08 17:38:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,29 @@ typedef struct		s_window_info {
 }					t_window_info;
 
 typedef struct		s_cvulkan {
-	bool			is_running;
-	bool			frame_buffer_resized;
-	SDL_Window		*window;
-	t_window_info	window_info;
-	VkInstance		vk_instance;
-	uint32_t		vk_enabled_extension_count;
-	uint32_t		vk_enabled_layer_count;
-	char*			vk_extension_names[64];
-	char*			vk_enabled_layers[64];
+	bool						is_running;
+	bool						frame_buffer_resized;
+	SDL_Window					*window;
+	t_window_info				window_info;
+	VkInstance					vk_instance;
+	uint32_t					vk_enabled_extension_count;
+	uint32_t					vk_enabled_layer_count;
+	VkDebugUtilsMessengerEXT	vk_debug_utils_messenger;
+	char*						vk_extension_names[64];
+	char*						vk_enabled_layers[64];
 }					t_cvulkan;
 
 /*
-** Error checking
+** Debugging
 */
 void				error_check(int test, const char *message);
 void				populate_debug_messenger_create_info(
 					VkDebugUtilsMessengerCreateInfoEXT *create_info);
+void				vulkan_setup_debug_messenger(t_cvulkan *app);
+void				destroy_debug_utils_messenger_ext(
+					VkInstance instance,
+					VkDebugUtilsMessengerEXT p_debug_messenger,
+					const VkAllocationCallbacks *p_allocator);
 
 /*
 ** App

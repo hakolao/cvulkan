@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 20:47:25 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/09 21:56:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,12 @@ typedef struct			s_cvulkan {
 	VkDevice					vk_logical_device;
 	VkQueue						vk_graphics_queue;
 	VkQueue						vk_present_queue;
+	VkSwapchainKHR				vk_swap_chain;
+	VkImage						vk_swap_chain_images[8];
+	VkFormat					vk_swap_chain_image_format;
+	VkExtent2D					vk_swap_chain_extent;
+	VkImageView					vk_swap_chain_image_views[8];
+	VkFramebuffer				vk_swap_chain_frame_buffers[8];
 	VkSampleCountFlagBits		vk_msaa_samples;
 	uint32_t					vk_enabled_extension_count;
 	uint32_t					vk_enabled_layer_count;
@@ -123,5 +129,11 @@ void					find_queue_families(t_cvulkan *app,
 ** Vulkan logical device
 */
 void					vulkan_create_logical_device(t_cvulkan *app);
+
+/*
+** Vulkan swap chain
+*/
+void					vulkan_create_swap_chain(t_cvulkan *app);
+void					vulkan_cleanup_swap_chain(t_cvulkan *app);
 
 #endif

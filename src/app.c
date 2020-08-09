@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 20:47:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/09 21:57:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,14 @@ static void		vulkan_init(t_cvulkan *app)
 	vulkan_create_surface(app);
 	vulkan_pick_physical_device(app);
 	vulkan_create_logical_device(app);
+	vulkan_create_swap_chain(app);
 }
 
-static void		scleanup(t_cvulkan *app)
+static void		cleanup(t_cvulkan *app)
 {
+	vulkan_cleanup_swap_chain(app);
+	vkDestroyDevice(app->vk_logical_device, NULL);
+
 	if (ENABLE_VALIDATION_LAYERS) {
 		destroy_debug_utils_messenger_ext(app->vk_instance,
 			app->vk_debug_utils_messenger, NULL);
@@ -54,5 +58,5 @@ void			app_run(t_cvulkan *app)
 	window_init(app);
 	vulkan_init(app);
 	main_loop(app);
-	scleanup(app);
+	cleanup(app);
 }

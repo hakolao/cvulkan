@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 18:39:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 20:08:30 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/09 20:20:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static void						find_queue_families(t_cvulkan *app,
+void							find_queue_families(t_cvulkan *app,
 								VkPhysicalDevice device,
 								t_queue_family_indices *indices)
 {

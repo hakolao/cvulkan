@@ -38,7 +38,8 @@ SOURCES = main.c \
 			vulkan_device_utils.c \
 			vulkan_surface.c \
 			vulkan_instance.c \
-			vulkan_instance_info.c
+			vulkan_instance_info.c \
+			vulkan_logical_device.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

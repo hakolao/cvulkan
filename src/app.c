@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 20:04:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/09 20:47:33 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void		vulkan_init(t_cvulkan *app)
 	vulkan_setup_debug_messenger(app);
 	vulkan_create_surface(app);
 	vulkan_pick_physical_device(app);
+	vulkan_create_logical_device(app);
 }
 
 static void		scleanup(t_cvulkan *app)

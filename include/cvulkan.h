@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 19:51:23 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/09 20:47:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ typedef struct			s_cvulkan {
 	VkInstance					vk_instance;
 	VkSurfaceKHR				vk_surface;
 	VkPhysicalDevice			vk_physical_device;
+	VkDevice					vk_logical_device;
+	VkQueue						vk_graphics_queue;
+	VkQueue						vk_present_queue;
 	VkSampleCountFlagBits		vk_msaa_samples;
 	uint32_t					vk_enabled_extension_count;
 	uint32_t					vk_enabled_layer_count;
@@ -112,5 +115,13 @@ void					vulkan_pick_physical_device(t_cvulkan *app);
 bool					check_device_extension_support(t_cvulkan *app,
 						VkPhysicalDevice device);
 VkSampleCountFlagBits	get_max_usable_sample_count(t_cvulkan *app);
+void					find_queue_families(t_cvulkan *app,
+						VkPhysicalDevice device,
+						t_queue_family_indices *indices);
+
+/*
+** Vulkan logical device
+*/
+void					vulkan_create_logical_device(t_cvulkan *app);
 
 #endif

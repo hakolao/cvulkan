@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/08 17:36:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/09 18:38:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,20 @@ static void		vulkan_init(t_cvulkan *app)
 {
 	vulkan_create_instance(app);
 	vulkan_setup_debug_messenger(app);
+	vulkan_create_surface(app);
 }
 
-static void		cleanup(t_cvulkan *app)
+static void		scleanup(t_cvulkan *app)
 {
 	if (ENABLE_VALIDATION_LAYERS) {
 		destroy_debug_utils_messenger_ext(app->vk_instance,
 			app->vk_debug_utils_messenger, NULL);
 	}
+	vkDestroySurfaceKHR(app->vk_instance, app->vk_surface, NULL);
 	vkDestroyInstance(app->vk_instance, NULL);
 
-	// SDL_DestroyWindow(app->window); seems to segfault
-	IMG_Quit();
+	// SDL_DestroyWindow(app->window); // seems to segfault
+	// IMG_Quit();
 	SDL_Quit();
 }
 
@@ -50,5 +52,5 @@ void			app_run(t_cvulkan *app)
 	window_init(app);
 	vulkan_init(app);
 	main_loop(app);
-	cleanup(app);
+	scleanup(app);
 }

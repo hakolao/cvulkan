@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/08 17:38:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/09 18:37:07 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct		s_cvulkan {
 	SDL_Window					*window;
 	t_window_info				window_info;
 	VkInstance					vk_instance;
+	VkSurfaceKHR				vk_surface;
 	uint32_t					vk_enabled_extension_count;
 	uint32_t					vk_enabled_layer_count;
 	VkDebugUtilsMessengerEXT	vk_debug_utils_messenger;
@@ -76,5 +77,10 @@ void				populate_create_info(
 					t_cvulkan *app, VkInstanceCreateInfo *create_info,
 					VkApplicationInfo *app_info,
 					VkDebugUtilsMessengerCreateInfoEXT *debug_create_info);
+
+/*
+** Vulkan surface
+*/
+void				vulkan_create_surface(t_cvulkan *app);
 
 #endif

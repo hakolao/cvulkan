@@ -34,6 +34,8 @@ SOURCES = main.c \
 			app.c \
 			window.c \
 			debug.c \
+			vulkan_device.c \
+			vulkan_device_utils.c \
 			vulkan_surface.c \
 			vulkan_instance.c \
 			vulkan_instance_info.c

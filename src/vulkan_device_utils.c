@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 19:47:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 19:51:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/09 20:02:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void							query_swap_chain_support(t_cvulkan *app,
 								t_swap_chain_support_details
 								*details)
 {
-	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, app->vk_surface, details);
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, app->vk_surface,
+		&details->capabilities);
 	vkGetPhysicalDeviceSurfaceFormatsKHR(device, app->vk_surface,
 		&details->format_count, NULL);
 	if (details->format_count != 0)

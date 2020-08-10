@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 15:10:45 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 17:09:49 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 17:40:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,10 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 {
 	VkShaderModule							vertShaderModule;
 	VkShaderModule							fragShaderModule;
-	VkPipelineShaderStageCreateInfo			vertShaderStageInfo;
-	VkPipelineShaderStageCreateInfo			fragShaderStageInfo;
-	VkPipelineVertexInputStateCreateInfo	vertexInputInfo;
 	VkVertexInputBindingDescription			bindingDescription;
-	VkVertexInputAttributeDescription		attributeDescriptions[3];
-	VkPipelineInputAssemblyStateCreateInfo	inputAssembly;
-	VkPipelineMultisampleStateCreateInfo	multisampling;
-	VkPipelineDepthStencilStateCreateInfo	depthStencil;
-	VkPipelineColorBlendAttachmentState		colorBlendAttachment;
 	VkPipelineColorBlendStateCreateInfo		colorBlending;
+	VkVertexInputAttributeDescription		attributeDescriptions[3];
+	VkPipelineDepthStencilStateCreateInfo	depthStencil;
 	VkPipelineLayoutCreateInfo				pipelineLayoutInfo;
 	VkGraphicsPipelineCreateInfo			pipelineInfo;
 
@@ -49,45 +43,6 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 		read_file("shaders/vert.spv"));
 	fragShaderModule = vulkan_create_shader_module(app,
 		read_file("shaders/frag.spv"));
-
-	ft_memset(&vertShaderStageInfo, 0, sizeof(vertShaderStageInfo));
-	vertShaderStageInfo.sType =
-		VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-	vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-	vertShaderStageInfo.module = vertShaderModule;
-	vertShaderStageInfo.pName = "main";
-
-	ft_memset(&fragShaderStageInfo, 0, sizeof(fragShaderStageInfo));
-	fragShaderStageInfo.sType =
-		VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-	fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-	fragShaderStageInfo.module = fragShaderModule;
-	fragShaderStageInfo.pName = "main";
-
-	ft_memset(&vertexInputInfo, 0, sizeof(vertexInputInfo));
-	vertexInputInfo.sType =
-		VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-
-	bindingDescription = vulkan_vertex_binding_description();
-	vulkan_vertex_fill_attribute_descriptions(attributeDescriptions);
-
-	vertexInputInfo.vertexBindingDescriptionCount = 1;
-	vertexInputInfo.vertexAttributeDescriptionCount = 3;
-	vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
-	vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions;
-
-	ft_memset(&inputAssembly, 0, sizeof(inputAssembly));
-	inputAssembly.sType =
-		VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-	inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-	inputAssembly.primitiveRestartEnable = VK_FALSE;
-
-	ft_memset(&multisampling, 0, sizeof(multisampling));
-	multisampling.sType =
-		VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-	multisampling.sampleShadingEnable = VK_TRUE;
-	multisampling.minSampleShading = .2f;
-	multisampling.rasterizationSamples = app->vk_msaa_samples;
 
 	ft_memset(&depthStencil, 0, sizeof(depthStencil));
 	depthStencil.sType =
@@ -97,24 +52,6 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
 	depthStencil.depthBoundsTestEnable = VK_FALSE;
 	depthStencil.stencilTestEnable = VK_FALSE;
-
-	ft_memset(&colorBlendAttachment, 0, sizeof(colorBlendAttachment));
-	colorBlendAttachment.colorWriteMask =
-		VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-		VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-	colorBlendAttachment.blendEnable = VK_FALSE;
-
-	ft_memset(&colorBlending, 0, sizeof(colorBlending));
-	colorBlending.sType =
-		VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-	colorBlending.logicOpEnable = VK_FALSE;
-	colorBlending.logicOp = VK_LOGIC_OP_COPY;
-	colorBlending.attachmentCount = 1;
-	colorBlending.pAttachments = &colorBlendAttachment;
-	colorBlending.blendConstants[0] = 0.0f;
-	colorBlending.blendConstants[1] = 0.0f;
-	colorBlending.blendConstants[2] = 0.0f;
-	colorBlending.blendConstants[3] = 0.0f;
 
 	ft_memset(&pipelineLayoutInfo, 0, sizeof(pipelineLayoutInfo));
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -130,13 +67,27 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	pipelineInfo.stageCount = 2;
 	pipelineInfo.pStages = (VkPipelineShaderStageCreateInfo[2]){
-		vertShaderStageInfo, fragShaderStageInfo};
-	// vulkan_pipeline_info_set_vertex_input();
-	pipelineInfo.pVertexInputState = &vertexInputInfo;
-	// vulkan_pipeline_info_set_input_assembly();
-	pipelineInfo.pInputAssemblyState = &inputAssembly;
-	// vulkan_pipeline_info_set_viewpor_state();
-
+		(VkPipelineShaderStageCreateInfo){
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+		.flags = 0, .pNext = NULL, .pSpecializationInfo = NULL, .pName = "main",
+		.module = vertShaderModule, .stage = VK_SHADER_STAGE_VERTEX_BIT},
+		(VkPipelineShaderStageCreateInfo){
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+		.flags = 0, .pNext = NULL, .pSpecializationInfo = NULL, .pName = "main",
+		.module = fragShaderModule, .stage = VK_SHADER_STAGE_FRAGMENT_BIT}};
+	vulkan_vertex_fill_attribute_descriptions(attributeDescriptions);
+	bindingDescription = vulkan_vertex_binding_description();
+	pipelineInfo.pVertexInputState = &(VkPipelineVertexInputStateCreateInfo){.pNext = NULL, .flags = 0,
+		.pVertexAttributeDescriptions = attributeDescriptions,
+		.pVertexBindingDescriptions = &bindingDescription,
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
+		.vertexBindingDescriptionCount = 1,
+		.vertexAttributeDescriptionCount = 3};
+	pipelineInfo.pInputAssemblyState =
+		&(VkPipelineInputAssemblyStateCreateInfo){.flags = 0,
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
+		.primitiveRestartEnable = VK_FALSE,
+		.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, .pNext = NULL};
 	pipelineInfo.pViewportState = &(VkPipelineViewportStateCreateInfo){
 		.flags = 0, .pNext = NULL,
 		.pScissors = &(VkRect2D){.offset = (VkOffset2D){0, 0}},
@@ -155,9 +106,28 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 		.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE,
 		.rasterizerDiscardEnable = VK_FALSE,
 		.polygonMode = VK_POLYGON_MODE_FILL};
-	// vulkan_pipeline_info_set_multisampling();
-	pipelineInfo.pMultisampleState = &multisampling;
-	// vulkan_pipeline_info_set_color_blending();
+	pipelineInfo.pMultisampleState = &(VkPipelineMultisampleStateCreateInfo){
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
+		.pNext = NULL,  .flags = 0, .pSampleMask = NULL,
+		.alphaToCoverageEnable = VK_FALSE, .alphaToOneEnable = VK_FALSE,
+		.sampleShadingEnable = VK_TRUE, .minSampleShading = .2f,
+		.rasterizationSamples = app->vk_msaa_samples};
+	colorBlending = (VkPipelineColorBlendStateCreateInfo){
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
+		.pNext = NULL, .flags = 0, .attachmentCount = 1,
+		.logicOpEnable = VK_FALSE, .logicOp = VK_LOGIC_OP_COPY,
+		.pAttachments = &(VkPipelineColorBlendAttachmentState){
+			.blendEnable = VK_FALSE, .alphaBlendOp = 0, .colorBlendOp = 0,
+			.colorWriteMask =
+				VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+				VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT,
+			.dstAlphaBlendFactor = 0, .dstColorBlendFactor = 0,
+			.srcAlphaBlendFactor = 0, .srcColorBlendFactor = 0
+	}};
+	colorBlending.blendConstants[0] = 0.0f;
+	colorBlending.blendConstants[1] = 0.0f;
+	colorBlending.blendConstants[2] = 0.0f;
+	colorBlending.blendConstants[3] = 0.0f;
 	pipelineInfo.pColorBlendState = &colorBlending;
 	pipelineInfo.layout = app->vk_pipeline_layout;
 	pipelineInfo.renderPass = app->vk_render_pass;

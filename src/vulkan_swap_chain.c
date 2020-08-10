@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 21:01:12 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 11:41:55 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 11:53:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,5 @@ void						vulkan_create_swap_chain(t_cvulkan *app)
 		&image_count, NULL);
 	vkGetSwapchainImagesKHR(app->vk_logical_device, app->vk_swap_chain,
 		&image_count, app->vk_swap_chain_images);
+	app->vk_swap_chain_images_count = image_count;
 }

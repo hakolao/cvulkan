@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 11:39:36 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 12:07:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ typedef struct			s_cvulkan {
 	VkExtent2D					vk_swap_chain_extent;
 	VkImageView					vk_swap_chain_image_views[8];
 	VkFramebuffer				vk_swap_chain_frame_buffers[8];
+	uint32_t					vk_swap_chain_images_count;
+	uint32_t					vk_swap_chain_frame_buffer_count;
 	VkSampleCountFlagBits		vk_msaa_samples;
 	uint32_t					vk_enabled_extension_count;
 	uint32_t					vk_enabled_layer_count;
@@ -144,5 +146,15 @@ void					choose_swap_present_mode(
 void					choose_swap_surface_format(
 						t_swap_chain_support_details *details,
 						VkSurfaceFormatKHR *format);
+
+/*
+** Vulkan image views
+*/
+void					vulkan_create_image_views(t_cvulkan *app);
+VkImageView				vulkan_create_image_view(t_cvulkan *app,
+						VkImageViewCreateInfo *view_info);
+VkImageViewCreateInfo	vulkan_create_image_image_view_info(VkImage image,
+						VkFormat format, VkImageAspectFlags aspect_flags,
+						uint32_t mip_levels);
 
 #endif

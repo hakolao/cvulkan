@@ -41,7 +41,8 @@ SOURCES = main.c \
 			vulkan_instance_info.c \
 			vulkan_logical_device.c \
 			vulkan_swap_chain.c \
-			vulkan_swap_chain_utils.c
+			vulkan_swap_chain_utils.c \
+			vulkan_image_views.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

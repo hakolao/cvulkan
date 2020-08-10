@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 21:56:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 11:39:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,5 +135,14 @@ void					vulkan_create_logical_device(t_cvulkan *app);
 */
 void					vulkan_create_swap_chain(t_cvulkan *app);
 void					vulkan_cleanup_swap_chain(t_cvulkan *app);
+void					choose_swap_extent(t_cvulkan *app,
+						VkSurfaceCapabilitiesKHR *capabilities,
+						VkExtent2D *actualExtent);
+void					choose_swap_present_mode(
+						t_swap_chain_support_details *details,
+						VkPresentModeKHR *present_mode);
+void					choose_swap_surface_format(
+						t_swap_chain_support_details *details,
+						VkSurfaceFormatKHR *format);
 
 #endif

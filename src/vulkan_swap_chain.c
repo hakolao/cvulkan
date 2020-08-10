@@ -6,70 +6,28 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 21:01:12 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 22:06:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 11:41:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static void					choose_swap_extent(t_cvulkan *app,
-							VkSurfaceCapabilitiesKHR *capabilities,
-							VkExtent2D *actualExtent)
+static void					populate_queue_family_dependent_info(t_cvulkan *app,
+							VkSwapchainCreateInfoKHR *create_info)
 {
-	int			width;
-	int			height;
+	t_queue_family_indices			indices;
+	uint32_t						queue_family_indices[2];
 
-	if (capabilities->currentExtent.width != UINT32_MAX)
-		*actualExtent = capabilities->currentExtent;
-	else
-	{
-		SDL_GL_GetDrawableSize(app->window, &width, &height);
-		actualExtent->width = ft_max_int((int[2]){
-			capabilities->minImageExtent.width,
-			ft_min_int((int[2]){capabilities->maxImageExtent.width,
-				width}, 2)}, 2);
-		actualExtent->height = ft_max_int((int[2]){
-			capabilities->minImageExtent.height,
-			ft_min_int((int[2]){capabilities->maxImageExtent.height,
-				height}, 2)}, 2);
+	find_queue_families(app, app->vk_physical_device, &indices);
+	queue_family_indices[0] = indices.graphics_family,
+	queue_family_indices[1] = indices.present_family;
+	if (indices.graphics_family != indices.present_family) {
+		create_info->imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+		create_info->queueFamilyIndexCount = 2;
+		create_info->pQueueFamilyIndices = queue_family_indices;
+	} else {
+		create_info->imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	}
-}
-
-static void					choose_swap_present_mode(
-							t_swap_chain_support_details *details,
-							VkPresentModeKHR *present_mode)
-{
-	size_t			i;
-
-	i = -1;
-	while (++i < details->present_mode_count)
-	{
-		if (details->present_modes[i] == VK_PRESENT_MODE_MAILBOX_KHR)
-		{
-			*present_mode = details->present_modes[i];
-			return ;
-		}
-	}
-	*present_mode = VK_PRESENT_MODE_FIFO_KHR;
-}
-
-static void					choose_swap_surface_format(
-							t_swap_chain_support_details *details,
-							VkSurfaceFormatKHR *format)
-{
-	size_t			i;
-
-	i = -1;
-	while (++i < details->format_count)
-	{
-		if (details->formats[i].format == VK_FORMAT_B8G8R8A8_SRGB &&
-			details->formats[i].colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-		{
-			*format = details->formats[i];
-			return ;
-		}
-	}
-	*format = details->formats[0];
 }
 
 static void					populate_swap_chain_create_info(t_cvulkan *app,
@@ -77,8 +35,6 @@ static void					populate_swap_chain_create_info(t_cvulkan *app,
 							t_swap_chain_support_details *swap_chain_support,
 							VkSwapchainCreateInfoKHR *create_info)
 {
-	t_queue_family_indices			indices;
-	uint32_t						queue_family_indices[2];
 	VkSurfaceFormatKHR				surface_format;
 	VkPresentModeKHR				present_mode;
 
@@ -98,16 +54,7 @@ static void					populate_swap_chain_create_info(t_cvulkan *app,
 	create_info->imageExtent = app->vk_swap_chain_extent;
 	create_info->imageArrayLayers = 1;
 	create_info->imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-	find_queue_families(app, app->vk_physical_device, &indices);
-	queue_family_indices[0] = indices.graphics_family,
-	queue_family_indices[1] = indices.present_family;
-	if (indices.graphics_family != indices.present_family) {
-		create_info->imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-		create_info->queueFamilyIndexCount = 2;
-		create_info->pQueueFamilyIndices = queue_family_indices;
-	} else {
-		create_info->imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	}
+	populate_queue_family_dependent_info(app, create_info);
 	create_info->preTransform =
 		swap_chain_support->capabilities.currentTransform;
 	create_info->compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;

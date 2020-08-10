@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 13:39:03 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:55:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,21 @@ typedef struct			s_cvulkan {
 }						t_cvulkan;
 
 /*
+** App
+*/
+void					app_run(t_cvulkan *app);
+
+/*
+** File reading
+*/
+char					*read_file(char *filename);
+
+/*
+** Window
+*/
+void					window_init(t_cvulkan *app);
+
+/*
 ** Debugging
 */
 void					error_check(int test, const char *message);
@@ -89,16 +104,6 @@ void					vulkan_destroy_debug_utils_messenger_ext(
 						VkInstance instance,
 						VkDebugUtilsMessengerEXT p_debug_messenger,
 						const VkAllocationCallbacks *p_allocator);
-
-/*
-** App
-*/
-void					app_run(t_cvulkan *app);
-
-/*
-** Window
-*/
-void					window_init(t_cvulkan *app);
 
 /*
 ** Vulkan instance

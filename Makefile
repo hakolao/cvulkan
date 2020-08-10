@@ -33,7 +33,8 @@ FLAGS = -Wall -Wextra -Werror -O3
 SOURCES = main.c \
 			app.c \
 			window.c \
-			debug.c \
+			read_file.c \
+			vulkan_debug.c \
 			vulkan_device.c \
 			vulkan_device_utils.c \
 			vulkan_surface.c \

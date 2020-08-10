@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 15:01:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 16:17:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,33 +29,53 @@
 # include <vulkan/vulkan.h>
 # include "libft.h"
 
-typedef struct			s_file_contents
+/*
+** cGLM
+** ToDo: Don't use cglm, but own library...
+*/
+# include <cglm/cglm.h>
+
+typedef struct					s_vulkan_vertex
+{
+	vec3				pos;
+	vec3				color;
+	vec2				tex_coord;
+}								t_vulkan_vertex;
+
+typedef struct					s_uniform_buffer_object
+{
+	mat4				model;
+	mat4				view;
+	mat4				proj;
+}								t_uniform_buffer_object;
+
+typedef struct					s_file_contents
 {
 	void				*buf;
 	uint32_t			size;
-}						t_file_contents;
+}								t_file_contents;
 
-typedef struct			s_queue_family_indices
+typedef struct					s_queue_family_indices
 {
 	int32_t			graphics_family;
 	int32_t			present_family;
-}						t_queue_family_indices;
+}								t_queue_family_indices;
 
-typedef struct			s_swap_chain_support_details {
+typedef struct					s_swap_chain_support_details {
 	VkSurfaceCapabilitiesKHR	capabilities;
 	VkSurfaceFormatKHR			formats[64];
 	uint32_t					format_count;
 	VkPresentModeKHR			present_modes[64];
 	uint32_t					present_mode_count;
-}						t_swap_chain_support_details;
+}								t_swap_chain_support_details;
 
-typedef struct			s_window_info {
+typedef struct					s_window_info {
 	uint32_t		window_id;
 	bool			is_hidden;
 	void			*parent;
-}						t_window_info;
+}								t_window_info;
 
-typedef struct			s_cvulkan {
+typedef struct					s_cvulkan {
 	bool						is_running;
 	bool						frame_buffer_resized;
 	SDL_Window					*window;
@@ -84,107 +104,127 @@ typedef struct			s_cvulkan {
 	char						*vk_required_device_extensions[64];
 	VkRenderPass				vk_render_pass;
 	VkDescriptorSetLayout		vk_descriptor_set_layout;
-}						t_cvulkan;
+	VkPipelineLayout			vk_pipeline_layout;
+	VkPipeline					vk_graphics_pipeline;
+}								t_cvulkan;
 
 /*
 ** App
 */
-void					app_run(t_cvulkan *app);
+void							app_run(t_cvulkan *app);
 
 /*
 ** File reading
 */
-t_file_contents			*read_file(char *filename);
-void					free_file_contents(t_file_contents *contents);
+t_file_contents					*read_file(char *filename);
+void							free_file_contents(t_file_contents *contents);
 
 /*
 ** Window
 */
-void					window_init(t_cvulkan *app);
+void							window_init(t_cvulkan *app);
 
 /*
 ** Debugging
 */
-void					error_check(int test, const char *message);
-void					vulkan_populate_debug_messenger_create_info(
-						VkDebugUtilsMessengerCreateInfoEXT *create_info);
-void					vulkan_setup_debug_messenger(t_cvulkan *app);
-void					vulkan_destroy_debug_utils_messenger_ext(
-						VkInstance instance,
-						VkDebugUtilsMessengerEXT p_debug_messenger,
-						const VkAllocationCallbacks *p_allocator);
+void							error_check(int test, const char *message);
+void							vulkan_populate_debug_messenger_create_info(
+								VkDebugUtilsMessengerCreateInfoEXT
+								*create_info);
+void							vulkan_setup_debug_messenger(t_cvulkan *app);
+void							vulkan_destroy_debug_utils_messenger_ext(
+								VkInstance instance,
+								VkDebugUtilsMessengerEXT p_debug_messenger,
+								const VkAllocationCallbacks *p_allocator);
 
 /*
 ** Vulkan instance
 */
-void					vulkan_create_instance(t_cvulkan *app);
-void					vulkan_populate_instance_create_info(
-						t_cvulkan *app, VkInstanceCreateInfo *create_info,
-						VkApplicationInfo *app_info,
-						VkDebugUtilsMessengerCreateInfoEXT *debug_create_info);
+void							vulkan_create_instance(t_cvulkan *app);
+void							vulkan_populate_instance_create_info(
+								t_cvulkan *app, VkApplicationInfo *app_info,
+								VkDebugUtilsMessengerCreateInfoEXT *debug_create_info,
+								VkInstanceCreateInfo *create_info);
 
 /*
 ** Vulkan surface
 */
-void					vulkan_create_surface(t_cvulkan *app);
+void							vulkan_create_surface(t_cvulkan *app);
 
 
 /*
 ** Vulkan device
 */
-void					vulkan_query_swap_chain_support(t_cvulkan *app,
-						VkPhysicalDevice device, t_swap_chain_support_details
-						*details);
-void					vulkan_pick_physical_device(t_cvulkan *app);
-bool					vulkan_check_device_extension_support(t_cvulkan *app,
-						VkPhysicalDevice device);
-VkSampleCountFlagBits	vulkan_get_max_usable_sample_count(t_cvulkan *app);
-void					vulkan_find_queue_families(t_cvulkan *app,
-						VkPhysicalDevice device,
-						t_queue_family_indices *indices);
+void							vulkan_query_swap_chain_support(t_cvulkan *app,
+								VkPhysicalDevice device,
+								t_swap_chain_support_details *details);
+void							vulkan_pick_physical_device(t_cvulkan *app);
+bool							vulkan_check_device_extension_support(t_cvulkan
+								*app,
+								VkPhysicalDevice device);
+VkSampleCountFlagBits			vulkan_get_max_usable_sample_count(t_cvulkan
+								*app);
+void							vulkan_find_queue_families(t_cvulkan *app,
+								VkPhysicalDevice device,
+								t_queue_family_indices *indices);
 
 /*
 ** Vulkan logical device
 */
-void					vulkan_create_logical_device(t_cvulkan *app);
+void							vulkan_create_logical_device(t_cvulkan *app);
 
 /*
 ** Vulkan swap chain
 */
-void					vulkan_create_swap_chain(t_cvulkan *app);
-void					vulkan_cleanup_swap_chain(t_cvulkan *app);
-void					vulkan_choose_swap_extent(t_cvulkan *app,
-						VkSurfaceCapabilitiesKHR *capabilities,
-						VkExtent2D *actualExtent);
-void					vulkan_choose_swap_present_mode(
-						t_swap_chain_support_details *details,
-						VkPresentModeKHR *present_mode);
-void					vulkan_choose_swap_surface_format(
-						t_swap_chain_support_details *details,
-						VkSurfaceFormatKHR *format);
+void							vulkan_create_swap_chain(t_cvulkan *app);
+void							vulkan_cleanup_swap_chain(t_cvulkan *app);
+void							vulkan_choose_swap_extent(t_cvulkan *app,
+								VkSurfaceCapabilitiesKHR *capabilities,
+								VkExtent2D *actualExtent);
+void							vulkan_choose_swap_present_mode(
+								t_swap_chain_support_details *details,
+								VkPresentModeKHR *present_mode);
+void							vulkan_choose_swap_surface_format(
+								t_swap_chain_support_details *details,
+								VkSurfaceFormatKHR *format);
 
 /*
 ** Vulkan image views
 */
-void					vulkan_create_image_views(t_cvulkan *app);
-VkImageView				vulkan_create_image_view(t_cvulkan *app,
-						VkImageViewCreateInfo *view_info);
-VkImageViewCreateInfo	vulkan_create_image_image_view_info(VkImage image,
-						VkFormat format, VkImageAspectFlags aspect_flags,
-						uint32_t mip_levels);
+void							vulkan_create_image_views(t_cvulkan *app);
+VkImageView						vulkan_create_image_view(t_cvulkan *app,
+								VkImageViewCreateInfo *view_info);
+VkImageViewCreateInfo			vulkan_create_image_image_view_info(VkImage image,
+								VkFormat format, VkImageAspectFlags aspect_flags,
+								uint32_t mip_levels);
 
 /*
 ** Vulkan render pass
 */
-void					vulkan_create_render_pass(t_cvulkan *app);
-VkFormat				vulkan_find_depth_format(t_cvulkan *app);
-VkSubpassDescription	*vulkan_create_subpass_description();
-void					vulkan_free_subpass_description(
-						VkSubpassDescription *subpass);
+void							vulkan_create_render_pass(t_cvulkan *app);
+VkFormat						vulkan_find_depth_format(t_cvulkan *app);
+VkSubpassDescription			*vulkan_create_subpass_description();
+void							vulkan_free_subpass_description(
+								VkSubpassDescription *subpass);
 
 /*
 ** Vulkan descriptor set layout
 */
-void					vulkan_create_descriptor_set_layout(t_cvulkan *app);
+void							vulkan_create_descriptor_set_layout(t_cvulkan
+								*app);
+
+
+/*
+** Vulkan vertex
+*/
+VkVertexInputBindingDescription	vulkan_vertex_binding_description();
+void							vulkan_vertex_fill_attribute_descriptions(
+								VkVertexInputAttributeDescription
+								attributeDescriptions[3]);
+
+/*
+** Vulkan graphics pipeline
+*/
+void							vulkan_create_graphics_pipeline(t_cvulkan *app);
 
 #endif

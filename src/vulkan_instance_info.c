@@ -6,16 +6,16 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 20:26:04 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 15:59:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
 void				vulkan_populate_instance_create_info(
-					t_cvulkan *app, VkInstanceCreateInfo *create_info,
-					VkApplicationInfo *app_info,
-					VkDebugUtilsMessengerCreateInfoEXT *debug_create_info)
+					t_cvulkan *app, VkApplicationInfo *app_info,
+					VkDebugUtilsMessengerCreateInfoEXT *debug_create_info,
+					VkInstanceCreateInfo *create_info)
 {
 	create_info->sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	create_info->pApplicationInfo = app_info;

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 20:19:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 20:53:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void			vulkan_create_logical_device(t_cvulkan *app)
 	int32_t						queueFamilies[2];
 	VkDeviceCreateInfo			create_info;
 
-	find_queue_families(app, app->vk_physical_device, &indices);
+	vulkan_find_queue_families(app, app->vk_physical_device, &indices);
 	queueFamilies[0] = indices.graphics_family;
 	queueFamilies[1] = indices.present_family;
 	i = -1;

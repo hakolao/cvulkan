@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 21:01:12 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 11:53:44 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void					populate_queue_family_dependent_info(t_cvulkan *app,
 	t_queue_family_indices			indices;
 	uint32_t						queue_family_indices[2];
 
-	find_queue_families(app, app->vk_physical_device, &indices);
+	vulkan_find_queue_families(app, app->vk_physical_device, &indices);
 	queue_family_indices[0] = indices.graphics_family,
 	queue_family_indices[1] = indices.present_family;
 	if (indices.graphics_family != indices.present_family) {
@@ -38,9 +38,9 @@ static void					populate_swap_chain_create_info(t_cvulkan *app,
 	VkSurfaceFormatKHR				surface_format;
 	VkPresentModeKHR				present_mode;
 
-	choose_swap_surface_format(swap_chain_support, &surface_format);
+	vulkan_choose_swap_surface_format(swap_chain_support, &surface_format);
 	app->vk_swap_chain_image_format = surface_format.format;
-	choose_swap_present_mode(swap_chain_support, &present_mode);
+	vulkan_choose_swap_present_mode(swap_chain_support, &present_mode);
 	*image_count = swap_chain_support->capabilities.minImageCount + 1;
 	if (swap_chain_support->capabilities.maxImageCount > 0 &&
 		*image_count > swap_chain_support->capabilities.maxImageCount)
@@ -68,8 +68,8 @@ void						vulkan_create_swap_chain(t_cvulkan *app)
 	uint32_t						image_count;
 	t_swap_chain_support_details	swap_chain_support;
 
-	query_swap_chain_support(app, app->vk_physical_device, &swap_chain_support);
-	choose_swap_extent(app, &swap_chain_support.capabilities,
+	vulkan_query_swap_chain_support(app, app->vk_physical_device, &swap_chain_support);
+	vulkan_choose_swap_extent(app, &swap_chain_support.capabilities,
 		&app->vk_swap_chain_extent);
 	populate_swap_chain_create_info(app, &image_count, &swap_chain_support,
 		&create_info);

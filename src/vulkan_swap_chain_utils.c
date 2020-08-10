@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 21:54:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 12:24:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void					vulkan_cleanup_swap_chain(t_cvulkan *app)
 	vkDestroySwapchainKHR(app->vk_logical_device, app->vk_swap_chain, NULL);
 }
 
-void					choose_swap_extent(t_cvulkan *app,
+void					vulkan_choose_swap_extent(t_cvulkan *app,
 						VkSurfaceCapabilitiesKHR *capabilities,
 						VkExtent2D *actualExtent)
 {
@@ -47,7 +47,7 @@ void					choose_swap_extent(t_cvulkan *app,
 	}
 }
 
-void					choose_swap_present_mode(
+void					vulkan_choose_swap_present_mode(
 						t_swap_chain_support_details *details,
 						VkPresentModeKHR *present_mode)
 {
@@ -65,7 +65,7 @@ void					choose_swap_present_mode(
 	*present_mode = VK_PRESENT_MODE_FIFO_KHR;
 }
 
-void					choose_swap_surface_format(
+void					vulkan_choose_swap_surface_format(
 						t_swap_chain_support_details *details,
 						VkSurfaceFormatKHR *format)
 {

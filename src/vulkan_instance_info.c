@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 20:26:04 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/08 17:28:42 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-void				populate_create_info(
+void				vulkan_populate_instance_create_info(
 					t_cvulkan *app, VkInstanceCreateInfo *create_info,
 					VkApplicationInfo *app_info,
 					VkDebugUtilsMessengerCreateInfoEXT *debug_create_info)
@@ -23,7 +23,7 @@ void				populate_create_info(
 	{
 		create_info->enabledLayerCount = app->vk_enabled_layer_count;
 		create_info->ppEnabledLayerNames = (const char**)app->vk_enabled_layers;
-		populate_debug_messenger_create_info(debug_create_info);
+		vulkan_populate_debug_messenger_create_info(debug_create_info);
 		create_info->pNext = debug_create_info;
 	}
 	else

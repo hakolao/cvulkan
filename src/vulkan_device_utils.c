@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 19:47:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/09 20:02:30 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-VkSampleCountFlagBits			get_max_usable_sample_count(t_cvulkan *app)
+VkSampleCountFlagBits			vulkan_get_max_usable_sample_count(t_cvulkan *app)
 {
 	VkPhysicalDeviceProperties	physical_device_properties;
 	VkSampleCountFlags			counts;
@@ -36,7 +36,7 @@ VkSampleCountFlagBits			get_max_usable_sample_count(t_cvulkan *app)
 	return VK_SAMPLE_COUNT_1_BIT;
 }
 
-bool							check_device_extension_support(t_cvulkan *app,
+bool							vulkan_check_device_extension_support(t_cvulkan *app,
 								VkPhysicalDevice device)
 {
 	uint32_t				extension_count;
@@ -62,7 +62,7 @@ bool							check_device_extension_support(t_cvulkan *app,
 	return required_extensions_checked == app->vk_required_extension_count;
 }
 
-void							query_swap_chain_support(t_cvulkan *app,
+void							vulkan_query_swap_chain_support(t_cvulkan *app,
 								VkPhysicalDevice device,
 								t_swap_chain_support_details
 								*details)

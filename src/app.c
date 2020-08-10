@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 12:23:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void		cleanup(t_cvulkan *app)
 	vulkan_cleanup_swap_chain(app);
 	vkDestroyDevice(app->vk_logical_device, NULL);
 	if (ENABLE_VALIDATION_LAYERS) {
-		destroy_debug_utils_messenger_ext(app->vk_instance,
+		vulkan_destroy_debug_utils_messenger_ext(app->vk_instance,
 			app->vk_debug_utils_messenger, NULL);
 	}
 	vkDestroySurfaceKHR(app->vk_instance, app->vk_surface, NULL);

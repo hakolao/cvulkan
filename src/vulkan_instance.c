@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 18:04:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/08 17:28:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void					vulkan_create_instance(t_cvulkan *app) {
 	app_info.apiVersion = VK_API_VERSION_1_0;
 	app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	app_info.pNext = NULL;
-	populate_create_info(app, &create_info, &app_info, &debug_create_info);
+	vulkan_populate_instance_create_info(app, &create_info, &app_info, &debug_create_info);
 	error_check(vkCreateInstance(&create_info, NULL, &app->vk_instance) !=
 		VK_SUCCESS, "Failed to create a Vulkan Instance");
 }

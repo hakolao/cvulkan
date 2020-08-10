@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 13:24:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:27:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ typedef struct			s_cvulkan {
 ** Debugging
 */
 void					error_check(int test, const char *message);
-void					populate_debug_messenger_create_info(
+void					vulkan_populate_debug_messenger_create_info(
 						VkDebugUtilsMessengerCreateInfoEXT *create_info);
 void					vulkan_setup_debug_messenger(t_cvulkan *app);
-void					destroy_debug_utils_messenger_ext(
+void					vulkan_destroy_debug_utils_messenger_ext(
 						VkInstance instance,
 						VkDebugUtilsMessengerEXT p_debug_messenger,
 						const VkAllocationCallbacks *p_allocator);
@@ -103,7 +103,7 @@ void					window_init(t_cvulkan *app);
 ** Vulkan instance
 */
 void					vulkan_create_instance(t_cvulkan *app);
-void					populate_create_info(
+void					vulkan_populate_instance_create_info(
 						t_cvulkan *app, VkInstanceCreateInfo *create_info,
 						VkApplicationInfo *app_info,
 						VkDebugUtilsMessengerCreateInfoEXT *debug_create_info);
@@ -117,14 +117,14 @@ void					vulkan_create_surface(t_cvulkan *app);
 /*
 ** Vulkan device
 */
-void					query_swap_chain_support(t_cvulkan *app,
+void					vulkan_query_swap_chain_support(t_cvulkan *app,
 						VkPhysicalDevice device, t_swap_chain_support_details
 						*details);
 void					vulkan_pick_physical_device(t_cvulkan *app);
-bool					check_device_extension_support(t_cvulkan *app,
+bool					vulkan_check_device_extension_support(t_cvulkan *app,
 						VkPhysicalDevice device);
-VkSampleCountFlagBits	get_max_usable_sample_count(t_cvulkan *app);
-void					find_queue_families(t_cvulkan *app,
+VkSampleCountFlagBits	vulkan_get_max_usable_sample_count(t_cvulkan *app);
+void					vulkan_find_queue_families(t_cvulkan *app,
 						VkPhysicalDevice device,
 						t_queue_family_indices *indices);
 
@@ -138,13 +138,13 @@ void					vulkan_create_logical_device(t_cvulkan *app);
 */
 void					vulkan_create_swap_chain(t_cvulkan *app);
 void					vulkan_cleanup_swap_chain(t_cvulkan *app);
-void					choose_swap_extent(t_cvulkan *app,
+void					vulkan_choose_swap_extent(t_cvulkan *app,
 						VkSurfaceCapabilitiesKHR *capabilities,
 						VkExtent2D *actualExtent);
-void					choose_swap_present_mode(
+void					vulkan_choose_swap_present_mode(
 						t_swap_chain_support_details *details,
 						VkPresentModeKHR *present_mode);
-void					choose_swap_surface_format(
+void					vulkan_choose_swap_surface_format(
 						t_swap_chain_support_details *details,
 						VkSurfaceFormatKHR *format);
 

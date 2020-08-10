@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:35:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/08 17:30:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static VkResult 						create_debug_utils_messenger_ext(
 	}
 }
 
-void									destroy_debug_utils_messenger_ext(
+void									vulkan_destroy_debug_utils_messenger_ext(
 	VkInstance instance, VkDebugUtilsMessengerEXT p_debug_messenger,
 	const VkAllocationCallbacks *p_allocator) {
 	PFN_vkDestroyDebugUtilsMessengerEXT func =
@@ -61,7 +61,7 @@ void									error_check(int test,
 	}
 }
 
-void									populate_debug_messenger_create_info(
+void									vulkan_populate_debug_messenger_create_info(
 										VkDebugUtilsMessengerCreateInfoEXT
 										*create_info)
 {
@@ -85,7 +85,7 @@ void									vulkan_setup_debug_messenger(t_cvulkan
 	VkDebugUtilsMessengerCreateInfoEXT create_info;
 
 	if (!ENABLE_VALIDATION_LAYERS) return;
-	populate_debug_messenger_create_info(&create_info);
+	vulkan_populate_debug_messenger_create_info(&create_info);
 	error_check(create_debug_utils_messenger_ext(app->vk_instance, &create_info,
 		NULL, &app->vk_debug_utils_messenger) != VK_SUCCESS,
 				"failed to set up debug messenger!");

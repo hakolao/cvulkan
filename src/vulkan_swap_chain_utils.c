@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 21:54:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 12:10:39 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 12:24:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void					vulkan_cleanup_swap_chain(t_cvulkan *app)
 {
 	size_t	i;
 
+	vkDestroyRenderPass(app->vk_logical_device, app->vk_render_pass, NULL);
 	i = -1;
 	while (++i < app->vk_swap_chain_images_count)
 		vkDestroyImageView(app->vk_logical_device,

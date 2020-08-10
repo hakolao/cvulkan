@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 12:07:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 12:23:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct			s_cvulkan {
 	char						*vk_extension_names[64];
 	char						*vk_enabled_layers[64];
 	char						*vk_required_device_extensions[64];
+	VkRenderPass				vk_render_pass;
 }						t_cvulkan;
 
 /*
@@ -156,5 +157,10 @@ VkImageView				vulkan_create_image_view(t_cvulkan *app,
 VkImageViewCreateInfo	vulkan_create_image_image_view_info(VkImage image,
 						VkFormat format, VkImageAspectFlags aspect_flags,
 						uint32_t mip_levels);
+
+/*
+** Vulkan render pass
+*/
+void					vulkan_create_render_pass(t_cvulkan *app);
 
 #endif

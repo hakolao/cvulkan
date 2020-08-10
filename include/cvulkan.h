@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 13:27:39 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:39:03 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct			s_cvulkan {
 	char						*vk_enabled_layers[64];
 	char						*vk_required_device_extensions[64];
 	VkRenderPass				vk_render_pass;
+	VkDescriptorSetLayout		vk_descriptor_set_layout;
 }						t_cvulkan;
 
 /*
@@ -166,5 +167,10 @@ VkFormat				vulkan_find_depth_format(t_cvulkan *app);
 VkSubpassDescription	*vulkan_create_subpass_description();
 void					vulkan_free_subpass_description(
 						VkSubpassDescription *subpass);
+
+/*
+** Vulkan descriptor set layout
+*/
+void					vulkan_create_descriptor_set_layout(t_cvulkan *app);
 
 #endif

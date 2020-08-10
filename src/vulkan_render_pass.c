@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 12:12:47 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 13:22:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 13:34:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,75 +28,76 @@ static VkSubpassDependency		subpass_dependency()
 
 static VkAttachmentDescription	depth_attachment_description(t_cvulkan *app)
 {
-	VkAttachmentDescription		depthAttachment;
-	ft_memset(&depthAttachment, 0, sizeof(depthAttachment));
-	depthAttachment.format = vulkan_find_depth_format(app);
-	depthAttachment.samples = app->vk_msaa_samples;
-	depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	depthAttachment.finalLayout =
+	VkAttachmentDescription		depth_attachment;
+	ft_memset(&depth_attachment, 0, sizeof(depth_attachment));
+	depth_attachment.format = vulkan_find_depth_format(app);
+	depth_attachment.samples = app->vk_msaa_samples;
+	depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	depth_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	depth_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	depth_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	depth_attachment.finalLayout =
 		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-	return (depthAttachment);
+	return (depth_attachment);
 }
 
 static VkAttachmentDescription	color_attachment_description(t_cvulkan *app)
 {
-	VkAttachmentDescription		colorAttachment;
+	VkAttachmentDescription		color_attachment;
 
-	ft_memset(&colorAttachment, 0, sizeof(colorAttachment));
-	colorAttachment.format = app->vk_swap_chain_image_format;
-	colorAttachment.samples = app->vk_msaa_samples;
-	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	colorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	return (colorAttachment);
+	ft_memset(&color_attachment, 0, sizeof(color_attachment));
+	color_attachment.format = app->vk_swap_chain_image_format;
+	color_attachment.samples = app->vk_msaa_samples;
+	color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	color_attachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	return (color_attachment);
 }
 
-static VkAttachmentDescription	color_attachment_resolve(t_cvulkan *app)
+static VkAttachmentDescription	color_attachment_resolve_description(t_cvulkan
+								*app)
 {
-	VkAttachmentDescription		colorAttachmentResolve;
+	VkAttachmentDescription		color_attachment_resolve;
 
-	ft_memset(&colorAttachmentResolve, 0, sizeof(colorAttachmentResolve));
-	colorAttachmentResolve.format = app->vk_swap_chain_image_format;
-	colorAttachmentResolve.samples = VK_SAMPLE_COUNT_1_BIT;
-	colorAttachmentResolve.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	colorAttachmentResolve.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	colorAttachmentResolve.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	colorAttachmentResolve.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	colorAttachmentResolve.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	colorAttachmentResolve.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-	return (colorAttachmentResolve);
+	ft_memset(&color_attachment_resolve, 0, sizeof(color_attachment_resolve));
+	color_attachment_resolve.format = app->vk_swap_chain_image_format;
+	color_attachment_resolve.samples = VK_SAMPLE_COUNT_1_BIT;
+	color_attachment_resolve.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	color_attachment_resolve.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	color_attachment_resolve.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	color_attachment_resolve.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	color_attachment_resolve.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	color_attachment_resolve.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	return (color_attachment_resolve);
 }
 
 void							vulkan_create_render_pass(t_cvulkan *app)
 {
-	VkAttachmentDescription		colorAttachment;
-	VkAttachmentDescription		colorAttachmentResolve;
+	VkAttachmentDescription		color_attachment;
+	VkAttachmentDescription		color_attachment_resolve;
 	VkSubpassDependency			dependency;
-	VkRenderPassCreateInfo		renderPassInfo;
+	VkRenderPassCreateInfo		render_pass_info;
 	VkSubpassDescription		*subpass;
 
-	colorAttachment = color_attachment_description(app);
-	colorAttachmentResolve = color_attachment_resolve(app);
+	color_attachment = color_attachment_description(app);
+	color_attachment_resolve = color_attachment_resolve_description(app);
 	subpass = vulkan_create_subpass_description();
-	ft_memset(&renderPassInfo, 0, sizeof(renderPassInfo));
-	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-	renderPassInfo.attachmentCount = 3;
-	renderPassInfo.pAttachments = (VkAttachmentDescription[3]){colorAttachment,
-		depth_attachment_description(app), colorAttachmentResolve};
-	renderPassInfo.subpassCount = 1;
-	renderPassInfo.pSubpasses = subpass;
-	renderPassInfo.dependencyCount = 1;
+	ft_memset(&render_pass_info, 0, sizeof(render_pass_info));
+	render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	render_pass_info.attachmentCount = 3;
+	render_pass_info.pAttachments = (VkAttachmentDescription[3]){color_attachment,
+		depth_attachment_description(app), color_attachment_resolve};
+	render_pass_info.subpassCount = 1;
+	render_pass_info.pSubpasses = subpass;
+	render_pass_info.dependencyCount = 1;
 	dependency = subpass_dependency();
-	renderPassInfo.pDependencies = &dependency;
+	render_pass_info.pDependencies = &dependency;
 	error_check(vkCreateRenderPass(app->vk_logical_device,
-		&renderPassInfo, NULL, &app->vk_render_pass) != VK_SUCCESS,
+		&render_pass_info, NULL, &app->vk_render_pass) != VK_SUCCESS,
 				"Failed to create render pass!");
 	vulkan_free_subpass_description(subpass);
 }

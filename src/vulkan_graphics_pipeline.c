@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 15:10:45 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 17:40:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 20:51:26 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,20 @@ static VkShaderModule 		vulkan_create_shader_module(t_cvulkan *app,
 	return (shader_module);
 }
 
+static void					create_pipeline_layout(t_cvulkan *app)
+{
+	VkPipelineLayoutCreateInfo				pipelineLayoutInfo;
+
+	ft_memset(&pipelineLayoutInfo, 0, sizeof(pipelineLayoutInfo));
+	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipelineLayoutInfo.setLayoutCount = 1;
+	pipelineLayoutInfo.pSetLayouts = &app->vk_descriptor_set_layout;
+	pipelineLayoutInfo.pushConstantRangeCount = 0;
+	error_check(vkCreatePipelineLayout(app->vk_logical_device,
+		&pipelineLayoutInfo, NULL, &app->vk_pipeline_layout) != VK_SUCCESS,
+				"Failed to create pipeline layout!");
+}
+
 void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 {
 	VkShaderModule							vertShaderModule;
@@ -35,34 +49,13 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 	VkVertexInputBindingDescription			bindingDescription;
 	VkPipelineColorBlendStateCreateInfo		colorBlending;
 	VkVertexInputAttributeDescription		attributeDescriptions[3];
-	VkPipelineDepthStencilStateCreateInfo	depthStencil;
-	VkPipelineLayoutCreateInfo				pipelineLayoutInfo;
 	VkGraphicsPipelineCreateInfo			pipelineInfo;
 
+	create_pipeline_layout(app);
 	vertShaderModule = vulkan_create_shader_module(app,
 		read_file("shaders/vert.spv"));
 	fragShaderModule = vulkan_create_shader_module(app,
 		read_file("shaders/frag.spv"));
-
-	ft_memset(&depthStencil, 0, sizeof(depthStencil));
-	depthStencil.sType =
-		VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-	depthStencil.depthTestEnable = VK_TRUE;
-	depthStencil.depthWriteEnable = VK_TRUE;
-	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
-	depthStencil.depthBoundsTestEnable = VK_FALSE;
-	depthStencil.stencilTestEnable = VK_FALSE;
-
-	ft_memset(&pipelineLayoutInfo, 0, sizeof(pipelineLayoutInfo));
-	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 1;
-	pipelineLayoutInfo.pSetLayouts = &app->vk_descriptor_set_layout;
-	pipelineLayoutInfo.pushConstantRangeCount = 0;
-
-	error_check(vkCreatePipelineLayout(app->vk_logical_device,
-		&pipelineLayoutInfo, NULL, &app->vk_pipeline_layout) != VK_SUCCESS,
-				"Failed to create pipeline layout!");
-
 	ft_memset(&pipelineInfo, 0, sizeof(pipelineInfo));
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	pipelineInfo.stageCount = 2;
@@ -77,7 +70,8 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 		.module = fragShaderModule, .stage = VK_SHADER_STAGE_FRAGMENT_BIT}};
 	vulkan_vertex_fill_attribute_descriptions(attributeDescriptions);
 	bindingDescription = vulkan_vertex_binding_description();
-	pipelineInfo.pVertexInputState = &(VkPipelineVertexInputStateCreateInfo){.pNext = NULL, .flags = 0,
+	pipelineInfo.pVertexInputState = &(VkPipelineVertexInputStateCreateInfo){
+		.pNext = NULL, .flags = 0,
 		.pVertexAttributeDescriptions = attributeDescriptions,
 		.pVertexBindingDescriptions = &bindingDescription,
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
@@ -133,13 +127,15 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 	pipelineInfo.renderPass = app->vk_render_pass;
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
-	pipelineInfo.pDepthStencilState = &depthStencil;
-
-	error_check(
-		vkCreateGraphicsPipelines(app->vk_logical_device, VK_NULL_HANDLE, 1,
-			&pipelineInfo, NULL, &app->vk_graphics_pipeline) != VK_SUCCESS,
-		"Failed to create graphics pipeline!");
-
+	pipelineInfo.pDepthStencilState = &(VkPipelineDepthStencilStateCreateInfo){
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
+		.pNext = NULL, .flags = 0, .front = {}, .stencilTestEnable = VK_FALSE,
+		.minDepthBounds = 0, .maxDepthBounds = 0, .depthWriteEnable = VK_TRUE,
+		.depthTestEnable = VK_TRUE, .depthCompareOp = VK_COMPARE_OP_LESS,
+		.back = {}, .depthBoundsTestEnable = VK_FALSE};
+	error_check(vkCreateGraphicsPipelines(app->vk_logical_device,
+		VK_NULL_HANDLE, 1, &pipelineInfo, NULL, &app->vk_graphics_pipeline)
+			!= VK_SUCCESS, "Failed to create graphics pipeline!");
 	vkDestroyShaderModule(app->vk_logical_device, fragShaderModule, NULL);
 	vkDestroyShaderModule(app->vk_logical_device, vertShaderModule, NULL);
 }

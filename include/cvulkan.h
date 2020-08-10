@@ -6,26 +6,34 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 13:55:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 15:01:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CVULKAN_H
 
-#define WIDTH 1280
-#define HEIGHT 720
-#define NAME "CVulkan"
+# define FILE_READ_BUF 1024
+
+# define WIDTH 1280
+# define HEIGHT 720
+# define NAME "CVulkan"
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
 # define ENABLE_VALIDATION_LAYERS 1
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_vulkan.h>
-#include <vulkan/vulkan.h>
+# include <SDL.h>
+# include <SDL_image.h>
+# include <SDL_vulkan.h>
+# include <vulkan/vulkan.h>
 # include "libft.h"
+
+typedef struct			s_file_contents
+{
+	void				*buf;
+	uint32_t			size;
+}						t_file_contents;
 
 typedef struct			s_queue_family_indices
 {
@@ -86,7 +94,8 @@ void					app_run(t_cvulkan *app);
 /*
 ** File reading
 */
-char					*read_file(char *filename);
+t_file_contents			*read_file(char *filename);
+void					free_file_contents(t_file_contents *contents);
 
 /*
 ** Window

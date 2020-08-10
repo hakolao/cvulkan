@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 15:10:45 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 22:10:39 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 22:44:49 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ VkPipelineMultisampleStateCreateInfo	*create_multisample_create_info(
 										VkSampleCountFlagBits msaa_samples)
 {
 	VkPipelineMultisampleStateCreateInfo	*create_info;
+
 	error_check(!(create_info = malloc(sizeof(*create_info))),
 		"Failed to malloc!");
 	ft_memset(create_info, 0, sizeof(*create_info));
@@ -111,8 +112,66 @@ VkPipelineMultisampleStateCreateInfo	*create_multisample_create_info(
 	return (create_info);
 }
 
-void									vulkan_create_graphics_pipeline(t_cvulkan
+VkPipelineRasterizationStateCreateInfo	*create_rasterization_create_info()
+{
+	VkPipelineRasterizationStateCreateInfo	*rasterizer;
+
+	error_check(!(rasterizer = malloc(sizeof(*rasterizer))),
+		"Failed to malloc!");
+	ft_memset(rasterizer, 0, sizeof(*rasterizer));
+	rasterizer->sType =
+		VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	rasterizer->depthClampEnable = VK_FALSE;
+	rasterizer->rasterizerDiscardEnable = VK_FALSE;
+	rasterizer->polygonMode = VK_POLYGON_MODE_FILL;
+	rasterizer->lineWidth = 1.0f;
+	rasterizer->cullMode = VK_CULL_MODE_BACK_BIT;
+	rasterizer->frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+	rasterizer->depthBiasEnable = VK_FALSE;
+	return (rasterizer);
+}
+
+VkPipelineViewportStateCreateInfo		*create_viewport_create_info(t_cvulkan
 										*app)
+{
+	VkPipelineViewportStateCreateInfo	*viewport_state;
+	VkRect2D							*scissor;
+	VkViewport							*viewport;
+
+	error_check(!(viewport_state = malloc(sizeof(*viewport_state))),
+		"Failed to malloc!");
+	error_check(!(scissor = malloc(sizeof(*scissor))), "Failed to malloc!");
+	error_check(!(viewport = malloc(sizeof(*viewport))), "Failed to malloc!");
+	ft_memset(viewport_state, 0, sizeof(*viewport_state));
+	ft_memset(scissor, 0, sizeof(*scissor));
+	ft_memset(viewport, 0, sizeof(*viewport));
+	viewport->x = 0.0f;
+	viewport->y = 0.0f;
+	viewport->width = (float)app->vk_swap_chain_extent.width;
+	viewport->height = (float)app->vk_swap_chain_extent.height;
+	viewport->minDepth = 0.0f;
+	viewport->maxDepth = 1.0f;
+	scissor->offset = (VkOffset2D){0, 0};
+	scissor->extent = app->vk_swap_chain_extent;
+	viewport_state->sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	viewport_state->viewportCount = 1;
+	viewport_state->pViewports = viewport;
+	viewport_state->scissorCount = 1;
+	viewport_state->pScissors = scissor;
+	return (viewport_state);
+}
+
+void									free_viewport_create_info(
+										const VkPipelineViewportStateCreateInfo
+										*create_info)
+{
+	free((void*)create_info->pScissors);
+	free((void*)create_info->pViewports);
+	free((void*)create_info);
+}
+
+void									vulkan_create_graphics_pipeline(
+										t_cvulkan *app)
 {
 	VkShaderModule							vertShaderModule;
 	VkShaderModule							fragShaderModule;
@@ -156,26 +215,8 @@ void									vulkan_create_graphics_pipeline(t_cvulkan
 		.primitiveRestartEnable = VK_FALSE,
 		.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, .pNext = NULL};
 
-	pipelineInfo.pViewportState = &(VkPipelineViewportStateCreateInfo){
-		.flags = 0, .pNext = NULL,
-		.pScissors = &(VkRect2D){.offset = (VkOffset2D){0, 0}},
-		.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
-		.viewportCount = 1, .pViewports = &(VkViewport){.x = 0.0f, .y = 0.0f,
-		.width = (float)app->vk_swap_chain_extent.width,
-		.height = (float)app->vk_swap_chain_extent.height,
-		.minDepth = 0.0f, .maxDepth = 0.0f}, .scissorCount = 1};
-
-	pipelineInfo.pRasterizationState =
-		&(VkPipelineRasterizationStateCreateInfo){.flags = 0, .pNext = NULL,
-		.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
-		.depthBiasSlopeFactor = 0.0f,
-		.depthBiasConstantFactor = 0.0f, .depthBiasClamp = 0.0f,
-		.depthClampEnable = VK_FALSE, .depthBiasEnable = VK_FALSE,
-		.lineWidth = 1.0f, .cullMode = VK_CULL_MODE_BACK_BIT,
-		.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE,
-		.rasterizerDiscardEnable = VK_FALSE,
-		.polygonMode = VK_POLYGON_MODE_FILL};
-
+	pipelineInfo.pViewportState = create_viewport_create_info(app);
+	pipelineInfo.pRasterizationState = create_rasterization_create_info();
 	pipelineInfo.pMultisampleState =
 		create_multisample_create_info(app->vk_msaa_samples);
 	pipelineInfo.pColorBlendState = create_color_blend_create_info();
@@ -188,8 +229,10 @@ void									vulkan_create_graphics_pipeline(t_cvulkan
 		VK_NULL_HANDLE, 1, &pipelineInfo, NULL, &app->vk_graphics_pipeline)
 			!= VK_SUCCESS, "Failed to create graphics pipeline!");
 	free_color_blend_create_info(pipelineInfo.pColorBlendState);
+	free_viewport_create_info(pipelineInfo.pViewportState);
 	free((void*)pipelineInfo.pDepthStencilState);
 	free((void*)pipelineInfo.pMultisampleState);
+	free((void*)pipelineInfo.pRasterizationState);
 	vkDestroyShaderModule(app->vk_logical_device, fragShaderModule, NULL);
 	vkDestroyShaderModule(app->vk_logical_device, vertShaderModule, NULL);
 }

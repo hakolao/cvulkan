@@ -6,14 +6,14 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 15:10:45 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 20:51:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 21:59:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static VkShaderModule 		vulkan_create_shader_module(t_cvulkan *app,
-							t_file_contents *code)
+static VkShaderModule 				vulkan_create_shader_module(t_cvulkan *app,
+									t_file_contents *code)
 {
 	VkShaderModuleCreateInfo	create_info;
 	VkShaderModule				shader_module;
@@ -28,7 +28,7 @@ static VkShaderModule 		vulkan_create_shader_module(t_cvulkan *app,
 	return (shader_module);
 }
 
-static void					create_pipeline_layout(t_cvulkan *app)
+static void							create_pipeline_layout(t_cvulkan *app)
 {
 	VkPipelineLayoutCreateInfo				pipelineLayoutInfo;
 
@@ -42,12 +42,48 @@ static void					create_pipeline_layout(t_cvulkan *app)
 				"Failed to create pipeline layout!");
 }
 
-void						vulkan_create_graphics_pipeline(t_cvulkan *app)
+VkPipelineColorBlendStateCreateInfo	*create_color_blend_create_info()
+{
+	VkPipelineColorBlendStateCreateInfo	*color_blending;
+	VkPipelineColorBlendAttachmentState	*color_blend_attachment;
+
+	error_check(!(color_blending = malloc(sizeof(*color_blending))),
+		"Failed to malloc!");
+	error_check(!(color_blend_attachment =
+		malloc(sizeof(*color_blend_attachment))), "Failed to malloc!");
+	ft_memset(color_blend_attachment, 0, sizeof(*color_blend_attachment));
+	color_blend_attachment->colorWriteMask =
+		VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+		VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	color_blend_attachment->blendEnable = VK_FALSE;
+	ft_memset(color_blending, 0, sizeof(*color_blending));
+	color_blending->sType =
+		VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+	color_blending->logicOpEnable = VK_FALSE;
+	color_blending->logicOp = VK_LOGIC_OP_COPY;
+	color_blending->attachmentCount = 1;
+	color_blending->pAttachments = color_blend_attachment;
+	color_blending->blendConstants[0] = 0.0f;
+	color_blending->blendConstants[1] = 0.0f;
+	color_blending->blendConstants[2] = 0.0f;
+	color_blending->blendConstants[3] = 0.0f;
+	return (color_blending);
+}
+
+void								free_color_blend_create_info(
+									const VkPipelineColorBlendStateCreateInfo
+									*color_blending)
+{
+	free((void*)color_blending->pAttachments);
+	free((void*)color_blending);
+}
+
+void								vulkan_create_graphics_pipeline(t_cvulkan
+									*app)
 {
 	VkShaderModule							vertShaderModule;
 	VkShaderModule							fragShaderModule;
 	VkVertexInputBindingDescription			bindingDescription;
-	VkPipelineColorBlendStateCreateInfo		colorBlending;
 	VkVertexInputAttributeDescription		attributeDescriptions[3];
 	VkGraphicsPipelineCreateInfo			pipelineInfo;
 
@@ -56,8 +92,10 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 		read_file("shaders/vert.spv"));
 	fragShaderModule = vulkan_create_shader_module(app,
 		read_file("shaders/frag.spv"));
+
 	ft_memset(&pipelineInfo, 0, sizeof(pipelineInfo));
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+
 	pipelineInfo.stageCount = 2;
 	pipelineInfo.pStages = (VkPipelineShaderStageCreateInfo[2]){
 		(VkPipelineShaderStageCreateInfo){
@@ -68,6 +106,7 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
 		.flags = 0, .pNext = NULL, .pSpecializationInfo = NULL, .pName = "main",
 		.module = fragShaderModule, .stage = VK_SHADER_STAGE_FRAGMENT_BIT}};
+
 	vulkan_vertex_fill_attribute_descriptions(attributeDescriptions);
 	bindingDescription = vulkan_vertex_binding_description();
 	pipelineInfo.pVertexInputState = &(VkPipelineVertexInputStateCreateInfo){
@@ -77,11 +116,13 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
 		.vertexBindingDescriptionCount = 1,
 		.vertexAttributeDescriptionCount = 3};
+
 	pipelineInfo.pInputAssemblyState =
 		&(VkPipelineInputAssemblyStateCreateInfo){.flags = 0,
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
 		.primitiveRestartEnable = VK_FALSE,
 		.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, .pNext = NULL};
+
 	pipelineInfo.pViewportState = &(VkPipelineViewportStateCreateInfo){
 		.flags = 0, .pNext = NULL,
 		.pScissors = &(VkRect2D){.offset = (VkOffset2D){0, 0}},
@@ -90,6 +131,7 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 		.width = (float)app->vk_swap_chain_extent.width,
 		.height = (float)app->vk_swap_chain_extent.height,
 		.minDepth = 0.0f, .maxDepth = 0.0f}, .scissorCount = 1};
+
 	pipelineInfo.pRasterizationState =
 		&(VkPipelineRasterizationStateCreateInfo){.flags = 0, .pNext = NULL,
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
@@ -100,42 +142,33 @@ void						vulkan_create_graphics_pipeline(t_cvulkan *app)
 		.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE,
 		.rasterizerDiscardEnable = VK_FALSE,
 		.polygonMode = VK_POLYGON_MODE_FILL};
+
 	pipelineInfo.pMultisampleState = &(VkPipelineMultisampleStateCreateInfo){
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
 		.pNext = NULL,  .flags = 0, .pSampleMask = NULL,
 		.alphaToCoverageEnable = VK_FALSE, .alphaToOneEnable = VK_FALSE,
 		.sampleShadingEnable = VK_TRUE, .minSampleShading = .2f,
 		.rasterizationSamples = app->vk_msaa_samples};
-	colorBlending = (VkPipelineColorBlendStateCreateInfo){
-		.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
-		.pNext = NULL, .flags = 0, .attachmentCount = 1,
-		.logicOpEnable = VK_FALSE, .logicOp = VK_LOGIC_OP_COPY,
-		.pAttachments = &(VkPipelineColorBlendAttachmentState){
-			.blendEnable = VK_FALSE, .alphaBlendOp = 0, .colorBlendOp = 0,
-			.colorWriteMask =
-				VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-				VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT,
-			.dstAlphaBlendFactor = 0, .dstColorBlendFactor = 0,
-			.srcAlphaBlendFactor = 0, .srcColorBlendFactor = 0
-	}};
-	colorBlending.blendConstants[0] = 0.0f;
-	colorBlending.blendConstants[1] = 0.0f;
-	colorBlending.blendConstants[2] = 0.0f;
-	colorBlending.blendConstants[3] = 0.0f;
-	pipelineInfo.pColorBlendState = &colorBlending;
+
+
+	pipelineInfo.pColorBlendState = create_color_blend_create_info();
+
 	pipelineInfo.layout = app->vk_pipeline_layout;
 	pipelineInfo.renderPass = app->vk_render_pass;
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
 	pipelineInfo.pDepthStencilState = &(VkPipelineDepthStencilStateCreateInfo){
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
 		.pNext = NULL, .flags = 0, .front = {}, .stencilTestEnable = VK_FALSE,
 		.minDepthBounds = 0, .maxDepthBounds = 0, .depthWriteEnable = VK_TRUE,
 		.depthTestEnable = VK_TRUE, .depthCompareOp = VK_COMPARE_OP_LESS,
 		.back = {}, .depthBoundsTestEnable = VK_FALSE};
+
 	error_check(vkCreateGraphicsPipelines(app->vk_logical_device,
 		VK_NULL_HANDLE, 1, &pipelineInfo, NULL, &app->vk_graphics_pipeline)
 			!= VK_SUCCESS, "Failed to create graphics pipeline!");
+	free_color_blend_create_info(pipelineInfo.pColorBlendState);
 	vkDestroyShaderModule(app->vk_logical_device, fragShaderModule, NULL);
 	vkDestroyShaderModule(app->vk_logical_device, vertShaderModule, NULL);
 }

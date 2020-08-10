@@ -6,14 +6,15 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 15:10:45 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 21:59:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 22:10:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static VkShaderModule 				vulkan_create_shader_module(t_cvulkan *app,
-									t_file_contents *code)
+static VkShaderModule 					vulkan_create_shader_module(t_cvulkan
+										*app,
+										t_file_contents *code)
 {
 	VkShaderModuleCreateInfo	create_info;
 	VkShaderModule				shader_module;
@@ -28,7 +29,7 @@ static VkShaderModule 				vulkan_create_shader_module(t_cvulkan *app,
 	return (shader_module);
 }
 
-static void							create_pipeline_layout(t_cvulkan *app)
+static void								create_pipeline_layout(t_cvulkan *app)
 {
 	VkPipelineLayoutCreateInfo				pipelineLayoutInfo;
 
@@ -42,7 +43,7 @@ static void							create_pipeline_layout(t_cvulkan *app)
 				"Failed to create pipeline layout!");
 }
 
-VkPipelineColorBlendStateCreateInfo	*create_color_blend_create_info()
+VkPipelineColorBlendStateCreateInfo		*create_color_blend_create_info()
 {
 	VkPipelineColorBlendStateCreateInfo	*color_blending;
 	VkPipelineColorBlendAttachmentState	*color_blend_attachment;
@@ -70,16 +71,48 @@ VkPipelineColorBlendStateCreateInfo	*create_color_blend_create_info()
 	return (color_blending);
 }
 
-void								free_color_blend_create_info(
-									const VkPipelineColorBlendStateCreateInfo
-									*color_blending)
+void									free_color_blend_create_info(
+										const
+										VkPipelineColorBlendStateCreateInfo
+										*color_blending)
 {
 	free((void*)color_blending->pAttachments);
 	free((void*)color_blending);
 }
 
-void								vulkan_create_graphics_pipeline(t_cvulkan
-									*app)
+VkPipelineDepthStencilStateCreateInfo	*create_depth_stencil_create_info()
+{
+	VkPipelineDepthStencilStateCreateInfo	*depth_stencil_state;
+	error_check(!(depth_stencil_state = malloc(sizeof(*depth_stencil_state))),
+		"Failed to malloc!");
+	ft_memset(depth_stencil_state, 0, sizeof(*depth_stencil_state));
+	depth_stencil_state->sType =
+		VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depth_stencil_state->depthTestEnable = VK_TRUE;
+	depth_stencil_state->depthWriteEnable = VK_TRUE;
+	depth_stencil_state->depthCompareOp = VK_COMPARE_OP_LESS;
+	depth_stencil_state->depthBoundsTestEnable = VK_FALSE;
+	depth_stencil_state->stencilTestEnable = VK_FALSE;
+	return (depth_stencil_state);
+}
+
+VkPipelineMultisampleStateCreateInfo	*create_multisample_create_info(
+										VkSampleCountFlagBits msaa_samples)
+{
+	VkPipelineMultisampleStateCreateInfo	*create_info;
+	error_check(!(create_info = malloc(sizeof(*create_info))),
+		"Failed to malloc!");
+	ft_memset(create_info, 0, sizeof(*create_info));
+	create_info->sType =
+		VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+	create_info->sampleShadingEnable = VK_TRUE;
+	create_info->minSampleShading = .2f;
+	create_info->rasterizationSamples = msaa_samples;
+	return (create_info);
+}
+
+void									vulkan_create_graphics_pipeline(t_cvulkan
+										*app)
 {
 	VkShaderModule							vertShaderModule;
 	VkShaderModule							fragShaderModule;
@@ -143,32 +176,20 @@ void								vulkan_create_graphics_pipeline(t_cvulkan
 		.rasterizerDiscardEnable = VK_FALSE,
 		.polygonMode = VK_POLYGON_MODE_FILL};
 
-	pipelineInfo.pMultisampleState = &(VkPipelineMultisampleStateCreateInfo){
-		.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
-		.pNext = NULL,  .flags = 0, .pSampleMask = NULL,
-		.alphaToCoverageEnable = VK_FALSE, .alphaToOneEnable = VK_FALSE,
-		.sampleShadingEnable = VK_TRUE, .minSampleShading = .2f,
-		.rasterizationSamples = app->vk_msaa_samples};
-
-
+	pipelineInfo.pMultisampleState =
+		create_multisample_create_info(app->vk_msaa_samples);
 	pipelineInfo.pColorBlendState = create_color_blend_create_info();
-
 	pipelineInfo.layout = app->vk_pipeline_layout;
 	pipelineInfo.renderPass = app->vk_render_pass;
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
-
-	pipelineInfo.pDepthStencilState = &(VkPipelineDepthStencilStateCreateInfo){
-		.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
-		.pNext = NULL, .flags = 0, .front = {}, .stencilTestEnable = VK_FALSE,
-		.minDepthBounds = 0, .maxDepthBounds = 0, .depthWriteEnable = VK_TRUE,
-		.depthTestEnable = VK_TRUE, .depthCompareOp = VK_COMPARE_OP_LESS,
-		.back = {}, .depthBoundsTestEnable = VK_FALSE};
-
+	pipelineInfo.pDepthStencilState = create_depth_stencil_create_info();
 	error_check(vkCreateGraphicsPipelines(app->vk_logical_device,
 		VK_NULL_HANDLE, 1, &pipelineInfo, NULL, &app->vk_graphics_pipeline)
 			!= VK_SUCCESS, "Failed to create graphics pipeline!");
 	free_color_blend_create_info(pipelineInfo.pColorBlendState);
+	free((void*)pipelineInfo.pDepthStencilState);
+	free((void*)pipelineInfo.pMultisampleState);
 	vkDestroyShaderModule(app->vk_logical_device, fragShaderModule, NULL);
 	vkDestroyShaderModule(app->vk_logical_device, vertShaderModule, NULL);
 }

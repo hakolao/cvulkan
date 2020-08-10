@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 15:10:45 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 22:44:49 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 23:25:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,13 +170,54 @@ void									free_viewport_create_info(
 	free((void*)create_info);
 }
 
+VkPipelineInputAssemblyStateCreateInfo	*create_input_assembly_create_info()
+{
+	VkPipelineInputAssemblyStateCreateInfo	*input_assembly;
+
+	error_check(!(input_assembly = malloc(sizeof(*input_assembly))),
+		"Failed to malloc!");
+	ft_memset(input_assembly, 0, sizeof(*input_assembly));
+	input_assembly->sType =
+		VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+	input_assembly->topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+	input_assembly->primitiveRestartEnable = VK_FALSE;
+	return (input_assembly);
+}
+
+VkPipelineVertexInputStateCreateInfo	*create_vertex_input_create_info()
+{
+	VkPipelineVertexInputStateCreateInfo	*vertex_input_info;
+	uint32_t								attribute_count;
+
+	error_check(!(vertex_input_info = malloc(sizeof(*vertex_input_info))),
+		"Failed to malloc!");
+	ft_memset(vertex_input_info, 0, sizeof(*vertex_input_info));
+	vertex_input_info->sType =
+		VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+	vertex_input_info->vertexBindingDescriptionCount = 1;
+	vertex_input_info->pVertexBindingDescriptions =
+		vulkan_create_vertex_binding_description();
+	vertex_input_info->pVertexAttributeDescriptions =
+		vulkan_create_vtx_attribute_descriptions(&attribute_count);
+	vertex_input_info->vertexAttributeDescriptionCount = attribute_count;
+	return (vertex_input_info);
+}
+
+void									free_vertex_input_create_info(
+										const
+										VkPipelineVertexInputStateCreateInfo
+										*create_info)
+{
+	free((void*)create_info->pVertexAttributeDescriptions);
+	free((void*)create_info->pVertexBindingDescriptions);
+	free((void*)create_info);
+}
+
 void									vulkan_create_graphics_pipeline(
 										t_cvulkan *app)
 {
 	VkShaderModule							vertShaderModule;
 	VkShaderModule							fragShaderModule;
-	VkVertexInputBindingDescription			bindingDescription;
-	VkVertexInputAttributeDescription		attributeDescriptions[3];
 	VkGraphicsPipelineCreateInfo			pipelineInfo;
 
 	create_pipeline_layout(app);
@@ -199,22 +240,8 @@ void									vulkan_create_graphics_pipeline(
 		.flags = 0, .pNext = NULL, .pSpecializationInfo = NULL, .pName = "main",
 		.module = fragShaderModule, .stage = VK_SHADER_STAGE_FRAGMENT_BIT}};
 
-	vulkan_vertex_fill_attribute_descriptions(attributeDescriptions);
-	bindingDescription = vulkan_vertex_binding_description();
-	pipelineInfo.pVertexInputState = &(VkPipelineVertexInputStateCreateInfo){
-		.pNext = NULL, .flags = 0,
-		.pVertexAttributeDescriptions = attributeDescriptions,
-		.pVertexBindingDescriptions = &bindingDescription,
-		.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-		.vertexBindingDescriptionCount = 1,
-		.vertexAttributeDescriptionCount = 3};
-
-	pipelineInfo.pInputAssemblyState =
-		&(VkPipelineInputAssemblyStateCreateInfo){.flags = 0,
-		.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
-		.primitiveRestartEnable = VK_FALSE,
-		.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, .pNext = NULL};
-
+	pipelineInfo.pVertexInputState = create_vertex_input_create_info();
+	pipelineInfo.pInputAssemblyState = create_input_assembly_create_info();
 	pipelineInfo.pViewportState = create_viewport_create_info(app);
 	pipelineInfo.pRasterizationState = create_rasterization_create_info();
 	pipelineInfo.pMultisampleState =
@@ -230,9 +257,11 @@ void									vulkan_create_graphics_pipeline(
 			!= VK_SUCCESS, "Failed to create graphics pipeline!");
 	free_color_blend_create_info(pipelineInfo.pColorBlendState);
 	free_viewport_create_info(pipelineInfo.pViewportState);
+	free_vertex_input_create_info(pipelineInfo.pVertexInputState);
 	free((void*)pipelineInfo.pDepthStencilState);
 	free((void*)pipelineInfo.pMultisampleState);
 	free((void*)pipelineInfo.pRasterizationState);
+	free((void*)pipelineInfo.pInputAssemblyState);
 	vkDestroyShaderModule(app->vk_logical_device, fragShaderModule, NULL);
 	vkDestroyShaderModule(app->vk_logical_device, vertShaderModule, NULL);
 }

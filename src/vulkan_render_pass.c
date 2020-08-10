@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 12:12:47 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 13:34:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 16:31:50 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,9 @@ void							vulkan_create_render_pass(t_cvulkan *app)
 	ft_memset(&render_pass_info, 0, sizeof(render_pass_info));
 	render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
 	render_pass_info.attachmentCount = 3;
-	render_pass_info.pAttachments = (VkAttachmentDescription[3]){color_attachment,
-		depth_attachment_description(app), color_attachment_resolve};
+	render_pass_info.pAttachments = (VkAttachmentDescription[3]){
+		color_attachment, depth_attachment_description(app),
+		color_attachment_resolve};
 	render_pass_info.subpassCount = 1;
 	render_pass_info.pSubpasses = subpass;
 	render_pass_info.dependencyCount = 1;

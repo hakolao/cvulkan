@@ -49,6 +49,9 @@ SOURCES = main.c \
 			vulkan_render_pass_utils.c \
 			vulkan_descriptor_set_layout.c \
 			vulkan_graphics_pipeline.c \
+			vulkan_graphics_pipeline_info1.c \
+			vulkan_graphics_pipeline_info2.c \
+			vulkan_graphics_pipeline_info3.c \
 			vulkan_vertex.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))

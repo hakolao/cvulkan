@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 23:26:23 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 23:55:33 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,14 +222,42 @@ void								vulkan_create_descriptor_set_layout(
 /*
 ** Vulkan vertex
 */
-VkVertexInputBindingDescription		*vulkan_create_vertex_binding_description();
-VkVertexInputAttributeDescription	*vulkan_create_vtx_attribute_descriptions(
-									uint32_t *count);
+void								vulkan_free_vertex_input_create_info(const
+									VkPipelineVertexInputStateCreateInfo
+									*create_info);
+VkPipelineVertexInputStateCreateInfo*vulkan_create_vertex_input_create_info();
 
 /*
 ** Vulkan graphics pipeline
 */
 void								vulkan_create_graphics_pipeline(t_cvulkan
 									*app);
+VkPipelineColorBlendStateCreateInfo	*vulkan_create_color_blend_create_info();
+void								free_color_blend_create_info(const
+									VkPipelineColorBlendStateCreateInfo
+									*color_blending);
+VkPipelineDepthStencilStateCreateInfo
+									*vulkan_create_depth_stencil_create_info();
+VkPipelineMultisampleStateCreateInfo
+									*vulkan_create_multisample_create_info(
+									VkSampleCountFlagBits msaa_samples);
+VkPipelineRasterizationStateCreateInfo
+									*vulkan_create_rasterization_create_info();
+
+VkPipelineViewportStateCreateInfo	*vulkan_create_viewport_create_info(
+									t_cvulkan *app);
+void								vulkan_free_viewport_create_info(const
+									VkPipelineViewportStateCreateInfo
+									*create_info);
+VkPipelineInputAssemblyStateCreateInfo
+									*create_input_assembly_create_info();
+VkPipelineShaderStageCreateInfo		*vulkan_create_shader_stages_info(
+									t_cvulkan *app,
+									uint32_t *stage_count);
+void								vulkan_destroy_shader_modules(
+									t_cvulkan *app,
+									uint32_t stage_count,
+									const VkPipelineShaderStageCreateInfo
+									*shader_stages);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 15:30:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 23:26:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/10 23:34:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-VkVertexInputBindingDescription		*vulkan_create_vertex_binding_description()
+static VkVertexInputBindingDescription		*create_vertex_binding_description()
 {
 	VkVertexInputBindingDescription *binding_description;
 
@@ -25,8 +25,8 @@ VkVertexInputBindingDescription		*vulkan_create_vertex_binding_description()
 	return (binding_description);
 }
 
-VkVertexInputAttributeDescription	*vulkan_create_vtx_attribute_descriptions(
-									uint32_t *count)
+static VkVertexInputAttributeDescription	*create_vtx_attribute_descriptions(
+											uint32_t *count)
 {
 	t_vulkan_vertex						vtx;
 	VkVertexInputAttributeDescription	*attribute_descriptions;
@@ -48,4 +48,33 @@ VkVertexInputAttributeDescription	*vulkan_create_vtx_attribute_descriptions(
 	attribute_descriptions[2].offset = sizeof(vtx.pos) + sizeof(vtx.color);
 	*count = 3;
 	return (attribute_descriptions);
+}
+
+VkPipelineVertexInputStateCreateInfo		*vulkan_create_vertex_input_create_info()
+{
+	VkPipelineVertexInputStateCreateInfo	*vertex_input_info;
+	uint32_t								attribute_count;
+
+	error_check(!(vertex_input_info = malloc(sizeof(*vertex_input_info))),
+		"Failed to malloc!");
+	ft_memset(vertex_input_info, 0, sizeof(*vertex_input_info));
+	vertex_input_info->sType =
+		VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+	vertex_input_info->vertexBindingDescriptionCount = 1;
+	vertex_input_info->pVertexBindingDescriptions =
+		create_vertex_binding_description();
+	vertex_input_info->pVertexAttributeDescriptions =
+		create_vtx_attribute_descriptions(&attribute_count);
+	vertex_input_info->vertexAttributeDescriptionCount = attribute_count;
+	return (vertex_input_info);
+}
+
+void										vulkan_free_vertex_input_create_info(
+											const
+											VkPipelineVertexInputStateCreateInfo
+											*create_info)
+{
+	free((void*)create_info->pVertexAttributeDescriptions);
+	free((void*)create_info->pVertexBindingDescriptions);
+	free((void*)create_info);
 }

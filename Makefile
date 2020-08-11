@@ -59,7 +59,9 @@ SOURCES = main.c \
 			vulkan_image.c \
 			vulkan_image_utils.c \
 			vulkan_image_layout.c \
-			vulkan_image_memory_barrier.c \
+			vulkan_image_layout_info.c \
+			vulkan_image_mipmaps.c \
+			vulkan_image_blit_cmd.c \
 			vulkan_memory.c \
 			vulkan_frame_buffer.c \
 			vulkan_command_buffer.c

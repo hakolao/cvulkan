@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 17:24:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 18:12:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,7 +335,12 @@ void								vulkan_set_barrier_layout_transition(
 									VkPipelineStageFlags *src_stage,
 									VkPipelineStageFlags *dst_stage,
 									VkImageMemoryBarrier *barrier);
-
+void								vulkan_generate_mipmaps(t_cvulkan *app,
+									t_image_info *info);
+void								vulkan_create_blit_image_cmd(int32_t
+									dimensions[2],
+									VkCommandBuffer command_buffer,
+									t_image_info *info, size_t i);
 
 /*
 ** Vulkan color resources

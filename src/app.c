@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 16:53:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 22:22:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,15 @@ static void		vulkan_init(t_cvulkan *app)
 	vulkan_create_depth_resources(app);
 	vulkan_create_frame_buffers(app);
 	vulkan_create_texture_image(app);
+	vulkan_create_texture_image_view(app);
 }
 
 static void		cleanup(t_cvulkan *app)
 {
 	vulkan_cleanup_swap_chain(app);
 	vkDestroyImage(app->vk_logical_device, app->vk_texture_image, NULL);
+	vkDestroyImageView(app->vk_logical_device,
+		app->vk_texture_image_view, NULL);
 	vkFreeMemory(app->vk_logical_device, app->vk_texture_image_memory, NULL);
 	vkDestroyDescriptorSetLayout(app->vk_logical_device,
 		app->vk_descriptor_set_layout, NULL);

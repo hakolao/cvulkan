@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 11:50:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 12:11:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 22:19:02 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,14 @@ void						vulkan_create_image_views(t_cvulkan *app)
 		app->vk_swap_chain_image_views[i] =
 			vulkan_create_image_view(app, &view_info);
 	}
+}
+
+void						vulkan_create_texture_image_view(t_cvulkan *app)
+{
+	VkImageViewCreateInfo	view_info;
+
+	view_info = vulkan_create_image_image_view_info(
+		app->vk_texture_image, VK_FORMAT_B8G8R8A8_SRGB,
+		VK_IMAGE_ASPECT_COLOR_BIT, app->vk_mip_levels);
+	app->vk_texture_image_view = vulkan_create_image_view(app, &view_info);
 }

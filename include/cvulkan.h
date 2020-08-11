@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 18:12:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 22:19:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,8 @@ VkImageViewCreateInfo				vulkan_create_image_image_view_info(
 									VkImage image, VkFormat format,
 									VkImageAspectFlags aspect_flags,
 									uint32_t mip_levels);
+void								vulkan_create_texture_image_view(t_cvulkan
+									*app);
 
 /*
 ** Vulkan render pass

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 18:39:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 12:15:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,21 @@ void							vulkan_find_queue_families(t_cvulkan *app,
 	vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, NULL);
 	vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count,
 		queue_families);
-	i = 0;
-	indices->graphics_family = -1;
-	indices->present_family = -1;
-	while (i  < queue_family_count)
+	i = -1;
+	indices->graphics_family = (uint32_t)-1;
+	indices->present_family = (uint32_t)-1;
+	while (++i  < queue_family_count)
 	{
 		if (queue_families[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 			indices->graphics_family = i;
-		if (indices->graphics_family != -1 && indices->present_family != -1)
+		if (indices->graphics_family != (uint32_t)-1 &&
+			indices->present_family != (uint32_t)-1)
 			break;
 		present_support = false;
 		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, app->vk_surface,
 											 &present_support);
 		if (present_support)
 			indices->present_family = i;
-		i++;
 	}
 }
 
@@ -61,7 +61,8 @@ static int 						rate_device_suitability(t_cvulkan *app,
 	if (!deviceFeatures.samplerAnisotropy)
 		return 0;
 	vulkan_find_queue_families(app, device, &indices);
-	if (indices.graphics_family == -1 || indices.present_family == -1)
+	if (indices.graphics_family == (uint32_t)-1 ||
+		indices.present_family == (uint32_t)-1)
 		return 0;
 	if (!vulkan_check_device_extension_support(app, device))
 		return 0;

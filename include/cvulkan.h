@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 23:55:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 12:13:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ typedef struct						s_file_contents
 
 typedef struct						s_queue_family_indices
 {
-	int32_t			graphics_family;
-	int32_t			present_family;
+	uint32_t			graphics_family;
+	uint32_t			present_family;
 }									t_queue_family_indices;
 
 typedef struct						s_swap_chain_support_details {
@@ -106,6 +106,7 @@ typedef struct						s_cvulkan {
 	VkDescriptorSetLayout		vk_descriptor_set_layout;
 	VkPipelineLayout			vk_pipeline_layout;
 	VkPipeline					vk_graphics_pipeline;
+	VkCommandPool				vk_command_pool;
 }									t_cvulkan;
 
 /*
@@ -259,5 +260,11 @@ void								vulkan_destroy_shader_modules(
 									uint32_t stage_count,
 									const VkPipelineShaderStageCreateInfo
 									*shader_stages);
+
+
+/*
+** Vulkan command pool
+*/
+void								vulkan_create_command_pool(t_cvulkan *app);
 
 #endif

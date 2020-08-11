@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 15:11:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 16:57:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 18:16:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void				vulkan_create_buffer(t_cvulkan *app, t_buffer_info *info)
 	bufferInfo.usage = info->usage;
 	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	error_check(vkCreateBuffer(app->vk_logical_device, &bufferInfo, NULL,
-		info->buffer) != VK_SUCCESS, "Failed to create vertex buffer!");
+		info->buffer) != VK_SUCCESS, "Failed to create buffer!");
 	vkGetBufferMemoryRequirements(app->vk_logical_device, *info->buffer,
 		&memRequirements);
 	ft_memset(&allocInfo, 0, sizeof(allocInfo));
@@ -70,7 +70,7 @@ void				vulkan_create_buffer(t_cvulkan *app, t_buffer_info *info)
 		memRequirements.memoryTypeBits, info->properties);
 	error_check(vkAllocateMemory(app->vk_logical_device, &allocInfo, NULL,
 		info->buffer_memory) != VK_SUCCESS,
-		"Failed to allocate vertex buffer memory!");
+		"Failed to allocate buffer memory!");
 	vkBindBufferMemory(app->vk_logical_device, *info->buffer,
 		*info->buffer_memory, 0);
 }

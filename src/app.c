@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 12:13:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 12:51:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void		main_loop(t_cvulkan *app) {
 		}
 		// drawFrame();
 	}
-	// vkDeviceWaitIdle(device);
+	vkDeviceWaitIdle(app->vk_logical_device);
 }
 
 static void		vulkan_init(t_cvulkan *app)
@@ -38,6 +38,7 @@ static void		vulkan_init(t_cvulkan *app)
 	vulkan_create_descriptor_set_layout(app);
 	vulkan_create_graphics_pipeline(app);
 	vulkan_create_command_pool(app);
+	vulkan_create_color_resources(app);
 }
 
 static void		cleanup(t_cvulkan *app)

@@ -53,7 +53,10 @@ SOURCES = main.c \
 			vulkan_graphics_pipeline_info2.c \
 			vulkan_graphics_pipeline_info3.c \
 			vulkan_vertex.c \
-			vulkan_command_pool.c
+			vulkan_command_pool.c \
+			vulkan_color_resources.c \
+			vulkan_image.c \
+			vulkan_memory.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 12:13:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 12:42:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,20 @@
 ** ToDo: Don't use cglm, but own library...
 */
 # include <cglm/cglm.h>
+
+typedef struct						s_create_image_info
+{
+	uint32_t						width;
+	uint32_t						height;
+	uint32_t						mip_levels;
+	VkSampleCountFlagBits			msaa_samples;
+	VkFormat						format;
+	VkImageTiling					tiling;
+	VkImageUsageFlags				usage;
+	VkMemoryPropertyFlags			properties;
+	VkImage							*image;
+	VkDeviceMemory					*image_memory;
+}									t_create_image_info;
 
 typedef struct						s_vulkan_vertex
 {
@@ -107,6 +121,9 @@ typedef struct						s_cvulkan {
 	VkPipelineLayout			vk_pipeline_layout;
 	VkPipeline					vk_graphics_pipeline;
 	VkCommandPool				vk_command_pool;
+	VkImage						vk_color_image;
+	VkDeviceMemory				vk_color_image_memory;
+	VkImageView					vk_color_image_view;
 }									t_cvulkan;
 
 /*
@@ -266,5 +283,24 @@ void								vulkan_destroy_shader_modules(
 ** Vulkan command pool
 */
 void								vulkan_create_command_pool(t_cvulkan *app);
+
+/*
+** Vulkan memory
+*/
+uint32_t							vulkan_find_memory_type(t_cvulkan *app,
+									uint32_t type_filter,
+									VkMemoryPropertyFlags properties);
+
+/*
+** Vulkan image
+*/
+void								vulkan_create_image(t_cvulkan *app,
+									t_create_image_info *info);
+
+/*
+** Vulkan color resources
+*/
+void								vulkan_create_color_resources(t_cvulkan
+									*app);
 
 #endif

@@ -58,6 +58,8 @@ SOURCES = main.c \
 			vulkan_depth_resources.c \
 			vulkan_image.c \
 			vulkan_image_utils.c \
+			vulkan_image_layout.c \
+			vulkan_image_memory_barrier.c \
 			vulkan_memory.c \
 			vulkan_frame_buffer.c \
 			vulkan_command_buffer.c

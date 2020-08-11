@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 17:04:53 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 17:24:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,6 +326,16 @@ void								vulkan_transition_image_layout(t_cvulkan
 									*app, t_image_info *info,
 									VkImageLayout oldLayout,
 									VkImageLayout newLayout);
+ void								vulkan_set_barrier_subresource_range(
+	 								VkImageLayout new_layout,
+									t_image_info *info,
+									VkImageMemoryBarrier *barrier);
+void								vulkan_set_barrier_layout_transition(
+									VkImageLayout layouts[2],
+									VkPipelineStageFlags *src_stage,
+									VkPipelineStageFlags *dst_stage,
+									VkImageMemoryBarrier *barrier);
+
 
 /*
 ** Vulkan color resources

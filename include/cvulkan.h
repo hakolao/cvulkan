@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 16:50:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 17:01:02 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,6 +316,12 @@ uint32_t							vulkan_find_memory_type(t_cvulkan *app,
 void								vulkan_create_image(t_cvulkan *app,
 									t_image_info *info);
 void								vulkan_create_texture_image(t_cvulkan *app);
+bool								vulkan_has_stencil_component(VkFormat
+									format);
+void								vulkan_allocate_image_memory(t_cvulkan *app,
+									t_image_info *info);
+void								vulkan_copy_buffer_to_image(t_cvulkan *app,
+									VkBuffer buffer, t_image_info *info);
 
 /*
 ** Vulkan color resources

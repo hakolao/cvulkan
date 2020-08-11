@@ -6,33 +6,11 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 12:23:55 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 16:52:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 17:01:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
-
-static bool		has_stencil_component(VkFormat format) {
-	return (format == VK_FORMAT_D32_SFLOAT_S8_UINT ||
-			format == VK_FORMAT_D24_UNORM_S8_UINT);
-}
-
-static void		allocate_image_memory(t_cvulkan *app,
-				t_image_info *info)
-{
-	VkMemoryAllocateInfo	alloc_info;
-	VkMemoryRequirements	mem_requirements;
-
-	vkGetImageMemoryRequirements(app->vk_logical_device, *info->image,
-		&mem_requirements);
-	ft_memset(&alloc_info, 0, sizeof(alloc_info));
-	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-	alloc_info.allocationSize = mem_requirements.size;
-	alloc_info.memoryTypeIndex = vulkan_find_memory_type(app,
-		mem_requirements.memoryTypeBits, info->properties);
-	error_check(vkAllocateMemory(app->vk_logical_device, &alloc_info, NULL,
-		info->image_memory) != VK_SUCCESS, "Failed to allocate image memory!");
-}
 
 static void		transition_image_layout(t_cvulkan *app,
 				t_image_info *info,
@@ -57,7 +35,7 @@ static void		transition_image_layout(t_cvulkan *app,
 	if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
 	{
 		barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-		if (has_stencil_component(info->format))
+		if (vulkan_has_stencil_component(info->format))
 			barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
 	}
 	else
@@ -115,31 +93,9 @@ void			vulkan_create_image(t_cvulkan *app, t_image_info *info)
 	image_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	error_check(vkCreateImage(app->vk_logical_device, &image_info, NULL,
 			info->image) != VK_SUCCESS, "Failed to create image!");
-	allocate_image_memory(app, info);
+	vulkan_allocate_image_memory(app, info);
 	vkBindImageMemory(app->vk_logical_device, *info->image,
 		*info->image_memory, 0);
-}
-
-void			copy_buffer_to_image(t_cvulkan *app,
-				VkBuffer buffer, t_image_info *info)
-{
-	VkCommandBuffer		command_buffer;
-	VkBufferImageCopy	region;
-
-	command_buffer = vulkan_begin_single_time_commands(app);
-	ft_memset(&region, 0, sizeof(region));
-	region.bufferOffset = 0;
-	region.bufferRowLength = 0;
-	region.bufferImageHeight = 0;
-	region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	region.imageSubresource.mipLevel = 0;
-	region.imageSubresource.baseArrayLayer = 0;
-	region.imageSubresource.layerCount = 1;
-	region.imageOffset = (VkOffset3D){0, 0, 0};
-	region.imageExtent = (VkExtent3D){info->width, info->height, 1};
-	vkCmdCopyBufferToImage(command_buffer, buffer, *info->image,
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
-	vulkan_end_single_time_commands(app, command_buffer);
 }
 
 void			generate_mipmaps(t_cvulkan *app, t_image_info *info)
@@ -263,7 +219,7 @@ void			vulkan_create_texture_image(t_cvulkan *app)
 	vulkan_create_image(app, &image_info);
 	transition_image_layout(app, &image_info, VK_IMAGE_LAYOUT_UNDEFINED,
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-	copy_buffer_to_image(app, stagingBuffer, &image_info);
+	vulkan_copy_buffer_to_image(app, stagingBuffer, &image_info);
 	vkDestroyBuffer(app->vk_logical_device, stagingBuffer, NULL);
 	vkFreeMemory(app->vk_logical_device, stagingBufferMemory, NULL);
 	generate_mipmaps(app, &image_info);

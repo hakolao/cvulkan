@@ -55,6 +55,7 @@ SOURCES = main.c \
 			vulkan_vertex.c \
 			vulkan_command_pool.c \
 			vulkan_color_resources.c \
+			vulkan_depth_resources.c \
 			vulkan_image.c \
 			vulkan_memory.c
 

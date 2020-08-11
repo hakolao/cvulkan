@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 12:42:36 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 13:18:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,9 @@ typedef struct						s_cvulkan {
 	VkImage						vk_color_image;
 	VkDeviceMemory				vk_color_image_memory;
 	VkImageView					vk_color_image_view;
+	VkImage						vk_depth_image;
+	VkDeviceMemory				vk_depth_image_memory;
+	VkImageView					vk_depth_image_view;
 }									t_cvulkan;
 
 /*
@@ -301,6 +304,12 @@ void								vulkan_create_image(t_cvulkan *app,
 ** Vulkan color resources
 */
 void								vulkan_create_color_resources(t_cvulkan
+									*app);
+
+/*
+** Vulkan depth resources
+*/
+void								vulkan_create_depth_resources(t_cvulkan
 									*app);
 
 #endif

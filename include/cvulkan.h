@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 13:18:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 13:24:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ typedef struct						s_cvulkan {
 	VkImageView					vk_swap_chain_image_views[8];
 	VkFramebuffer				vk_swap_chain_frame_buffers[8];
 	uint32_t					vk_swap_chain_images_count;
-	uint32_t					vk_swap_chain_frame_buffer_count;
 	VkSampleCountFlagBits		vk_msaa_samples;
 	uint32_t					vk_enabled_extension_count;
 	uint32_t					vk_enabled_layer_count;
@@ -311,5 +310,10 @@ void								vulkan_create_color_resources(t_cvulkan
 */
 void								vulkan_create_depth_resources(t_cvulkan
 									*app);
+
+/*
+** Vulkan  frame buffers
+*/
+void								vulkan_create_frame_buffers(t_cvulkan *app);
 
 #endif

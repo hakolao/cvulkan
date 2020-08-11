@@ -57,7 +57,8 @@ SOURCES = main.c \
 			vulkan_color_resources.c \
 			vulkan_depth_resources.c \
 			vulkan_image.c \
-			vulkan_memory.c
+			vulkan_memory.c \
+			vulkan_frame_buffer.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

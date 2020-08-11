@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 13:05:47 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 13:17:50 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 16:53:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void				vulkan_create_depth_resources(t_cvulkan *app)
 
 	depth_format = find_depth_format(app);
 	vulkan_create_image(app,
-		&(t_create_image_info){.width = app->vk_swap_chain_extent.width,
+		&(t_image_info){.width = app->vk_swap_chain_extent.width,
 			.height = app->vk_swap_chain_extent.height,
 			.mip_levels = 1, .msaa_samples = app->vk_msaa_samples,
 			.format = depth_format, .tiling = VK_IMAGE_TILING_OPTIMAL,

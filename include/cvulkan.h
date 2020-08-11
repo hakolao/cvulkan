@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 13:24:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 16:50:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <SDL_image.h>
 # include <SDL_vulkan.h>
 # include <vulkan/vulkan.h>
+# include <math.h>
 # include "libft.h"
 
 /*
@@ -35,7 +36,10 @@
 */
 # include <cglm/cglm.h>
 
-typedef struct						s_create_image_info
+# define MODEL_PATH "models/viking_room.obj"
+# define TEXTURE_PATH "textures/viking_room.png"
+
+typedef struct						s_image_info
 {
 	uint32_t						width;
 	uint32_t						height;
@@ -47,7 +51,16 @@ typedef struct						s_create_image_info
 	VkMemoryPropertyFlags			properties;
 	VkImage							*image;
 	VkDeviceMemory					*image_memory;
-}									t_create_image_info;
+}									t_image_info;
+
+typedef struct						s_buffer_info
+{
+VkDeviceSize						size;
+VkBufferUsageFlags					usage;
+VkMemoryPropertyFlags				properties;
+VkBuffer							*buffer;
+VkDeviceMemory						*buffer_memory;
+}									t_buffer_info;
 
 typedef struct						s_vulkan_vertex
 {
@@ -126,6 +139,10 @@ typedef struct						s_cvulkan {
 	VkImage						vk_depth_image;
 	VkDeviceMemory				vk_depth_image_memory;
 	VkImageView					vk_depth_image_view;
+	uint32_t					vk_mip_levels;
+	VkImage						vk_texture_image;
+	VkDeviceMemory				vk_texture_image_memory;
+	VkImageView					vk_texture_image_view;
 }									t_cvulkan;
 
 /*
@@ -297,7 +314,8 @@ uint32_t							vulkan_find_memory_type(t_cvulkan *app,
 ** Vulkan image
 */
 void								vulkan_create_image(t_cvulkan *app,
-									t_create_image_info *info);
+									t_image_info *info);
+void								vulkan_create_texture_image(t_cvulkan *app);
 
 /*
 ** Vulkan color resources
@@ -315,5 +333,15 @@ void								vulkan_create_depth_resources(t_cvulkan
 ** Vulkan  frame buffers
 */
 void								vulkan_create_frame_buffers(t_cvulkan *app);
+
+/*
+** Vulkan command buffer
+*/
+VkCommandBuffer						vulkan_begin_single_time_commands(t_cvulkan
+									*app);
+void								vulkan_end_single_time_commands(t_cvulkan
+									*app, VkCommandBuffer command_buffer);
+void								vulkan_create_buffer(t_cvulkan *app,
+									t_buffer_info *info);
 
 #endif

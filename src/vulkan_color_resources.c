@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 12:17:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 12:52:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/11 16:52:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	vulkan_create_color_resources(t_cvulkan *app)
 
 	color_format = app->vk_swap_chain_image_format;
 	vulkan_create_image(app,
-		&(t_create_image_info){.width = app->vk_swap_chain_extent.width,
+		&(t_image_info){.width = app->vk_swap_chain_extent.width,
 			.height = app->vk_swap_chain_extent.height,
 			.mip_levels = 1, .msaa_samples = app->vk_msaa_samples,
 			.format = color_format, .tiling = VK_IMAGE_TILING_OPTIMAL,

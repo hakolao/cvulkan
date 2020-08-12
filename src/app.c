@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 16:37:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 18:06:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static void		vulkan_init(t_cvulkan *app)
 	vulkan_create_texture_image_view(app);
 	vulkan_create_texture_sampler(app);
 	vulkan_load_model(app, MODEL_PATH);
+	vulkan_create_vertex_buffer(app);
 }
 
 static void		cleanup(t_cvulkan *app)
@@ -57,6 +58,8 @@ static void		cleanup(t_cvulkan *app)
 	vkFreeMemory(app->vk_logical_device, app->vk_texture_image_memory, NULL);
 	vkDestroyDescriptorSetLayout(app->vk_logical_device,
 		app->vk_descriptor_set_layout, NULL);
+	vkDestroyBuffer(app->vk_logical_device, app->vk_vertex_buffer, NULL);
+	vkFreeMemory(app->vk_logical_device, app->vk_vertex_buffer_memory, NULL);
 	vkDestroyCommandPool(app->vk_logical_device, app->vk_command_pool, NULL);
 	vkDestroyDevice(app->vk_logical_device, NULL);
 	if (ENABLE_VALIDATION_LAYERS) {

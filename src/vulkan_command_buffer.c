@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 15:11:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 18:16:32 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 18:01:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,27 +48,40 @@ void				vulkan_end_single_time_commands(t_cvulkan *app,
 		1, &command_buffer);
 }
 
+void				vulkan_copy_buffer(t_cvulkan *app, VkBuffer src_buffer,
+					VkBuffer dst_buffer, VkDeviceSize size)
+{
+	VkCommandBuffer		command_buffer;
+	VkBufferCopy		copy_region;
+
+	command_buffer = vulkan_begin_single_time_commands(app);
+	ft_memset(&copy_region, 0, sizeof(copy_region));
+	copy_region.size = size;
+	vkCmdCopyBuffer(command_buffer, src_buffer, dst_buffer, 1, &copy_region);
+	vulkan_end_single_time_commands(app, command_buffer);
+}
+
 void				vulkan_create_buffer(t_cvulkan *app, t_buffer_info *info)
 {
-	VkBufferCreateInfo		bufferInfo;
-	VkMemoryRequirements	memRequirements;
-	VkMemoryAllocateInfo	allocInfo;
+	VkBufferCreateInfo		buffer_info;
+	VkMemoryRequirements	mem_requirements;
+	VkMemoryAllocateInfo	alloc_info;
 
-	ft_memset(&bufferInfo, 0, sizeof(bufferInfo));
-	bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-	bufferInfo.size = info->size;
-	bufferInfo.usage = info->usage;
-	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	error_check(vkCreateBuffer(app->vk_logical_device, &bufferInfo, NULL,
+	ft_memset(&buffer_info, 0, sizeof(buffer_info));
+	buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+	buffer_info.size = info->size;
+	buffer_info.usage = info->usage;
+	buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	error_check(vkCreateBuffer(app->vk_logical_device, &buffer_info, NULL,
 		info->buffer) != VK_SUCCESS, "Failed to create buffer!");
 	vkGetBufferMemoryRequirements(app->vk_logical_device, *info->buffer,
-		&memRequirements);
-	ft_memset(&allocInfo, 0, sizeof(allocInfo));
-	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-	allocInfo.allocationSize = memRequirements.size;
-	allocInfo.memoryTypeIndex = vulkan_find_memory_type(app,
-		memRequirements.memoryTypeBits, info->properties);
-	error_check(vkAllocateMemory(app->vk_logical_device, &allocInfo, NULL,
+		&mem_requirements);
+	ft_memset(&alloc_info, 0, sizeof(alloc_info));
+	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	alloc_info.allocationSize = mem_requirements.size;
+	alloc_info.memoryTypeIndex = vulkan_find_memory_type(app,
+		mem_requirements.memoryTypeBits, info->properties);
+	error_check(vkAllocateMemory(app->vk_logical_device, &alloc_info, NULL,
 		info->buffer_memory) != VK_SUCCESS,
 		"Failed to allocate buffer memory!");
 	vkBindBufferMemory(app->vk_logical_device, *info->buffer,

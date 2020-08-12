@@ -6,15 +6,15 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 12:23:55 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 13:04:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 18:08:38 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
 static void			map_sdl_image_to_buffers(t_cvulkan *app,
-					uint32_t dimensions[2], VkBuffer *stagingBuffer,
-					VkDeviceMemory *stagingBufferMemory)
+					uint32_t dimensions[2], VkBuffer *staging_buffer,
+					VkDeviceMemory *staging_buffer_memory)
 {
 	void				*data;
 	VkDeviceSize		imageSize;
@@ -31,36 +31,36 @@ static void			map_sdl_image_to_buffers(t_cvulkan *app,
 		.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 		.properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
 			VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-		.buffer = stagingBuffer, .buffer_memory = stagingBufferMemory});
-	vkMapMemory(app->vk_logical_device, *stagingBufferMemory,
+		.buffer = staging_buffer, .buffer_memory = staging_buffer_memory});
+	vkMapMemory(app->vk_logical_device, *staging_buffer_memory,
 		0, imageSize, 0, &data);
 	ft_memcpy(data, image->pixels, (size_t)(imageSize));
-	vkUnmapMemory(app->vk_logical_device, *stagingBufferMemory);
+	vkUnmapMemory(app->vk_logical_device, *staging_buffer_memory);
 	SDL_FreeSurface(image);
 }
 
 void				vulkan_create_texture_sampler(t_cvulkan *app)
 {
-	VkSamplerCreateInfo	samplerInfo;
+	VkSamplerCreateInfo	sampler_info;
 
-	ft_memset(&samplerInfo, 0, sizeof(samplerInfo));
-	samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-	samplerInfo.magFilter = VK_FILTER_LINEAR;
-	samplerInfo.minFilter = VK_FILTER_LINEAR;
-	samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	samplerInfo.anisotropyEnable = VK_TRUE;
-	samplerInfo.maxAnisotropy = 16.0f;
-	samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
-	samplerInfo.unnormalizedCoordinates = VK_FALSE;
-	samplerInfo.compareEnable = VK_FALSE;
-	samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
-	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	samplerInfo.minLod = 0.0f;
-	samplerInfo.maxLod = (float)app->vk_mip_levels;
-	samplerInfo.mipLodBias = 0.0f;
-	error_check(vkCreateSampler(app->vk_logical_device, &samplerInfo, NULL,
+	ft_memset(&sampler_info, 0, sizeof(sampler_info));
+	sampler_info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	sampler_info.magFilter = VK_FILTER_LINEAR;
+	sampler_info.minFilter = VK_FILTER_LINEAR;
+	sampler_info.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	sampler_info.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	sampler_info.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	sampler_info.anisotropyEnable = VK_TRUE;
+	sampler_info.maxAnisotropy = 16.0f;
+	sampler_info.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+	sampler_info.unnormalizedCoordinates = VK_FALSE;
+	sampler_info.compareEnable = VK_FALSE;
+	sampler_info.compareOp = VK_COMPARE_OP_ALWAYS;
+	sampler_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	sampler_info.minLod = 0.0f;
+	sampler_info.maxLod = (float)app->vk_mip_levels;
+	sampler_info.mipLodBias = 0.0f;
+	error_check(vkCreateSampler(app->vk_logical_device, &sampler_info, NULL,
 		&app->vk_texture_sampler) != VK_SUCCESS,
 		"Failed to create texture sampler!");
 }
@@ -68,14 +68,14 @@ void				vulkan_create_texture_sampler(t_cvulkan *app)
 void				vulkan_create_texture_image(t_cvulkan *app)
 {
 	uint32_t			dimensions[2];
-	VkBuffer			stagingBuffer;
-	VkDeviceMemory		stagingBufferMemory;
+	VkBuffer			staging_buffer;
+	VkDeviceMemory		staging_buffer_memory;
 	t_image_info		image_info;
 
 	dimensions[0] = 0;
 	dimensions[1] = 0;
 	map_sdl_image_to_buffers(app, dimensions,
-		&stagingBuffer, &stagingBufferMemory);
+		&staging_buffer, &staging_buffer_memory);
 	image_info = (t_image_info){.width = dimensions[0], .height = dimensions[1],
 		.mip_levels = app->vk_mip_levels, .msaa_samples = VK_SAMPLE_COUNT_1_BIT,
 		.format = VK_FORMAT_B8G8R8A8_SRGB, .tiling = VK_IMAGE_TILING_OPTIMAL,
@@ -88,9 +88,9 @@ void				vulkan_create_texture_image(t_cvulkan *app)
 	vulkan_create_image(app, &image_info);
 	vulkan_transition_image_layout(app, &image_info, VK_IMAGE_LAYOUT_UNDEFINED,
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-	vulkan_copy_buffer_to_image(app, stagingBuffer, &image_info);
-	vkDestroyBuffer(app->vk_logical_device, stagingBuffer, NULL);
-	vkFreeMemory(app->vk_logical_device, stagingBufferMemory, NULL);
+	vulkan_copy_buffer_to_image(app, staging_buffer, &image_info);
+	vkDestroyBuffer(app->vk_logical_device, staging_buffer, NULL);
+	vkFreeMemory(app->vk_logical_device, staging_buffer_memory, NULL);
 	vulkan_generate_mipmaps(app, &image_info);
 }
 

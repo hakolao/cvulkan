@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 19:20:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 23:19:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ typedef struct						s_window_info {
 	void			*parent;
 }									t_window_info;
 
+# define MAX_SWAPCHAIN_SIZE 8
+
 typedef struct						s_cvulkan {
 	bool						is_running;
 	bool						frame_buffer_resized;
@@ -121,11 +123,11 @@ typedef struct						s_cvulkan {
 	VkQueue						vk_graphics_queue;
 	VkQueue						vk_present_queue;
 	VkSwapchainKHR				vk_swap_chain;
-	VkImage						vk_swap_chain_images[8];
+	VkImage						vk_swap_chain_images[MAX_SWAPCHAIN_SIZE];
 	VkFormat					vk_swap_chain_image_format;
 	VkExtent2D					vk_swap_chain_extent;
-	VkImageView					vk_swap_chain_image_views[8];
-	VkFramebuffer				vk_swap_chain_frame_buffers[8];
+	VkImageView					vk_swap_chain_image_views[MAX_SWAPCHAIN_SIZE];
+	VkFramebuffer				vk_swap_chain_frame_buffers[MAX_SWAPCHAIN_SIZE];
 	uint32_t					vk_swap_chain_images_count;
 	VkSampleCountFlagBits		vk_msaa_samples;
 	uint32_t					vk_enabled_extension_count;
@@ -159,10 +161,11 @@ typedef struct						s_cvulkan {
 	VkDeviceMemory				vk_vertex_buffer_memory;
 	VkBuffer					vk_index_buffer;
 	VkDeviceMemory				vk_index_buffer_memory;
-	VkBuffer					vk_uniform_buffers[8];
-	VkDeviceMemory				vk_uniform_buffers_memory[8];
+	VkBuffer					vk_uniform_buffers[MAX_SWAPCHAIN_SIZE];
+	VkDeviceMemory				vk_uniform_buffers_memory[MAX_SWAPCHAIN_SIZE];
 	VkDescriptorPool			vk_descriptor_pool;
-	VkDescriptorSet				vk_descriptor_sets[8];
+	VkDescriptorSet				vk_descriptor_sets[MAX_SWAPCHAIN_SIZE];
+	VkCommandBuffer				vk_command_buffers[MAX_SWAPCHAIN_SIZE];
 }									t_cvulkan;
 
 /*
@@ -404,6 +407,8 @@ void								vulkan_create_buffer(t_cvulkan *app,
 void								vulkan_copy_buffer(t_cvulkan *app,
 									VkBuffer src_buffer, VkBuffer dst_buffer,
 									VkDeviceSize size);
+void								vulkan_create_command_buffers(t_cvulkan
+									*app);
 
 /*
 ** Vulkan vertex & index buffers

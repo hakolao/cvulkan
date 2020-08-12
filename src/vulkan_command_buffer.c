@@ -6,60 +6,11 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 15:11:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 18:01:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 23:23:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
-
-VkCommandBuffer		vulkan_begin_single_time_commands(t_cvulkan *app)
-{
-	VkCommandBufferAllocateInfo	alloc_info;
-	VkCommandBuffer				command_buffer;
-	VkCommandBufferBeginInfo	begin_info;
-
-	ft_memset(&alloc_info, 0, sizeof(alloc_info));
-	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	alloc_info.commandPool = app->vk_command_pool;
-	alloc_info.commandBufferCount = 1;
-	vkAllocateCommandBuffers(app->vk_logical_device, &alloc_info,
-		&command_buffer);
-	ft_memset(&begin_info, 0, sizeof(begin_info));
-	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-	vkBeginCommandBuffer(command_buffer, &begin_info);
-	return (command_buffer);
-}
-
-void				vulkan_end_single_time_commands(t_cvulkan *app,
-					VkCommandBuffer command_buffer)
-{
-	VkSubmitInfo	submit_info;
-
-	vkEndCommandBuffer(command_buffer);
-	ft_memset(&submit_info, 0, sizeof(submit_info));
-	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	submit_info.commandBufferCount = 1;
-	submit_info.pCommandBuffers = &command_buffer;
-	vkQueueSubmit(app->vk_graphics_queue, 1, &submit_info, VK_NULL_HANDLE);
-	vkQueueWaitIdle(app->vk_graphics_queue);
-	vkFreeCommandBuffers(app->vk_logical_device, app->vk_command_pool,
-		1, &command_buffer);
-}
-
-void				vulkan_copy_buffer(t_cvulkan *app, VkBuffer src_buffer,
-					VkBuffer dst_buffer, VkDeviceSize size)
-{
-	VkCommandBuffer		command_buffer;
-	VkBufferCopy		copy_region;
-
-	command_buffer = vulkan_begin_single_time_commands(app);
-	ft_memset(&copy_region, 0, sizeof(copy_region));
-	copy_region.size = size;
-	vkCmdCopyBuffer(command_buffer, src_buffer, dst_buffer, 1, &copy_region);
-	vulkan_end_single_time_commands(app, command_buffer);
-}
 
 void				vulkan_create_buffer(t_cvulkan *app, t_buffer_info *info)
 {
@@ -86,4 +37,56 @@ void				vulkan_create_buffer(t_cvulkan *app, t_buffer_info *info)
 		"Failed to allocate buffer memory!");
 	vkBindBufferMemory(app->vk_logical_device, *info->buffer,
 		*info->buffer_memory, 0);
+}
+
+void				vulkan_create_command_buffers(t_cvulkan *app)
+{
+	VkCommandBufferAllocateInfo		allocInfo;
+	size_t							i;
+	VkClearValue					clearValues[2];
+	VkRenderPassBeginInfo			renderPassInfo;
+	VkCommandBufferBeginInfo		beginInfo;
+
+	ft_memset(&allocInfo, 0, sizeof(allocInfo));
+	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	allocInfo.commandPool = app->vk_command_pool;
+	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	allocInfo.commandBufferCount = app->vk_swap_chain_images_count;
+	error_check(vkAllocateCommandBuffers(app->vk_logical_device, &allocInfo,
+		app->vk_command_buffers) != VK_SUCCESS,
+		"Failed to allocate command buffers!");
+	i = -1;
+	while (++i < app->vk_swap_chain_images_count)
+	{
+		ft_memset(&beginInfo, 0, sizeof(beginInfo));
+		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		error_check(vkBeginCommandBuffer(app->vk_command_buffers[i], &beginInfo)
+			!= VK_SUCCESS, "failed to begin recording command buffer!");
+		ft_memset(&renderPassInfo, 0, sizeof(renderPassInfo));
+		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		renderPassInfo.renderPass = app->vk_render_pass;
+		renderPassInfo.framebuffer = app->vk_swap_chain_frame_buffers[i];
+		renderPassInfo.renderArea.offset = (VkOffset2D){0, 0};
+		renderPassInfo.renderArea.extent = app->vk_swap_chain_extent;
+		clearValues[0].color = (VkClearColorValue){{0.0f, 0.0f, 0.0f, 1.0f}};
+		clearValues[1].depthStencil = (VkClearDepthStencilValue){1.0f, 0};
+		renderPassInfo.clearValueCount = 2;
+		renderPassInfo.pClearValues = clearValues;
+		vkCmdBeginRenderPass(app->vk_command_buffers[i], &renderPassInfo,
+			VK_SUBPASS_CONTENTS_INLINE);
+		vkCmdBindPipeline(app->vk_command_buffers[i],
+			VK_PIPELINE_BIND_POINT_GRAPHICS, app->vk_graphics_pipeline);
+		vkCmdBindVertexBuffers(app->vk_command_buffers[i], 0, 1,
+			(VkBuffer[1]){app->vk_vertex_buffer}, (VkDeviceSize[1]){0});
+		vkCmdBindIndexBuffer(app->vk_command_buffers[i], app->vk_index_buffer, 0,
+			VK_INDEX_TYPE_UINT32);
+		vkCmdBindDescriptorSets(app->vk_command_buffers[i],
+			VK_PIPELINE_BIND_POINT_GRAPHICS, app->vk_pipeline_layout,
+			0, 1, &app->vk_descriptor_sets[i], 0, NULL);
+		vkCmdDrawIndexed(app->vk_command_buffers[i],
+			app->num_indices, 1, 0, 0, 0);
+		vkCmdEndRenderPass(app->vk_command_buffers[i]);
+		error_check(vkEndCommandBuffer(app->vk_command_buffers[i]) !=
+			VK_SUCCESS, "Failed to record command buffer!");
+	}
 }

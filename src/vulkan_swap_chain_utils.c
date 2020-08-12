@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 21:54:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 18:39:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 23:22:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void					vulkan_cleanup_swap_chain(t_cvulkan *app)
 	while (++i < app->vk_swap_chain_images_count)
 		vkDestroyFramebuffer(app->vk_logical_device,
 			app->vk_swap_chain_frame_buffers[i], NULL);
+	vkFreeCommandBuffers(app->vk_logical_device, app->vk_command_pool,
+		app->vk_swap_chain_images_count, app->vk_command_buffers);
 	vkDestroyPipeline(app->vk_logical_device, app->vk_graphics_pipeline, NULL);
 	vkDestroyPipelineLayout(app->vk_logical_device,
 		app->vk_pipeline_layout, NULL);

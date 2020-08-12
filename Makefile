@@ -68,6 +68,7 @@ SOURCES = main.c \
 			vulkan_memory.c \
 			vulkan_frame_buffer.c \
 			vulkan_command_buffer.c \
+			vulkan_command_buffer_utils.c \
 			vulkan_vertex_buffer.c \
 			vulkan_index_buffer.c \
 			vulkan_uniform_buffer.c

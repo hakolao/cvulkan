@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 18:04:34 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 18:15:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,9 +399,9 @@ void								vulkan_copy_buffer(t_cvulkan *app,
 									VkDeviceSize size);
 
 /*
-** Vulkan vertex buffers
+** Vulkan vertex & index buffers
 */
 void								vulkan_create_vertex_buffer(t_cvulkan *app);
-
+void								vulkan_create_index_buffer(t_cvulkan *app);
 
 #endif

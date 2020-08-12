@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 13:04:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 14:42:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@
 # include <vulkan/vulkan.h>
 # include <math.h>
 # include "libft.h"
+
+/*
+** Tiny object loader
+** ToDo: Use own functions
+** See load_model.c
+*/
+# define TINYOBJ_LOADER_C_IMPLEMENTATION
 
 /*
 ** cGLM
@@ -144,6 +151,12 @@ typedef struct						s_cvulkan {
 	VkDeviceMemory				vk_texture_image_memory;
 	VkImageView					vk_texture_image_view;
 	VkSampler					vk_texture_sampler;
+	t_vulkan_vertex				*vertices;
+	uint32_t					*indices;
+	VkBuffer					vk_vertex_buffer;
+	VkDeviceMemory				vk_vertex_buffer_memory;
+	VkBuffer					vk_index_buffer;
+	VkDeviceMemory				vk_index_buffer_memory;
 }									t_cvulkan;
 
 /*
@@ -154,7 +167,7 @@ void								app_run(t_cvulkan *app);
 /*
 ** File reading
 */
-t_file_contents						*read_file(char *filename);
+t_file_contents						*read_file(const char *filename);
 void								free_file_contents(t_file_contents
 									*contents);
 
@@ -162,6 +175,12 @@ void								free_file_contents(t_file_contents
 ** Window
 */
 void								window_init(t_cvulkan *app);
+
+/*
+** Model loading
+*/
+void								vulkan_load_model(t_cvulkan *app,
+									const char *filename);
 
 /*
 ** Debugging

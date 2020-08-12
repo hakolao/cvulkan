@@ -4,6 +4,7 @@ DIR_SRC = ./src
 DIR_OBJ = temp
 LIBVULKAN = ./lib/vulkan
 LIBSDL2 = ./lib/SDL2
+TINYOBJLOADER = ./lib/tinyobjloader
 LIBFT = ./lib/libft
 
 # USE THESE AT SCHOOL
@@ -24,6 +25,7 @@ SDL_FLAGS = -rpath $(LIBSDL2) \
 
 INCL = -I ./include \
 		-I$(LIBFT)/incl \
+		-I$(TINYOBJLOADER) \
 		-I$(LIBVULKAN)/vulkan.framework/Headers \
 		-I$(LIBSDL2)/SDL2.framework/Headers \
 		-I$(LIBSDL2)/SDL2_image.framework/Headers \
@@ -34,6 +36,7 @@ SOURCES = main.c \
 			app.c \
 			window.c \
 			read_file.c \
+			load_model.c \
 			vulkan_debug.c \
 			vulkan_device.c \
 			vulkan_device_utils.c \

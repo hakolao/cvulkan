@@ -6,14 +6,14 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 13:07:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 16:56:44 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 17:45:43 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 # include <tiny_obj_loader_c.h>
 
-static void	get_file_data(const char *filename, char **data, size_t *len)
+static void		get_file_data(const char *filename, char **data, size_t *len)
 {
 	t_file_contents	*contents;
 
@@ -23,7 +23,37 @@ static void	get_file_data(const char *filename, char **data, size_t *len)
 	free_file_contents(contents);
 }
 
-void		vulkan_load_model(t_cvulkan *app, const char *filename)
+static void		set_face_vertices_and_indices(t_cvulkan *app,
+				tinyobj_attrib_t attrib)
+{
+	size_t		i;
+
+	i = -1;
+	while (++i < attrib.num_face_num_verts)
+	{
+		error_check(attrib.face_num_verts[i] % 3 != 0, "Face verts % 3 != 0");
+		app->vertices[i].pos[0] = attrib.vertices[3 *
+			(size_t)(attrib.faces[i + 3 + 0].v_idx) + 0];
+		app->vertices[i].pos[1] = attrib.vertices[3 *
+			(size_t)(attrib.faces[i + 3 + 1].v_idx) + 1];
+		app->vertices[i].pos[2] = attrib.vertices[3 *
+			(size_t)(attrib.faces[i + 3 + 2].v_idx) + 2];
+		app->vertices[i].color[0] = 1.0f;
+		app->vertices[i].color[1] = 1.0f;
+		app->vertices[i].color[2] = 1.0f;
+		app->vertices[i].tex_coord[0] = attrib.texcoords[2 *
+			(size_t)(attrib.faces[i + 3].vt_idx) + 0];
+		app->vertices[i].tex_coord[1] = 1.0f - attrib.texcoords[2 *
+			(size_t)(attrib.faces[i + 3].vt_idx) + 1];
+		app->indices[i * 3 + 0] = i + 0;
+		app->indices[i * 3 + 1] = i + 1;
+		app->indices[i * 3 + 2] = i + 2;
+	}
+	app->num_vertices = i;
+	app->num_indices = i * 3;
+}
+
+void			vulkan_load_model(t_cvulkan *app, const char *filename)
 {
 
 	tinyobj_attrib_t		attrib;
@@ -31,8 +61,6 @@ void		vulkan_load_model(t_cvulkan *app, const char *filename)
 	tinyobj_material_t		*materials;
 	size_t					num_shapes;
 	size_t					num_materials;
-	size_t					i;
-	size_t					f;
 
 	num_shapes = 0;
 	num_materials = 0;
@@ -41,34 +69,13 @@ void		vulkan_load_model(t_cvulkan *app, const char *filename)
 	error_check(tinyobj_parse_obj(&attrib, &shapes, &num_shapes, &materials,
 		&num_materials, filename, get_file_data, TINYOBJ_FLAG_TRIANGULATE),
 		"Failed to parse model obj!");
-	error_check(!(app->vertices = malloc(sizeof(*app->vertices) * 3 *
+	error_check(!(app->vertices = malloc(sizeof(*app->vertices) *
 		attrib.num_face_num_verts)), "Failed to malloc vertices");
 	error_check(!(app->indices = malloc(sizeof(*app->indices) * 3 *
 		attrib.num_face_num_verts)), "Failed to malloc indices");
-	i = -1;
-	while (++i < attrib.num_face_num_verts)
-	{
-		error_check(attrib.face_num_verts[i] % 3 != 0,
-			"Face num verts % 3 != 0");
-		f = -1;
-		while (++f < (size_t)attrib.face_num_verts[i] / 3)
-		{
-			app->vertices[i + f].pos[0] = attrib.vertices[3 *
-				(size_t)(attrib.faces[i + 3 * f + 0].v_idx) + 0];
-			app->vertices[i + f].pos[1] = attrib.vertices[3 *
-				(size_t)(attrib.faces[i + 3 * f + 1].v_idx) + 1];
-			app->vertices[i + f].pos[2] = attrib.vertices[3 *
-				(size_t)(attrib.faces[i + 3 * f + 2].v_idx) + 2];
-			app->vertices[i + f].color[0] = 1.0f;
-			app->vertices[i + f].color[1] = 1.0f;
-			app->vertices[i + f].color[2] = 1.0f;
-			app->vertices[i + f].tex_coord[0] = attrib.texcoords[2 *
-				(size_t)(attrib.faces[i + 3 * f].vt_idx) + 0];
-			app->vertices[i + f].tex_coord[1] = 1.0f - attrib.texcoords[2 *
-				(size_t)(attrib.faces[i + 3 * f].vt_idx) + 1];
-			app->indices[i + f] = i + f;
-		}
-	}
+	set_face_vertices_and_indices(app, attrib);
+	ft_printf("vertices: %d\n", app->num_vertices);
+	ft_printf("num_indices: %d\n", app->num_indices);
 	tinyobj_attrib_free(&attrib);
   	tinyobj_shapes_free(shapes, num_shapes);
  	tinyobj_materials_free(materials, num_materials);

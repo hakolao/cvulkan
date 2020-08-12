@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 14:42:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 17:03:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,8 @@ typedef struct						s_cvulkan {
 	VkSampler					vk_texture_sampler;
 	t_vulkan_vertex				*vertices;
 	uint32_t					*indices;
+	uint32_t					num_vertices;
+	uint32_t					num_indices;
 	VkBuffer					vk_vertex_buffer;
 	VkDeviceMemory				vk_vertex_buffer_memory;
 	VkBuffer					vk_index_buffer;

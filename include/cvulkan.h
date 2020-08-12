@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 18:38:38 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 19:20:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ typedef struct						s_cvulkan {
 	VkBuffer					vk_uniform_buffers[8];
 	VkDeviceMemory				vk_uniform_buffers_memory[8];
 	VkDescriptorPool			vk_descriptor_pool;
+	VkDescriptorSet				vk_descriptor_sets[8];
 }									t_cvulkan;
 
 /*
@@ -282,6 +283,8 @@ void								vulkan_free_subpass_description(
 void								vulkan_create_descriptor_set_layout(
 									t_cvulkan *app);
 void								vulkan_create_descriptor_pool(t_cvulkan
+									*app);
+void								vulkan_create_descriptor_sets(t_cvulkan
 									*app);
 
 /*

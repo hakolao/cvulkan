@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 21:54:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 16:17:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 18:33:21 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,14 @@ void					vulkan_cleanup_swap_chain(t_cvulkan *app)
 		vkDestroyImageView(app->vk_logical_device,
 			app->vk_swap_chain_image_views[i], NULL);
 	vkDestroySwapchainKHR(app->vk_logical_device, app->vk_swap_chain, NULL);
+	i = -1;
+	while (++i < app->vk_swap_chain_images_count)
+	{
+		vkDestroyBuffer(app->vk_logical_device,
+			app->vk_uniform_buffers[i], NULL);
+		vkFreeMemory(app->vk_logical_device,
+			app->vk_uniform_buffers_memory[i], NULL);
+	}
 }
 
 void					vulkan_choose_swap_extent(t_cvulkan *app,

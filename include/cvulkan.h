@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 18:15:34 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 18:32:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,8 @@ typedef struct						s_cvulkan {
 	VkDeviceMemory				vk_vertex_buffer_memory;
 	VkBuffer					vk_index_buffer;
 	VkDeviceMemory				vk_index_buffer_memory;
+	VkBuffer					vk_uniform_buffers[8];
+	VkDeviceMemory				vk_uniform_buffers_memory[8];
 }									t_cvulkan;
 
 /*
@@ -403,5 +405,11 @@ void								vulkan_copy_buffer(t_cvulkan *app,
 */
 void								vulkan_create_vertex_buffer(t_cvulkan *app);
 void								vulkan_create_index_buffer(t_cvulkan *app);
+
+/*
+** Vulkan uniform buffers
+*/
+void								vulkan_create_uniform_buffers(t_cvulkan
+									*app);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 17:52:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 18:09:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 18:17:46 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ void	vulkan_create_vertex_buffer(t_cvulkan *app)
 	VkDeviceMemory	staging_buffer_memory;
 	void			*data;
 
-	staging_buffer = NULL;
-	staging_buffer_memory = NULL;
 	buffer_size = sizeof(*app->vertices) * app->num_vertices;
 	vulkan_create_buffer(app, &(t_buffer_info){.size = buffer_size,
 		.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT,

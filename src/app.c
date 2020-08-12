@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 18:25:38 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 18:38:45 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static void		vulkan_init(t_cvulkan *app)
 	vulkan_create_vertex_buffer(app);
 	vulkan_create_index_buffer(app);
 	vulkan_create_uniform_buffers(app);
+	vulkan_create_descriptor_pool(app);
 }
 
 static void		cleanup(t_cvulkan *app)

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 13:42:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 14:40:53 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 16:17:03 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void					free_file_contents(t_file_contents *contents)
 {
 	free(contents->buf);
 	free(contents);
+	contents = NULL;
 }
 
 t_file_contents			*read_file(const char *filename)

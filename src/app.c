@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 14:40:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 16:37:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ static void		cleanup(t_cvulkan *app)
 	}
 	vkDestroySurfaceKHR(app->vk_instance, app->vk_surface, NULL);
 	vkDestroyInstance(app->vk_instance, NULL);
+	free(app->vertices);
+	free(app->indices);
 	// SDL_DestroyWindow(app->window); // seems to segfault
 	// IMG_Quit();
 	SDL_Quit();

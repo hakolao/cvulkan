@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 13:07:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 16:15:44 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 16:56:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	get_file_data(const char *filename, char **data, size_t *len)
 	error_check(!(contents = read_file(filename)), "Failed to read file!");
 	*(len) = contents->size;
 	*(data) = contents->buf;
+	free_file_contents(contents);
 }
 
 void		vulkan_load_model(t_cvulkan *app, const char *filename)
@@ -32,7 +33,6 @@ void		vulkan_load_model(t_cvulkan *app, const char *filename)
 	size_t					num_materials;
 	size_t					i;
 	size_t					f;
-	t_vulkan_vertex			vertex;
 
 	num_shapes = 0;
 	num_materials = 0;
@@ -53,21 +53,23 @@ void		vulkan_load_model(t_cvulkan *app, const char *filename)
 		f = -1;
 		while (++f < (size_t)attrib.face_num_verts[i] / 3)
 		{
-			vertex.pos[0] = attrib.vertices[3 *
-				(size_t)(attrib.faces[0 + 3 * f + 0].v_idx) + 0];
-			vertex.pos[1] = attrib.vertices[3 *
-				(size_t)(attrib.faces[0 + 3 * f + 1].v_idx) + 1];
-			vertex.pos[2] = attrib.vertices[3 *
-				(size_t)(attrib.faces[0 + 3 * f + 2].v_idx) + 2];
-			vertex.color[0] = 1.0f;
-			vertex.color[1] = 1.0f;
-			vertex.color[2] = 1.0f;
-			vertex.tex_coord[0] = attrib.texcoords[2 *
-				(size_t)(attrib.faces[0 + 3 * f + 0].vt_idx) + 0];
-			vertex.tex_coord[1] = 1.0f - attrib.texcoords[2 *
-				(size_t)(attrib.faces[0 + 3 * f + 1].vt_idx) + 1];
-			app->vertices[i + f] = vertex;
+			app->vertices[i + f].pos[0] = attrib.vertices[3 *
+				(size_t)(attrib.faces[i + 3 * f + 0].v_idx) + 0];
+			app->vertices[i + f].pos[1] = attrib.vertices[3 *
+				(size_t)(attrib.faces[i + 3 * f + 1].v_idx) + 1];
+			app->vertices[i + f].pos[2] = attrib.vertices[3 *
+				(size_t)(attrib.faces[i + 3 * f + 2].v_idx) + 2];
+			app->vertices[i + f].color[0] = 1.0f;
+			app->vertices[i + f].color[1] = 1.0f;
+			app->vertices[i + f].color[2] = 1.0f;
+			app->vertices[i + f].tex_coord[0] = attrib.texcoords[2 *
+				(size_t)(attrib.faces[i + 3 * f].vt_idx) + 0];
+			app->vertices[i + f].tex_coord[1] = 1.0f - attrib.texcoords[2 *
+				(size_t)(attrib.faces[i + 3 * f].vt_idx) + 1];
 			app->indices[i + f] = i + f;
 		}
 	}
+	tinyobj_attrib_free(&attrib);
+  	tinyobj_shapes_free(shapes, num_shapes);
+ 	tinyobj_materials_free(materials, num_materials);
 }

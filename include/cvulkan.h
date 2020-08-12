@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 22:19:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 13:04:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ typedef struct						s_cvulkan {
 	VkImage						vk_texture_image;
 	VkDeviceMemory				vk_texture_image_memory;
 	VkImageView					vk_texture_image_view;
+	VkSampler					vk_texture_sampler;
 }									t_cvulkan;
 
 /*
@@ -343,6 +344,8 @@ void								vulkan_create_blit_image_cmd(int32_t
 									dimensions[2],
 									VkCommandBuffer command_buffer,
 									t_image_info *info, size_t i);
+void								vulkan_create_texture_sampler(t_cvulkan
+									*app);
 
 /*
 ** Vulkan color resources

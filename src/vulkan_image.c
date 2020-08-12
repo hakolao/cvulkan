@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 12:23:55 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 22:15:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/12 13:04:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,32 @@ static void			map_sdl_image_to_buffers(t_cvulkan *app,
 	ft_memcpy(data, image->pixels, (size_t)(imageSize));
 	vkUnmapMemory(app->vk_logical_device, *stagingBufferMemory);
 	SDL_FreeSurface(image);
+}
+
+void				vulkan_create_texture_sampler(t_cvulkan *app)
+{
+	VkSamplerCreateInfo	samplerInfo;
+
+	ft_memset(&samplerInfo, 0, sizeof(samplerInfo));
+	samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	samplerInfo.magFilter = VK_FILTER_LINEAR;
+	samplerInfo.minFilter = VK_FILTER_LINEAR;
+	samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	samplerInfo.anisotropyEnable = VK_TRUE;
+	samplerInfo.maxAnisotropy = 16.0f;
+	samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+	samplerInfo.unnormalizedCoordinates = VK_FALSE;
+	samplerInfo.compareEnable = VK_FALSE;
+	samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	samplerInfo.minLod = 0.0f;
+	samplerInfo.maxLod = (float)app->vk_mip_levels;
+	samplerInfo.mipLodBias = 0.0f;
+	error_check(vkCreateSampler(app->vk_logical_device, &samplerInfo, NULL,
+		&app->vk_texture_sampler) != VK_SUCCESS,
+		"Failed to create texture sampler!");
 }
 
 void				vulkan_create_texture_image(t_cvulkan *app)

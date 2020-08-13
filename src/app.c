@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 15:05:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 15:23:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void		vulkan_init(t_cvulkan *app)
 	vulkan_create_color_resources(app);
 	vulkan_create_depth_resources(app);
 	vulkan_create_frame_buffers(app);
-	vulkan_create_texture_image(app);
+	vulkan_create_texture_image(app, TEXTURE_PATH);
 	vulkan_create_texture_image_view(app);
 	vulkan_create_texture_sampler(app);
 	vulkan_load_model(app, MODEL_PATH);

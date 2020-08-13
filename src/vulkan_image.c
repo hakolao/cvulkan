@@ -6,27 +6,28 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 12:23:55 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 14:59:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 15:30:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
 static void			map_sdl_image_to_buffers(t_cvulkan *app,
-					uint32_t dimensions[2], VkBuffer *staging_buffer,
+					t_image_info *image_info, VkBuffer *staging_buffer,
 					VkDeviceMemory *staging_buffer_memory)
 {
 	void				*data;
 	VkDeviceSize		image_size;
 	SDL_Surface			*image;
 
-	error_check(!(image = IMG_Load(TEXTURE_PATH)),
+	error_check(!(image = IMG_Load(image_info->path)),
 		"Failed to load texture image!");
-	dimensions[0] = image->w;
-	dimensions[1] = image->h;
-	image_size = dimensions[0] * dimensions[1] * 4;
+	image_info->width = image->w;
+	image_info->height = image->h;
+	image_size = image_info->width * image_info->height * 4;
 	app->vk_mip_levels = (uint32_t)floor(log2(ft_max_int((int[2]){
-		dimensions[0], dimensions[1]}, 2))) + 1;
+		image_info->width, image_info->height}, 2))) + 1;
+	image_info->mip_levels = app->vk_mip_levels;
 	vulkan_create_buffer(app, &(t_buffer_info){.size = image_size,
 		.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 		.properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
@@ -65,26 +66,25 @@ void				vulkan_create_texture_sampler(t_cvulkan *app)
 		"Failed to create texture sampler!");
 }
 
-void				vulkan_create_texture_image(t_cvulkan *app)
+void				vulkan_create_texture_image(t_cvulkan *app,
+					const char *filename)
 {
-	uint32_t			dimensions[2];
 	VkBuffer			staging_buffer;
 	VkDeviceMemory		staging_buffer_memory;
 	t_image_info		image_info;
 
-	dimensions[0] = 0;
-	dimensions[1] = 0;
-	map_sdl_image_to_buffers(app, dimensions,
-		&staging_buffer, &staging_buffer_memory);
-	image_info = (t_image_info){.width = dimensions[0], .height = dimensions[1],
-		.mip_levels = app->vk_mip_levels, .msaa_samples = VK_SAMPLE_COUNT_1_BIT,
+	image_info = (t_image_info){.width = 0, .height = 0, .mip_levels = 0,
+		.msaa_samples = VK_SAMPLE_COUNT_1_BIT,
 		.format = VK_FORMAT_B8G8R8A8_SRGB, .tiling = VK_IMAGE_TILING_OPTIMAL,
 		.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
 			VK_IMAGE_USAGE_TRANSFER_DST_BIT |
 			VK_IMAGE_USAGE_SAMPLED_BIT,
 		.properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 		.image = &app->vk_texture_image,
-		.image_memory = &app->vk_texture_image_memory};
+		.image_memory = &app->vk_texture_image_memory,
+		.path = filename};
+	map_sdl_image_to_buffers(app, &image_info, &staging_buffer,
+		&staging_buffer_memory);
 	vulkan_create_image(app, &image_info);
 	vulkan_transition_image_layout(app, &image_info, VK_IMAGE_LAYOUT_UNDEFINED,
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);

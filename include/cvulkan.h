@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 14:41:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 15:23:35 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct						s_image_info
 	VkMemoryPropertyFlags			properties;
 	VkImage							*image;
 	VkDeviceMemory					*image_memory;
+	const char						*path;
 }									t_image_info;
 
 typedef struct						s_buffer_info
@@ -355,7 +356,8 @@ uint32_t							vulkan_find_memory_type(t_cvulkan *app,
 */
 void								vulkan_create_image(t_cvulkan *app,
 									t_image_info *info);
-void								vulkan_create_texture_image(t_cvulkan *app);
+void								vulkan_create_texture_image(t_cvulkan *app,
+									const char *filename);
 bool								vulkan_has_stencil_component(VkFormat
 									format);
 void								vulkan_allocate_image_memory(t_cvulkan *app,

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 23:19:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 14:41:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@
 
 # define MODEL_PATH "models/viking_room.obj"
 # define TEXTURE_PATH "textures/viking_room.png"
+
+# define MAX_SWAPCHAIN_SIZE 8
+# define MAXFRAMESINFLIGHT 2
 
 typedef struct						s_image_info
 {
@@ -109,8 +112,6 @@ typedef struct						s_window_info {
 	void			*parent;
 }									t_window_info;
 
-# define MAX_SWAPCHAIN_SIZE 8
-
 typedef struct						s_cvulkan {
 	bool						is_running;
 	bool						frame_buffer_resized;
@@ -166,6 +167,11 @@ typedef struct						s_cvulkan {
 	VkDescriptorPool			vk_descriptor_pool;
 	VkDescriptorSet				vk_descriptor_sets[MAX_SWAPCHAIN_SIZE];
 	VkCommandBuffer				vk_command_buffers[MAX_SWAPCHAIN_SIZE];
+	VkSemaphore					vk_img_available_semaphores[MAXFRAMESINFLIGHT];
+	VkSemaphore					vk_rndr_finished_semaphores[MAXFRAMESINFLIGHT];
+	VkFence						vk_in_flight_fences[MAXFRAMESINFLIGHT];
+	VkFence						vk_images_in_flight[MAX_SWAPCHAIN_SIZE];
+	size_t						vk_current_frame;
 }									t_cvulkan;
 
 /*
@@ -421,5 +427,10 @@ void								vulkan_create_index_buffer(t_cvulkan *app);
 */
 void								vulkan_create_uniform_buffers(t_cvulkan
 									*app);
+
+/*
+** Vulkan sync objects
+*/
+void								vulkan_create_sync_objects(t_cvulkan *app);
 
 #endif

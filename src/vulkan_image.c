@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 12:23:55 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 18:08:38 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 14:59:43 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,24 @@ static void			map_sdl_image_to_buffers(t_cvulkan *app,
 					VkDeviceMemory *staging_buffer_memory)
 {
 	void				*data;
-	VkDeviceSize		imageSize;
+	VkDeviceSize		image_size;
 	SDL_Surface			*image;
 
 	error_check(!(image = IMG_Load(TEXTURE_PATH)),
 		"Failed to load texture image!");
 	dimensions[0] = image->w;
 	dimensions[1] = image->h;
-	imageSize = dimensions[0] * dimensions[1] * 4;
+	image_size = dimensions[0] * dimensions[1] * 4;
 	app->vk_mip_levels = (uint32_t)floor(log2(ft_max_int((int[2]){
 		dimensions[0], dimensions[1]}, 2))) + 1;
-	vulkan_create_buffer(app, &(t_buffer_info){.size = imageSize,
+	vulkan_create_buffer(app, &(t_buffer_info){.size = image_size,
 		.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 		.properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
 			VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
 		.buffer = staging_buffer, .buffer_memory = staging_buffer_memory});
 	vkMapMemory(app->vk_logical_device, *staging_buffer_memory,
-		0, imageSize, 0, &data);
-	ft_memcpy(data, image->pixels, (size_t)(imageSize));
+		0, image_size, 0, &data);
+	ft_memcpy(data, image->pixels, (size_t)(image_size));
 	vkUnmapMemory(app->vk_logical_device, *staging_buffer_memory);
 	SDL_FreeSurface(image);
 }

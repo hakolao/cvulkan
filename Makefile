@@ -71,7 +71,8 @@ SOURCES = main.c \
 			vulkan_command_buffer_utils.c \
 			vulkan_vertex_buffer.c \
 			vulkan_index_buffer.c \
-			vulkan_uniform_buffer.c
+			vulkan_uniform_buffer.c \
+			vulkan_sync_objects.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

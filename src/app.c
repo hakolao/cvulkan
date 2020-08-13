@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 14:43:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 15:05:46 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ static void		vulkan_init(t_cvulkan *app)
 
 static void		cleanup(t_cvulkan *app)
 {
+	size_t	i;
+
 	vulkan_cleanup_swap_chain(app);
 	vkDestroySampler(app->vk_logical_device, app->vk_texture_sampler, NULL);
 	vkDestroyImage(app->vk_logical_device, app->vk_texture_image, NULL);
@@ -68,6 +70,16 @@ static void		cleanup(t_cvulkan *app)
 	vkFreeMemory(app->vk_logical_device, app->vk_index_buffer_memory, NULL);
 	vkDestroyBuffer(app->vk_logical_device, app->vk_vertex_buffer, NULL);
 	vkFreeMemory(app->vk_logical_device, app->vk_vertex_buffer_memory, NULL);
+	i = -1;
+	while (++i < MAXFRAMESINFLIGHT)
+	{
+		vkDestroySemaphore(app->vk_logical_device,
+			app->vk_rndr_finished_semaphores[i], NULL);
+		vkDestroySemaphore(app->vk_logical_device,
+			app->vk_img_available_semaphores[i], NULL);
+		vkDestroyFence(app->vk_logical_device,
+			app->vk_in_flight_fences[i], NULL);
+	}
 	vkDestroyCommandPool(app->vk_logical_device, app->vk_command_pool, NULL);
 	vkDestroyDevice(app->vk_logical_device, NULL);
 	if (ENABLE_VALIDATION_LAYERS) {

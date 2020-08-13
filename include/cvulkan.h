@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 15:23:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 15:52:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,11 @@ typedef struct						s_cvulkan {
 void								app_run(t_cvulkan *app);
 
 /*
+** Vulkan Draw
+*/
+void								vulkan_draw(t_cvulkan *app);
+
+/*
 ** File reading
 */
 t_file_contents						*read_file(const char *filename);
@@ -254,6 +259,7 @@ void								vulkan_create_logical_device(t_cvulkan *app);
 ** Vulkan swap chain
 */
 void								vulkan_create_swap_chain(t_cvulkan *app);
+void								vulkan_recreate_swapchain(t_cvulkan *app);
 void								vulkan_cleanup_swap_chain(t_cvulkan *app);
 void								vulkan_choose_swap_extent(t_cvulkan *app,
 									VkSurfaceCapabilitiesKHR *capabilities,

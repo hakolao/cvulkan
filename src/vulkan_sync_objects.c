@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 14:32:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 14:41:23 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 15:34:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	vulkan_create_sync_objects(t_cvulkan *app)
 	VkFenceCreateInfo		fence_info;
 
 	i = -1;
+	app->vk_current_frame = 0;
 	while (++i < app->vk_swap_chain_images_count)
 		app->vk_images_in_flight[i] = VK_NULL_HANDLE;
 	ft_memset(&semaphore_info, 0, sizeof(semaphore_info));

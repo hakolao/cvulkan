@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 15:23:48 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 15:51:50 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void		main_loop(t_cvulkan *app) {
 			if (event.type == SDL_QUIT)
 				app->is_running = false;
 		}
-		// drawFrame();
+		vulkan_draw(app);
 	}
 	vkDeviceWaitIdle(app->vk_logical_device);
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 12:12:47 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 16:31:50 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 16:49:04 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static VkSubpassDependency		subpass_dependency()
 static VkAttachmentDescription	depth_attachment_description(t_cvulkan *app)
 {
 	VkAttachmentDescription		depth_attachment;
+
 	ft_memset(&depth_attachment, 0, sizeof(depth_attachment));
 	depth_attachment.format = vulkan_find_depth_format(app);
 	depth_attachment.samples = app->vk_msaa_samples;

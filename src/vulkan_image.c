@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 12:23:55 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 15:30:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 15:31:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static void			map_sdl_image_to_buffers(t_cvulkan *app,
+static void			sdl_image_to_buffers_and_image_info(t_cvulkan *app,
 					t_image_info *image_info, VkBuffer *staging_buffer,
 					VkDeviceMemory *staging_buffer_memory)
 {
@@ -83,7 +83,7 @@ void				vulkan_create_texture_image(t_cvulkan *app,
 		.image = &app->vk_texture_image,
 		.image_memory = &app->vk_texture_image_memory,
 		.path = filename};
-	map_sdl_image_to_buffers(app, &image_info, &staging_buffer,
+	sdl_image_to_buffers_and_image_info(app, &image_info, &staging_buffer,
 		&staging_buffer_memory);
 	vulkan_create_image(app, &image_info);
 	vulkan_transition_image_layout(app, &image_info, VK_IMAGE_LAYOUT_UNDEFINED,

@@ -6,40 +6,39 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 15:33:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 15:52:53 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 16:45:24 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
+#include <time.h>
 
 static void		vulkan_update_uniform_buffer(t_cvulkan *app,
 				uint32_t currentImage)
 {
-	// static auto startTime = std::chrono::high_resolution_clock::now();
+	t_uniform_buffer_object		ubo;
+	mat4						model;
+	void						*data;
+	static clock_t				start_time;
+	clock_t						current_time;
+	float						time_elapsed;
 
-	// auto currentTime = std::chrono::high_resolution_clock::now();
-	// float time = std::chrono::duration<float, std::chrono::seconds::period>(
-	// 				 currentTime - startTime)
-	// 				 .count();
-
-	// VulkanUniformBufferObject ubo{};
-	// ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f),
-	// 						glm::vec3(0.0f, 0.0f, 1.0f));
-	// ubo.view =
-	// 	glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f),
-	// 				glm::vec3(0.0f, 0.0f, 1.0f));
-
-	// ubo.proj = glm::perspective(
-	// 	glm::radians(45.0f),
-	// 	swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 10.0f);
-
-	// ubo.proj[1][1] *= -1;
-
-	// void *data;
-	// vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0,
-	// 			&data);
-	// memcpy(data, &ubo, sizeof(ubo));
-	// vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
+	start_time = start_time == 0 ? clock() : start_time;
+	current_time = clock();
+	time_elapsed = (double)(current_time - start_time) / CLOCKS_PER_SEC;
+	glm_mat4_identity(model);
+	glm_rotate_z(model, time_elapsed * glm_rad(90.0f), ubo.model);
+	glm_lookat((vec3){2.0f, 2.0f, 2.0f}, (vec3){0.0f, 0.0f, 0.0f},
+		(vec3){0.0f, 0.0f, 0.0f}, ubo.view);
+	glm_perspective(glm_rad(45.0f), (float)app->vk_swap_chain_extent.width /
+		(float)app->vk_swap_chain_extent.height, 0.1f, 10.0f, ubo.proj);
+	ubo.proj[1][1] *= -1;
+	vkMapMemory(app->vk_logical_device,
+		 app->vk_uniform_buffers_memory[currentImage], 0,
+		 	sizeof(ubo), 0, &data);
+	ft_memcpy(data, &ubo, sizeof(ubo));
+	vkUnmapMemory(app->vk_logical_device,
+		app->vk_uniform_buffers_memory[currentImage]);
 }
 
 void			vulkan_draw(t_cvulkan *app)
@@ -94,8 +93,11 @@ void			vulkan_draw(t_cvulkan *app)
 	presentInfo.pImageIndices = &imageIndex;
 	res = vkQueuePresentKHR(app->vk_present_queue, &presentInfo);
 	if (res == VK_ERROR_OUT_OF_DATE_KHR || res == VK_SUBOPTIMAL_KHR ||
-		app->frame_buffer_resized && !(app->frame_buffer_resized = false))
+		app->frame_buffer_resized)
+	{
+		app->frame_buffer_resized = false;
 		vulkan_recreate_swapchain(app);
+	}
 	else
 		error_check(res != VK_SUCCESS, "Failed to present swap chain image!");
 	app->vk_current_frame = (app->vk_current_frame + 1) % MAXFRAMESINFLIGHT;

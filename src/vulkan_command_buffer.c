@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 15:11:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 14:28:39 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/13 16:45:08 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 static void			set_render_pass_info(t_cvulkan *app, size_t i,
 					VkRenderPassBeginInfo *render_pass_info)
 {
-		VkClearValue					clear_values[2];
+	VkClearValue					clear_values[2];
 
-		ft_memset(render_pass_info, 0, sizeof(*render_pass_info));
-		render_pass_info->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		render_pass_info->renderPass = app->vk_render_pass;
-		render_pass_info->framebuffer = app->vk_swap_chain_frame_buffers[i];
-		render_pass_info->renderArea.offset = (VkOffset2D){0, 0};
-		render_pass_info->renderArea.extent = app->vk_swap_chain_extent;
-		clear_values[0].color = (VkClearColorValue){{0.0f, 0.0f, 0.0f, 1.0f}};
-		clear_values[1].depthStencil = (VkClearDepthStencilValue){1.0f, 0};
-		render_pass_info->clearValueCount = 2;
-		render_pass_info->pClearValues = clear_values;
+	ft_memset(render_pass_info, 0, sizeof(*render_pass_info));
+	render_pass_info->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	render_pass_info->renderPass = app->vk_render_pass;
+	render_pass_info->framebuffer = app->vk_swap_chain_frame_buffers[i];
+	render_pass_info->renderArea.offset = (VkOffset2D){0, 0};
+	render_pass_info->renderArea.extent = app->vk_swap_chain_extent;
+	clear_values[0].color = (VkClearColorValue){{0.0f, 0.0f, 0.0f, 1.0f}};
+	clear_values[1].depthStencil = (VkClearDepthStencilValue){1.0f, 0};
+	render_pass_info->clearValueCount = 2;
+	render_pass_info->pClearValues = clear_values;
 }
 
 static void			allocate_command_buffers(t_cvulkan *app)

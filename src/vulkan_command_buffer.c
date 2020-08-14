@@ -6,28 +6,11 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 15:11:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 16:45:08 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/14 21:14:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
-
-static void			set_render_pass_info(t_cvulkan *app, size_t i,
-					VkRenderPassBeginInfo *render_pass_info)
-{
-	VkClearValue					clear_values[2];
-
-	ft_memset(render_pass_info, 0, sizeof(*render_pass_info));
-	render_pass_info->sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-	render_pass_info->renderPass = app->vk_render_pass;
-	render_pass_info->framebuffer = app->vk_swap_chain_frame_buffers[i];
-	render_pass_info->renderArea.offset = (VkOffset2D){0, 0};
-	render_pass_info->renderArea.extent = app->vk_swap_chain_extent;
-	clear_values[0].color = (VkClearColorValue){{0.0f, 0.0f, 0.0f, 1.0f}};
-	clear_values[1].depthStencil = (VkClearDepthStencilValue){1.0f, 0};
-	render_pass_info->clearValueCount = 2;
-	render_pass_info->pClearValues = clear_values;
-}
 
 static void			allocate_command_buffers(t_cvulkan *app)
 {
@@ -62,13 +45,12 @@ static void			record_command_buffer_commands(t_cvulkan *app,
 	vkCmdEndRenderPass(app->vk_command_buffers[i]);
 }
 
-void				vulkan_create_command_buffers(t_cvulkan *app)
+static void			create_command_buffers(t_cvulkan *app,
+					VkRenderPassBeginInfo *render_pass_info)
 {
-	VkRenderPassBeginInfo			render_pass_info;
-	VkCommandBufferBeginInfo		begin_info;
 	size_t							i;
+	VkCommandBufferBeginInfo		begin_info;
 
-	allocate_command_buffers(app);
 	i = -1;
 	while (++i < app->vk_swap_chain_images_count)
 	{
@@ -76,11 +58,31 @@ void				vulkan_create_command_buffers(t_cvulkan *app)
 		begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 		error_check(vkBeginCommandBuffer(app->vk_command_buffers[i], &begin_info)
 			!= VK_SUCCESS, "failed to begin recording command buffer!");
-		set_render_pass_info(app, i, &render_pass_info);
-		record_command_buffer_commands(app, &render_pass_info, i);
+		render_pass_info->framebuffer = app->vk_swap_chain_frame_buffers[i];
+		record_command_buffer_commands(app, render_pass_info, i);
 		error_check(vkEndCommandBuffer(app->vk_command_buffers[i]) !=
 			VK_SUCCESS, "Failed to record command buffer!");
 	}
+}
+
+void				vulkan_create_command_buffers(t_cvulkan *app)
+{
+	VkRenderPassBeginInfo			render_pass_info;
+	VkClearValue					clear_values[2];
+
+	allocate_command_buffers(app);
+	ft_memset(&clear_values[0], 0, sizeof(clear_values[0]));
+	ft_memset(&clear_values[1], 0, sizeof(clear_values[1]));
+	ft_memset(&render_pass_info, 0, sizeof(render_pass_info));
+	clear_values[0].color = (VkClearColorValue){{0.0f, 0.0f, 0.0f, 1.0f}};
+	clear_values[1].depthStencil = (VkClearDepthStencilValue){1.0f, 0};
+	render_pass_info.clearValueCount = 2;
+	render_pass_info.pClearValues = clear_values;
+	render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	render_pass_info.renderPass = app->vk_render_pass;
+	render_pass_info.renderArea.offset = (VkOffset2D){0, 0};
+	render_pass_info.renderArea.extent = app->vk_swap_chain_extent;
+	create_command_buffers(app, &render_pass_info);
 }
 
 void				vulkan_create_buffer(t_cvulkan *app, t_buffer_info *info)

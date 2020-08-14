@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 15:33:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 16:45:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/14 13:41:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static void		vulkan_update_uniform_buffer(t_cvulkan *app,
 
 	start_time = start_time == 0 ? clock() : start_time;
 	current_time = clock();
-	time_elapsed = (double)(current_time - start_time) / CLOCKS_PER_SEC;
+	time_elapsed = (double)(current_time - start_time) / CLOCKS_PER_SEC * 10.0f;
 	glm_mat4_identity(model);
 	glm_rotate_z(model, time_elapsed * glm_rad(90.0f), ubo.model);
 	glm_lookat((vec3){2.0f, 2.0f, 2.0f}, (vec3){0.0f, 0.0f, 0.0f},
-		(vec3){0.0f, 0.0f, 0.0f}, ubo.view);
+		(vec3){0.0f, 0.0f, 1.0f}, ubo.view);
 	glm_perspective(glm_rad(45.0f), (float)app->vk_swap_chain_extent.width /
 		(float)app->vk_swap_chain_extent.height, 0.1f, 10.0f, ubo.proj);
 	ubo.proj[1][1] *= -1;
@@ -39,6 +39,8 @@ static void		vulkan_update_uniform_buffer(t_cvulkan *app,
 	ft_memcpy(data, &ubo, sizeof(ubo));
 	vkUnmapMemory(app->vk_logical_device,
 		app->vk_uniform_buffers_memory[currentImage]);
+
+
 }
 
 void			vulkan_draw(t_cvulkan *app)

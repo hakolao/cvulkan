@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 13:07:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 17:51:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/14 21:55:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,21 @@ static void		set_face_vertices_and_indices(t_cvulkan *app,
 	{
 		error_check(attrib.face_num_verts[i] % 3 != 0, "Face verts % 3 != 0");
 		app->vertices[i].pos[0] = attrib.vertices[3 *
-			(size_t)(attrib.faces[i + 3 + 0].v_idx) + 0];
+			(size_t)(attrib.faces[i].v_idx) + 0];
 		app->vertices[i].pos[1] = attrib.vertices[3 *
-			(size_t)(attrib.faces[i + 3 + 1].v_idx) + 1];
+			(size_t)(attrib.faces[i].v_idx) + 1];
 		app->vertices[i].pos[2] = attrib.vertices[3 *
-			(size_t)(attrib.faces[i + 3 + 2].v_idx) + 2];
+			(size_t)(attrib.faces[i].v_idx) + 2];
 		app->vertices[i].color[0] = 1.0f;
 		app->vertices[i].color[1] = 1.0f;
 		app->vertices[i].color[2] = 1.0f;
 		app->vertices[i].tex_coord[0] = attrib.texcoords[2 *
-			(size_t)(attrib.faces[i + 3].vt_idx) + 0];
+			(size_t)(attrib.faces[i].vt_idx) + 0];
 		app->vertices[i].tex_coord[1] = 1.0f - attrib.texcoords[2 *
-			(size_t)(attrib.faces[i + 3].vt_idx) + 1];
-		app->indices[i * 3 + 0] = i + 0;
-		app->indices[i * 3 + 1] = i + 1;
-		app->indices[i * 3 + 2] = i + 2;
+			(size_t)(attrib.faces[i].vt_idx) + 1];
+		app->indices[i + 0] = i + 0;
+		app->indices[i + 1] = i + 1;
+		app->indices[i + 2] = i + 2;
 	}
 	app->num_vertices = i;
 	app->num_indices = i * 3;

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:35:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/14 20:18:07 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/14 23:35:45 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL	debug_callback(
 	void *p_user_data) {
 	(void)message_type;
 	(void)p_user_data;
-	if (message_severity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT)
+	if (message_severity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
 		ft_dprintf(2, "Validation layer:\n%s\n", p_callback_data->pMessage);
 	return (VK_FALSE);
 }

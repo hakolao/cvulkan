@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 13:07:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/14 21:55:48 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 20:11:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,58 @@ static void		set_face_vertices_and_indices(t_cvulkan *app,
 				tinyobj_attrib_t attrib)
 {
 	size_t		i;
+	size_t		f;
+	size_t		vi;
+	size_t		face_offset;
 
-	i = -1;
+	i = -1; (void)app;
+	face_offset = 0;
+	vi = 0;
 	while (++i < attrib.num_face_num_verts)
 	{
-		error_check(attrib.face_num_verts[i] % 3 != 0, "Face verts % 3 != 0");
-		app->vertices[i].pos[0] = attrib.vertices[3 *
-			(size_t)(attrib.faces[i].v_idx) + 0];
-		app->vertices[i].pos[1] = attrib.vertices[3 *
-			(size_t)(attrib.faces[i].v_idx) + 1];
-		app->vertices[i].pos[2] = attrib.vertices[3 *
-			(size_t)(attrib.faces[i].v_idx) + 2];
-		app->vertices[i].color[0] = 1.0f;
-		app->vertices[i].color[1] = 1.0f;
-		app->vertices[i].color[2] = 1.0f;
-		app->vertices[i].tex_coord[0] = attrib.texcoords[2 *
-			(size_t)(attrib.faces[i].vt_idx) + 0];
-		app->vertices[i].tex_coord[1] = 1.0f - attrib.texcoords[2 *
-			(size_t)(attrib.faces[i].vt_idx) + 1];
-		app->indices[i + 0] = i + 0;
-		app->indices[i + 1] = i + 1;
-		app->indices[i + 2] = i + 2;
+		f = -1;
+		while (++f < (size_t)attrib.face_num_verts[i] / 3)
+		{
+			tinyobj_vertex_index_t idx0 = attrib.faces[face_offset + 3 * f + 0];
+			tinyobj_vertex_index_t idx1 = attrib.faces[face_offset + 3 * f + 1];
+			tinyobj_vertex_index_t idx2 = attrib.faces[face_offset + 3 * f + 2];
+			// for (k = 0; k < 3; k++) {
+			int f0 = idx0.v_idx;
+			int f1 = idx1.v_idx;
+			int f2 = idx2.v_idx;
+			app->vertices[vi + 0].pos[0] =
+				attrib.vertices[3 * (size_t)f0 + 0];
+			app->vertices[vi + 0].pos[1] =
+				attrib.vertices[3 * (size_t)f0 + 1];
+			app->vertices[vi + 0].pos[2] =
+				attrib.vertices[3 * (size_t)f0 + 2];
+			app->vertices[vi + 1].pos[0] =
+				attrib.vertices[3 * (size_t)f1 + 0];
+			app->vertices[vi + 1].pos[1] =
+				attrib.vertices[3 * (size_t)f1 + 1];
+			app->vertices[vi + 1].pos[2] =
+				attrib.vertices[3 * (size_t)f1 + 2];
+			app->vertices[vi + 2].pos[0] =
+				attrib.vertices[3 * (size_t)f2 + 0];
+			app->vertices[vi + 2].pos[1] =
+				attrib.vertices[3 * (size_t)f2 + 1];
+			app->vertices[vi + 2].pos[2] =
+				attrib.vertices[3 * (size_t)f2 + 2];
+				vi += 3;
+			// }
+		}
+		face_offset += (size_t)attrib.face_num_verts[i];
 	}
-	app->num_vertices = i;
-	app->num_indices = i * 3;
+	app->num_vertices = vi;
+	app->num_indices = app->num_vertices;
+	for (size_t i = 0; i < vi; i++)
+	{
+		ft_printf("%d: %f %f %f\n", i,
+			app->vertices[i].pos[0],
+			app->vertices[i].pos[1],
+			app->vertices[i].pos[2]);
+	}
+
 }
 
 /*
@@ -74,9 +102,9 @@ void			vulkan_load_model(t_cvulkan *app, const char *filename)
 		&num_materials, filename, get_file_data, TINYOBJ_FLAG_TRIANGULATE),
 		"Failed to parse model obj!");
 	error_check(!(app->vertices = malloc(sizeof(*app->vertices) *
-		attrib.num_face_num_verts)), "Failed to malloc vertices");
+		attrib.num_face_num_verts * 3)), "Failed to malloc vertices");
 	error_check(!(app->indices = malloc(sizeof(*app->indices) * 3 *
-		attrib.num_face_num_verts)), "Failed to malloc indices");
+		attrib.num_face_num_verts * 3)), "Failed to malloc indices");
 	set_face_vertices_and_indices(app, attrib);
 	ft_printf("vertices: %d\n", app->num_vertices);
 	ft_printf("num_indices: %d\n", app->num_indices);

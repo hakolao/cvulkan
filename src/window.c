@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:32:05 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/08 17:37:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:45:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void		window_init(t_cvulkan *app)
 							  SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 	error_check(app->window == NULL, SDL_GetError());
 	app->window_info.window_id = SDL_GetWindowID(app->window);
-	app->window_info.parent = app->window;
+	app->window_info.parent = app;
 	app->window_info.is_hidden = false;
 	SDL_AddEventWatch(frame_buffer_resize_callback, &app->window_info);
 }

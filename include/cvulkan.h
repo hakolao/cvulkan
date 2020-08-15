@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 16:09:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:23:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ void								app_run(t_cvulkan *app);
 /*
 ** Vulkan Draw
 */
-void								vulkan_draw(t_cvulkan *app);
+void								vulkan_draw_frame(t_cvulkan *app);
 
 /*
 ** File reading

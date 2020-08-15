@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 18:50:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:28:28 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void		main_loop(t_cvulkan *app) {
 			if (event.type == SDL_QUIT)
 				app->is_running = false;
 		}
-		vulkan_draw(app);
+		vulkan_draw_frame(app);
 	}
 	vkDeviceWaitIdle(app->vk_logical_device);
 }
@@ -82,7 +82,8 @@ static void		cleanup(t_cvulkan *app)
 	}
 	vkDestroyCommandPool(app->vk_logical_device, app->vk_command_pool, NULL);
 	vkDestroyDevice(app->vk_logical_device, NULL);
-	if (ENABLE_VALIDATION_LAYERS) {
+	if (ENABLE_VALIDATION_LAYERS)
+	{
 		vulkan_destroy_debug_utils_messenger_ext(app->vk_instance,
 			app->vk_debug_utils_messenger, NULL);
 	}
@@ -90,8 +91,8 @@ static void		cleanup(t_cvulkan *app)
 	vkDestroyInstance(app->vk_instance, NULL);
 	free(app->vertices);
 	free(app->indices);
-	// SDL_DestroyWindow(app->window); // seems to segfault
-	// IMG_Quit();
+	SDL_DestroyWindow(app->window); // seems to segfault
+	IMG_Quit();
 	SDL_Quit();
 }
 

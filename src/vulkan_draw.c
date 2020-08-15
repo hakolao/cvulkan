@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 15:33:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:19:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:23:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static void		present_image(t_cvulkan *app, uint32_t imageIndex)
 		error_check(res != VK_SUCCESS, "Failed to present swap chain image!");
 }
 
-void			vulkan_draw(t_cvulkan *app)
+void			vulkan_draw_frame(t_cvulkan *app)
 {
 	uint32_t			imageIndex;
 	VkSubmitInfo		submitInfo;

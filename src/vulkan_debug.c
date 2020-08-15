@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:35:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/14 23:35:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:27:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,22 @@ static VkResult 						create_debug_utils_messenger_ext(
 	PFN_vkCreateDebugUtilsMessengerEXT func =
 		(PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance,
 		"vkCreateDebugUtilsMessengerEXT");
-	if (func != NULL) {
+	if (func != NULL)
 		return func(instance,
 			p_create_info, p_allocator, p_debug_messenger);
-	} else {
-		return VK_ERROR_EXTENSION_NOT_PRESENT;
-	}
+	else
+		return (VK_ERROR_EXTENSION_NOT_PRESENT);
 }
 
 void									vulkan_destroy_debug_utils_messenger_ext(
 	VkInstance instance, VkDebugUtilsMessengerEXT p_debug_messenger,
-	const VkAllocationCallbacks *p_allocator) {
+	const VkAllocationCallbacks *p_allocator)
+{
 	PFN_vkDestroyDebugUtilsMessengerEXT func =
 		(PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
 		instance, "vkDestroyDebugUtilsMessengerEXT");
-	if (func != NULL) {
+	if (func != NULL)
 		func(instance, p_debug_messenger, p_allocator);
-	}
 }
 
 void									error_check(int test,

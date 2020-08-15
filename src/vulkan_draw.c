@@ -6,12 +6,11 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 15:33:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 00:10:28 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
-#include <time.h>
 
 static void		vulkan_update_uniform_buffer(t_vkrenderer *app,
 				uint32_t currentImage)
@@ -19,15 +18,9 @@ static void		vulkan_update_uniform_buffer(t_vkrenderer *app,
 	t_uniform_buffer_object		ubo;
 	mat4						model;
 	void						*data;
-	static clock_t				start_time;
-	clock_t						current_time;
-	float						time_elapsed;
 
-	start_time = start_time == 0 ? clock() : start_time;
-	current_time = clock();
-	time_elapsed = (double)(current_time - start_time) / CLOCKS_PER_SEC * 10.0f;
 	glm_mat4_identity(model);
-	glm_rotate_z(model, time_elapsed * glm_rad(90.0f), ubo.model);
+	glm_rotate_z(model, glm_rad(app->rotation_angle), ubo.model);
 	glm_lookat((vec3){2.0f, 2.0f, 2.0f}, (vec3){0.0f, 0.0f, 0.0f},
 		(vec3){0.0f, 0.0f, 1.0f}, ubo.view);
 	glm_perspective(glm_rad(45.0f), (float)app->vk_swap_chain_extent.width /

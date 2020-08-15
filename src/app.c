@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 00:10:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,18 @@
 
 static void		main_loop(t_vkrenderer *app) {
 	app->is_running = true;
+	app->rotation_angle = 0.0f;
 	while (app->is_running) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT)
 				app->is_running = false;
+			if (event.type == SDL_KEYDOWN &&
+				event.key.keysym.sym == SDLK_LEFT)
+				app->rotation_angle += -1.0f;
+			if (event.type == SDL_KEYDOWN &&
+				event.key.keysym.sym == SDLK_RIGHT)
+				app->rotation_angle += 1.0f;
 		}
 		vulkan_draw_frame(app);
 	}

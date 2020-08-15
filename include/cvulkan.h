@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 00:08:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ typedef struct						s_window_info {
 }									t_window_info;
 
 typedef struct						s_vkrenderer {
+	float						rotation_angle;
 	bool						is_running;
 	bool						frame_buffer_resized;
 	SDL_Window					*window;

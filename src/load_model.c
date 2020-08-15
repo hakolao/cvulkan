@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 13:07:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 20:46:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 20:53:11 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,42 +27,37 @@ static void		set_face_vertices_and_indices(t_cvulkan *app,
 				tinyobj_attrib_t attrib)
 {
 	size_t		i;
-	size_t		f;
 	size_t		k;
-	size_t		vi;
 	size_t		face_offset;
 
 	i = -1;
 	face_offset = 0;
-	vi = 0;
 	while (++i < attrib.num_face_num_verts)
 	{
-		f = -1;
-		while (++f < (size_t)attrib.face_num_verts[i] / 3)
+		error_check((size_t)attrib.face_num_verts[i] != 3, "Face not triangle");
+		k = -1;
+		while (++k < 3)
 		{
-			k = -1;
-			while (++k < 3)
-			{
-				app->vertices[vi + k].pos[0] = attrib.vertices[3 *
-					(size_t)attrib.faces[face_offset + 3 * f + k].v_idx + 0];
-				app->vertices[vi + k].pos[1] = attrib.vertices[3 *
-					(size_t)attrib.faces[face_offset + 3 * f + k].v_idx + 1];
-				app->vertices[vi + k].pos[2] = attrib.vertices[3 *
-					(size_t)attrib.faces[face_offset + 3 * f + k].v_idx + 2];
-				app->vertices[vi + k].color[0] = 1.0f;
-				app->vertices[vi + k].color[1] = 1.0f;
-				app->vertices[vi + k].color[2] = 1.0f;
-				app->vertices[vi + k].tex_coord[0] = attrib.texcoords[2 *
-					(size_t)attrib.faces[face_offset + 3 * f + k].vt_idx + 0];
-				app->vertices[vi + k].tex_coord[1] = 1.0f - attrib.texcoords[2 *
-					(size_t)attrib.faces[face_offset + 3 * f + k].vt_idx + 1];
-				app->indices[vi + k] = vi + k;
-			}
-			vi += 3;
+			app->vertices[face_offset + k].pos[0] = attrib.vertices[3 *
+				(size_t)attrib.faces[face_offset + 3 + k].v_idx + 0];
+			app->vertices[face_offset + k].pos[1] = attrib.vertices[3 *
+				(size_t)attrib.faces[face_offset + 3 + k].v_idx + 1];
+			app->vertices[face_offset + k].pos[2] = attrib.vertices[3 *
+				(size_t)attrib.faces[face_offset + 3 + k].v_idx + 2];
+			app->vertices[face_offset + k].color[0] = 1.0f;
+			app->vertices[face_offset + k].color[1] = 1.0f;
+			app->vertices[face_offset + k].color[2] = 1.0f;
+			app->vertices[face_offset + k].tex_coord[0] =
+				attrib.texcoords[2 *
+				(size_t)attrib.faces[face_offset + 3 + k].vt_idx + 0];
+			app->vertices[face_offset + k].tex_coord[1] = 1.0f -
+				attrib.texcoords[2 *
+				(size_t)attrib.faces[face_offset + 3 + k].vt_idx + 1];
+			app->indices[face_offset + k] = face_offset + k;
 		}
-		face_offset += (size_t)attrib.face_num_verts[i];
+		face_offset += 3;
 	}
-	app->num_vertices = vi;
+	app->num_vertices = face_offset;
 	app->num_indices = app->num_vertices;
 }
 

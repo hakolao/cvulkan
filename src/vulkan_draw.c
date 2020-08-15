@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 15:33:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 21:15:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:19:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void		submit_draw_queue(t_cvulkan *app, uint32_t imageIndex,
 			"Failed to submit draw command buffer!");
 }
 
-static void		acquire_swap_chain_image(t_cvulkan *app, uint32_t *imageIndex)
+static int		acquire_swap_chain_image(t_cvulkan *app, uint32_t *imageIndex)
 {
 	VkResult			res;
 
@@ -73,11 +73,12 @@ static void		acquire_swap_chain_image(t_cvulkan *app, uint32_t *imageIndex)
 	if (res == VK_ERROR_OUT_OF_DATE_KHR)
 	{
 		vulkan_recreate_swapchain(app);
-		return ;
+		return (1);
 	}
 	else
 		error_check(res != VK_SUCCESS && res != VK_SUBOPTIMAL_KHR,
 			"Failed to acquire swap chain image!");
+	return (0);
 }
 
 static void		present_image(t_cvulkan *app, uint32_t imageIndex)
@@ -108,7 +109,8 @@ void			vulkan_draw(t_cvulkan *app)
 
 	vkWaitForFences(app->vk_logical_device, 1,
 		&app->vk_in_flight_fences[app->vk_current_frame], VK_TRUE, UINT64_MAX);
-	acquire_swap_chain_image(app, &imageIndex);
+	if (acquire_swap_chain_image(app, &imageIndex))
+		return ;
 	if (app->vk_images_in_flight[imageIndex] != VK_NULL_HANDLE)
 		vkWaitForFences(app->vk_logical_device, 1,
 			&app->vk_images_in_flight[imageIndex], VK_TRUE, UINT64_MAX);

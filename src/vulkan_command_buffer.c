@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 15:11:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/14 21:14:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:11:49 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void				vulkan_create_command_buffers(t_cvulkan *app)
 	ft_memset(&clear_values[0], 0, sizeof(clear_values[0]));
 	ft_memset(&clear_values[1], 0, sizeof(clear_values[1]));
 	ft_memset(&render_pass_info, 0, sizeof(render_pass_info));
-	clear_values[0].color = (VkClearColorValue){{0.0f, 0.0f, 0.0f, 1.0f}};
+	clear_values[0].color = (VkClearColorValue){{1.0f, 1.0f, 1.0f, 1.0f}};
 	clear_values[1].depthStencil = (VkClearDepthStencilValue){1.0f, 0};
 	render_pass_info.clearValueCount = 2;
 	render_pass_info.pClearValues = clear_values;

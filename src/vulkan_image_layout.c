@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 17:03:55 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 17:25:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-void			vulkan_transition_image_layout(t_cvulkan *app,
+void			vulkan_transition_image_layout(t_vkrenderer *app,
 				t_image_info *info,
 				VkImageLayout old_layout,
 				VkImageLayout new_layout)

@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 23:18:34 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 23:19:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-VkCommandBuffer		vulkan_begin_single_time_commands(t_cvulkan *app)
+VkCommandBuffer		vulkan_begin_single_time_commands(t_vkrenderer *app)
 {
 	VkCommandBufferAllocateInfo	alloc_info;
 	VkCommandBuffer				command_buffer;
@@ -32,7 +32,7 @@ VkCommandBuffer		vulkan_begin_single_time_commands(t_cvulkan *app)
 	return (command_buffer);
 }
 
-void				vulkan_end_single_time_commands(t_cvulkan *app,
+void				vulkan_end_single_time_commands(t_vkrenderer *app,
 					VkCommandBuffer command_buffer)
 {
 	VkSubmitInfo	submit_info;
@@ -48,7 +48,7 @@ void				vulkan_end_single_time_commands(t_cvulkan *app,
 		1, &command_buffer);
 }
 
-void				vulkan_copy_buffer(t_cvulkan *app, VkBuffer src_buffer,
+void				vulkan_copy_buffer(t_vkrenderer *app, VkBuffer src_buffer,
 					VkBuffer dst_buffer, VkDeviceSize size)
 {
 	VkCommandBuffer		command_buffer;

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 12:12:47 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 16:49:04 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static VkSubpassDependency		subpass_dependency()
 	return (dependency);
 }
 
-static VkAttachmentDescription	depth_attachment_description(t_cvulkan *app)
+static VkAttachmentDescription	depth_attachment_description(t_vkrenderer *app)
 {
 	VkAttachmentDescription		depth_attachment;
 
@@ -43,7 +43,7 @@ static VkAttachmentDescription	depth_attachment_description(t_cvulkan *app)
 	return (depth_attachment);
 }
 
-static VkAttachmentDescription	color_attachment_description(t_cvulkan *app)
+static VkAttachmentDescription	color_attachment_description(t_vkrenderer *app)
 {
 	VkAttachmentDescription		color_attachment;
 
@@ -59,7 +59,7 @@ static VkAttachmentDescription	color_attachment_description(t_cvulkan *app)
 	return (color_attachment);
 }
 
-static VkAttachmentDescription	color_attachment_resolve_description(t_cvulkan
+static VkAttachmentDescription	color_attachment_resolve_description(t_vkrenderer
 								*app)
 {
 	VkAttachmentDescription		color_attachment_resolve;
@@ -76,7 +76,7 @@ static VkAttachmentDescription	color_attachment_resolve_description(t_cvulkan
 	return (color_attachment_resolve);
 }
 
-void							vulkan_create_render_pass(t_cvulkan *app)
+void							vulkan_create_render_pass(t_vkrenderer *app)
 {
 	VkAttachmentDescription		color_attachment;
 	VkAttachmentDescription		color_attachment_resolve;

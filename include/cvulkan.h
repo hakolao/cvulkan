@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:23:44 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ typedef struct						s_window_info {
 	void			*parent;
 }									t_window_info;
 
-typedef struct						s_cvulkan {
+typedef struct						s_vkrenderer {
 	bool						is_running;
 	bool						frame_buffer_resized;
 	SDL_Window					*window;
@@ -173,17 +173,17 @@ typedef struct						s_cvulkan {
 	VkFence						vk_in_flight_fences[MAXFRAMESINFLIGHT];
 	VkFence						vk_images_in_flight[MAX_SWAPCHAIN_SIZE];
 	size_t						vk_current_frame;
-}									t_cvulkan;
+}									t_vkrenderer;
 
 /*
 ** App
 */
-void								app_run(t_cvulkan *app);
+void								app_run(t_vkrenderer *app);
 
 /*
 ** Vulkan Draw
 */
-void								vulkan_draw_frame(t_cvulkan *app);
+void								vulkan_draw_frame(t_vkrenderer *app);
 
 /*
 ** File reading
@@ -195,12 +195,12 @@ void								free_file_contents(t_file_contents
 /*
 ** Window
 */
-void								window_init(t_cvulkan *app);
+void								window_init(t_vkrenderer *app);
 
 /*
 ** Model loading
 */
-void								vulkan_load_model(t_cvulkan *app,
+void								vulkan_load_model(t_vkrenderer *app,
 									const char *filename);
 
 /*
@@ -210,7 +210,7 @@ void								error_check(int test, const char *message);
 void								vulkan_populate_debug_messenger_create_info(
 									VkDebugUtilsMessengerCreateInfoEXT
 									*create_info);
-void								vulkan_setup_debug_messenger(t_cvulkan
+void								vulkan_setup_debug_messenger(t_vkrenderer
 									*app);
 void								vulkan_destroy_debug_utils_messenger_ext(
 									VkInstance instance,
@@ -220,9 +220,9 @@ void								vulkan_destroy_debug_utils_messenger_ext(
 /*
 ** Vulkan instance
 */
-void								vulkan_create_instance(t_cvulkan *app);
+void								vulkan_create_instance(t_vkrenderer *app);
 void								vulkan_populate_instance_create_info(
-									t_cvulkan *app, VkApplicationInfo *app_info,
+									t_vkrenderer *app, VkApplicationInfo *app_info,
 									VkDebugUtilsMessengerCreateInfoEXT
 									*debug_create_info,
 									VkInstanceCreateInfo *create_info);
@@ -230,38 +230,38 @@ void								vulkan_populate_instance_create_info(
 /*
 ** Vulkan surface
 */
-void								vulkan_create_surface(t_cvulkan *app);
+void								vulkan_create_surface(t_vkrenderer *app);
 
 
 /*
 ** Vulkan device
 */
 void								vulkan_query_swap_chain_support(
-									t_cvulkan *app,
+									t_vkrenderer *app,
 									VkPhysicalDevice device,
 									t_swap_chain_support_details *details);
-void								vulkan_pick_physical_device(t_cvulkan *app);
+void								vulkan_pick_physical_device(t_vkrenderer *app);
 bool								vulkan_check_device_extension_support(
-									t_cvulkan *app,
+									t_vkrenderer *app,
 									VkPhysicalDevice device);
-VkSampleCountFlagBits				vulkan_get_max_usable_sample_count(t_cvulkan
+VkSampleCountFlagBits				vulkan_get_max_usable_sample_count(t_vkrenderer
 									*app);
-void								vulkan_find_queue_families(t_cvulkan *app,
+void								vulkan_find_queue_families(t_vkrenderer *app,
 									VkPhysicalDevice device,
 									t_queue_family_indices *indices);
 
 /*
 ** Vulkan logical device
 */
-void								vulkan_create_logical_device(t_cvulkan *app);
+void								vulkan_create_logical_device(t_vkrenderer *app);
 
 /*
 ** Vulkan swap chain
 */
-void								vulkan_create_swap_chain(t_cvulkan *app);
-void								vulkan_recreate_swapchain(t_cvulkan *app);
-void								vulkan_cleanup_swap_chain(t_cvulkan *app);
-void								vulkan_choose_swap_extent(t_cvulkan *app,
+void								vulkan_create_swap_chain(t_vkrenderer *app);
+void								vulkan_recreate_swapchain(t_vkrenderer *app);
+void								vulkan_cleanup_swap_chain(t_vkrenderer *app);
+void								vulkan_choose_swap_extent(t_vkrenderer *app,
 									VkSurfaceCapabilitiesKHR *capabilities,
 									VkExtent2D *actualExtent);
 void								vulkan_choose_swap_present_mode(
@@ -274,21 +274,21 @@ void								vulkan_choose_swap_surface_format(
 /*
 ** Vulkan image views
 */
-void								vulkan_create_image_views(t_cvulkan *app);
-VkImageView							vulkan_create_image_view(t_cvulkan *app,
+void								vulkan_create_image_views(t_vkrenderer *app);
+VkImageView							vulkan_create_image_view(t_vkrenderer *app,
 									VkImageViewCreateInfo *view_info);
 VkImageViewCreateInfo				vulkan_create_image_image_view_info(
 									VkImage image, VkFormat format,
 									VkImageAspectFlags aspect_flags,
 									uint32_t mip_levels);
-void								vulkan_create_texture_image_view(t_cvulkan
+void								vulkan_create_texture_image_view(t_vkrenderer
 									*app);
 
 /*
 ** Vulkan render pass
 */
-void								vulkan_create_render_pass(t_cvulkan *app);
-VkFormat							vulkan_find_depth_format(t_cvulkan *app);
+void								vulkan_create_render_pass(t_vkrenderer *app);
+VkFormat							vulkan_find_depth_format(t_vkrenderer *app);
 VkSubpassDescription				*vulkan_create_subpass_description();
 void								vulkan_free_subpass_description(
 									VkSubpassDescription *subpass);
@@ -297,10 +297,10 @@ void								vulkan_free_subpass_description(
 ** Vulkan descriptor set
 */
 void								vulkan_create_descriptor_set_layout(
-									t_cvulkan *app);
-void								vulkan_create_descriptor_pool(t_cvulkan
+									t_vkrenderer *app);
+void								vulkan_create_descriptor_pool(t_vkrenderer
 									*app);
-void								vulkan_create_descriptor_sets(t_cvulkan
+void								vulkan_create_descriptor_sets(t_vkrenderer
 									*app);
 
 /*
@@ -314,7 +314,7 @@ VkPipelineVertexInputStateCreateInfo*vulkan_create_vertex_input_create_info();
 /*
 ** Vulkan graphics pipeline
 */
-void								vulkan_create_graphics_pipeline(t_cvulkan
+void								vulkan_create_graphics_pipeline(t_vkrenderer
 									*app);
 VkPipelineColorBlendStateCreateInfo	*vulkan_create_color_blend_create_info();
 void								free_color_blend_create_info(const
@@ -329,17 +329,17 @@ VkPipelineRasterizationStateCreateInfo
 									*vulkan_create_rasterization_create_info();
 
 VkPipelineViewportStateCreateInfo	*vulkan_create_viewport_create_info(
-									t_cvulkan *app);
+									t_vkrenderer *app);
 void								vulkan_free_viewport_create_info(const
 									VkPipelineViewportStateCreateInfo
 									*create_info);
 VkPipelineInputAssemblyStateCreateInfo
 									*create_input_assembly_create_info();
 VkPipelineShaderStageCreateInfo		*vulkan_create_shader_stages_info(
-									t_cvulkan *app,
+									t_vkrenderer *app,
 									uint32_t *stage_count);
 void								vulkan_destroy_shader_modules(
-									t_cvulkan *app,
+									t_vkrenderer *app,
 									uint32_t stage_count,
 									const VkPipelineShaderStageCreateInfo
 									*shader_stages);
@@ -348,29 +348,29 @@ void								vulkan_destroy_shader_modules(
 /*
 ** Vulkan command pool
 */
-void								vulkan_create_command_pool(t_cvulkan *app);
+void								vulkan_create_command_pool(t_vkrenderer *app);
 
 /*
 ** Vulkan memory
 */
-uint32_t							vulkan_find_memory_type(t_cvulkan *app,
+uint32_t							vulkan_find_memory_type(t_vkrenderer *app,
 									uint32_t type_filter,
 									VkMemoryPropertyFlags properties);
 
 /*
 ** Vulkan image
 */
-void								vulkan_create_image(t_cvulkan *app,
+void								vulkan_create_image(t_vkrenderer *app,
 									t_image_info *info);
-void								vulkan_create_texture_image(t_cvulkan *app,
+void								vulkan_create_texture_image(t_vkrenderer *app,
 									const char *filename);
 bool								vulkan_has_stencil_component(VkFormat
 									format);
-void								vulkan_allocate_image_memory(t_cvulkan *app,
+void								vulkan_allocate_image_memory(t_vkrenderer *app,
 									t_image_info *info);
-void								vulkan_copy_buffer_to_image(t_cvulkan *app,
+void								vulkan_copy_buffer_to_image(t_vkrenderer *app,
 									VkBuffer buffer, t_image_info *info);
-void								vulkan_transition_image_layout(t_cvulkan
+void								vulkan_transition_image_layout(t_vkrenderer
 									*app, t_image_info *info,
 									VkImageLayout oldLayout,
 									VkImageLayout newLayout);
@@ -383,62 +383,62 @@ void								vulkan_set_barrier_layout_transition(
 									VkPipelineStageFlags *src_stage,
 									VkPipelineStageFlags *dst_stage,
 									VkImageMemoryBarrier *barrier);
-void								vulkan_generate_mipmaps(t_cvulkan *app,
+void								vulkan_generate_mipmaps(t_vkrenderer *app,
 									t_image_info *info);
 void								vulkan_create_blit_image_cmd(int32_t
 									dimensions[2],
 									VkCommandBuffer command_buffer,
 									t_image_info *info, size_t i);
-void								vulkan_create_texture_sampler(t_cvulkan
+void								vulkan_create_texture_sampler(t_vkrenderer
 									*app);
 
 /*
 ** Vulkan color resources
 */
-void								vulkan_create_color_resources(t_cvulkan
+void								vulkan_create_color_resources(t_vkrenderer
 									*app);
 
 /*
 ** Vulkan depth resources
 */
-void								vulkan_create_depth_resources(t_cvulkan
+void								vulkan_create_depth_resources(t_vkrenderer
 									*app);
 
 /*
 ** Vulkan  frame buffers
 */
-void								vulkan_create_frame_buffers(t_cvulkan *app);
+void								vulkan_create_frame_buffers(t_vkrenderer *app);
 
 /*
 ** Vulkan command buffer
 */
-VkCommandBuffer						vulkan_begin_single_time_commands(t_cvulkan
+VkCommandBuffer						vulkan_begin_single_time_commands(t_vkrenderer
 									*app);
-void								vulkan_end_single_time_commands(t_cvulkan
+void								vulkan_end_single_time_commands(t_vkrenderer
 									*app, VkCommandBuffer command_buffer);
-void								vulkan_create_buffer(t_cvulkan *app,
+void								vulkan_create_buffer(t_vkrenderer *app,
 									t_buffer_info *info);
-void								vulkan_copy_buffer(t_cvulkan *app,
+void								vulkan_copy_buffer(t_vkrenderer *app,
 									VkBuffer src_buffer, VkBuffer dst_buffer,
 									VkDeviceSize size);
-void								vulkan_create_command_buffers(t_cvulkan
+void								vulkan_create_command_buffers(t_vkrenderer
 									*app);
 
 /*
 ** Vulkan vertex & index buffers
 */
-void								vulkan_create_vertex_buffer(t_cvulkan *app);
-void								vulkan_create_index_buffer(t_cvulkan *app);
+void								vulkan_create_vertex_buffer(t_vkrenderer *app);
+void								vulkan_create_index_buffer(t_vkrenderer *app);
 
 /*
 ** Vulkan uniform buffers
 */
-void								vulkan_create_uniform_buffers(t_cvulkan
+void								vulkan_create_uniform_buffers(t_vkrenderer
 									*app);
 
 /*
 ** Vulkan sync objects
 */
-void								vulkan_create_sync_objects(t_cvulkan *app);
+void								vulkan_create_sync_objects(t_vkrenderer *app);
 
 #endif

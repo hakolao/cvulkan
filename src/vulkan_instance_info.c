@@ -6,14 +6,14 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 20:26:04 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 15:59:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
 void				vulkan_populate_instance_create_info(
-					t_cvulkan *app, VkApplicationInfo *app_info,
+					t_vkrenderer *app, VkApplicationInfo *app_info,
 					VkDebugUtilsMessengerCreateInfoEXT *debug_create_info,
 					VkInstanceCreateInfo *create_info)
 {

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 20:19:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 13:27:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void		popilate_device_features(VkPhysicalDeviceFeatures
 	device_features->sampleRateShading = VK_TRUE;
 }
 
-static void		populate_logical_device_create_info(t_cvulkan *app,
+static void		populate_logical_device_create_info(t_vkrenderer *app,
 				VkDeviceQueueCreateInfo queue_create_infos[2],
 				VkDeviceCreateInfo *create_info)
 {
@@ -55,7 +55,7 @@ static void		populate_logical_device_create_info(t_cvulkan *app,
 	}
 }
 
-void			vulkan_create_logical_device(t_cvulkan *app)
+void			vulkan_create_logical_device(t_vkrenderer *app)
 {
 	t_queue_family_indices		indices;
 	VkDeviceQueueCreateInfo		queue_create_infos[2];

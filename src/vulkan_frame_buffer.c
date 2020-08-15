@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 13:22:20 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 13:31:18 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-void	vulkan_create_frame_buffers(t_cvulkan *app)
+void	vulkan_create_frame_buffers(t_vkrenderer *app)
 {
 	size_t					i;
 	VkImageView				*attachments;

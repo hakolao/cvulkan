@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 15:11:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:11:49 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static void			allocate_command_buffers(t_cvulkan *app)
+static void			allocate_command_buffers(t_vkrenderer *app)
 {
 	VkCommandBufferAllocateInfo		allocInfo;
 
@@ -26,7 +26,7 @@ static void			allocate_command_buffers(t_cvulkan *app)
 		"Failed to allocate command buffers!");
 }
 
-static void			record_command_buffer_commands(t_cvulkan *app,
+static void			record_command_buffer_commands(t_vkrenderer *app,
 					VkRenderPassBeginInfo *render_pass_info, size_t i)
 {
 	vkCmdBeginRenderPass(app->vk_command_buffers[i], render_pass_info,
@@ -45,7 +45,7 @@ static void			record_command_buffer_commands(t_cvulkan *app,
 	vkCmdEndRenderPass(app->vk_command_buffers[i]);
 }
 
-static void			create_command_buffers(t_cvulkan *app,
+static void			create_command_buffers(t_vkrenderer *app,
 					VkRenderPassBeginInfo *render_pass_info)
 {
 	size_t							i;
@@ -65,7 +65,7 @@ static void			create_command_buffers(t_cvulkan *app,
 	}
 }
 
-void				vulkan_create_command_buffers(t_cvulkan *app)
+void				vulkan_create_command_buffers(t_vkrenderer *app)
 {
 	VkRenderPassBeginInfo			render_pass_info;
 	VkClearValue					clear_values[2];
@@ -85,7 +85,7 @@ void				vulkan_create_command_buffers(t_cvulkan *app)
 	create_command_buffers(app, &render_pass_info);
 }
 
-void				vulkan_create_buffer(t_cvulkan *app, t_buffer_info *info)
+void				vulkan_create_buffer(t_vkrenderer *app, t_buffer_info *info)
 {
 	VkBufferCreateInfo		buffer_info;
 	VkMemoryRequirements	mem_requirements;

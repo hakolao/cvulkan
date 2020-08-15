@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:32:05 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:45:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	frame_buffer_resize_callback(void *data, SDL_Event *event)
 		t_window_info *window_info = (t_window_info*)data;
 		if (event->window.windowID == window_info->window_id)
 		{
-			t_cvulkan *app = (t_cvulkan*)(window_info->parent);
+			t_vkrenderer *app = (t_vkrenderer*)(window_info->parent);
 			app->frame_buffer_resized = true;
 			if (event->window.event == SDL_WINDOWEVENT_HIDDEN)
 				window_info->is_hidden = true;
@@ -35,7 +35,7 @@ static int	frame_buffer_resize_callback(void *data, SDL_Event *event)
 	return 0;
 }
 
-void		window_init(t_cvulkan *app)
+void		window_init(t_vkrenderer *app)
 {
 	app->window = SDL_CreateWindow(NAME, SDL_WINDOWPOS_CENTERED,
 							  SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT,

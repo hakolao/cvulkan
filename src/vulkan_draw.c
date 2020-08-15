@@ -6,14 +6,14 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 15:33:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:23:44 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 #include <time.h>
 
-static void		vulkan_update_uniform_buffer(t_cvulkan *app,
+static void		vulkan_update_uniform_buffer(t_vkrenderer *app,
 				uint32_t currentImage)
 {
 	t_uniform_buffer_object		ubo;
@@ -41,7 +41,7 @@ static void		vulkan_update_uniform_buffer(t_cvulkan *app,
 		app->vk_uniform_buffers_memory[currentImage]);
 }
 
-static void		submit_draw_queue(t_cvulkan *app, uint32_t imageIndex,
+static void		submit_draw_queue(t_vkrenderer *app, uint32_t imageIndex,
 				VkSubmitInfo *submitInfo)
 {
 	ft_memset(submitInfo, 0, sizeof(*submitInfo));
@@ -63,7 +63,7 @@ static void		submit_draw_queue(t_cvulkan *app, uint32_t imageIndex,
 			"Failed to submit draw command buffer!");
 }
 
-static int		acquire_swap_chain_image(t_cvulkan *app, uint32_t *imageIndex)
+static int		acquire_swap_chain_image(t_vkrenderer *app, uint32_t *imageIndex)
 {
 	VkResult			res;
 
@@ -81,7 +81,7 @@ static int		acquire_swap_chain_image(t_cvulkan *app, uint32_t *imageIndex)
 	return (0);
 }
 
-static void		present_image(t_cvulkan *app, uint32_t imageIndex)
+static void		present_image(t_vkrenderer *app, uint32_t imageIndex)
 {
 	VkPresentInfoKHR	presentInfo;
 	VkResult			res;
@@ -102,7 +102,7 @@ static void		present_image(t_cvulkan *app, uint32_t imageIndex)
 		error_check(res != VK_SUCCESS, "Failed to present swap chain image!");
 }
 
-void			vulkan_draw_frame(t_cvulkan *app)
+void			vulkan_draw_frame(t_vkrenderer *app)
 {
 	uint32_t			imageIndex;
 	VkSubmitInfo		submitInfo;

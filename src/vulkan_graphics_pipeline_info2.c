@@ -6,14 +6,14 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 23:35:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 23:58:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
 
-VkPipelineViewportStateCreateInfo		*vulkan_create_viewport_create_info(t_cvulkan
+VkPipelineViewportStateCreateInfo		*vulkan_create_viewport_create_info(t_vkrenderer
 										*app)
 {
 	VkPipelineViewportStateCreateInfo	*viewport_state;

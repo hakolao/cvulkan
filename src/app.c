@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:11:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:41:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static void		main_loop(t_cvulkan *app) {
+static void		main_loop(t_vkrenderer *app) {
 	app->is_running = true;
 	while (app->is_running) {
 		SDL_Event event;
@@ -25,7 +25,7 @@ static void		main_loop(t_cvulkan *app) {
 	vkDeviceWaitIdle(app->vk_logical_device);
 }
 
-static void		vulkan_init(t_cvulkan *app)
+static void		vulkan_init(t_vkrenderer *app)
 {
 	vulkan_create_instance(app);
 	vulkan_setup_debug_messenger(app);
@@ -54,7 +54,7 @@ static void		vulkan_init(t_cvulkan *app)
 	vulkan_create_sync_objects(app);
 }
 
-static void		cleanup(t_cvulkan *app)
+static void		cleanup(t_vkrenderer *app)
 {
 	size_t	i;
 
@@ -96,7 +96,7 @@ static void		cleanup(t_cvulkan *app)
 	SDL_Quit();
 }
 
-void			app_run(t_cvulkan *app)
+void			app_run(t_vkrenderer *app)
 {
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	window_init(app);

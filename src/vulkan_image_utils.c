@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 16:58:47 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 17:01:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ bool			vulkan_has_stencil_component(VkFormat format) {
 			format == VK_FORMAT_D24_UNORM_S8_UINT);
 }
 
-void			vulkan_allocate_image_memory(t_cvulkan *app,
+void			vulkan_allocate_image_memory(t_vkrenderer *app,
 				t_image_info *info)
 {
 	VkMemoryAllocateInfo	alloc_info;
@@ -34,7 +34,7 @@ void			vulkan_allocate_image_memory(t_cvulkan *app,
 		info->image_memory) != VK_SUCCESS, "Failed to allocate image memory!");
 }
 
-void			vulkan_copy_buffer_to_image(t_cvulkan *app,
+void			vulkan_copy_buffer_to_image(t_vkrenderer *app,
 				VkBuffer buffer, t_image_info *info)
 {
 	VkCommandBuffer		command_buffer;

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 11:50:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 22:19:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ VkImageViewCreateInfo		vulkan_create_image_image_view_info(VkImage image,
 	return (view_info);
 }
 
-VkImageView					vulkan_create_image_view(t_cvulkan *app,
+VkImageView					vulkan_create_image_view(t_vkrenderer *app,
 							VkImageViewCreateInfo *view_info)
 {
 	VkImageView				image_view;
@@ -41,7 +41,7 @@ VkImageView					vulkan_create_image_view(t_cvulkan *app,
 	return image_view;
 }
 
-void						vulkan_create_image_views(t_cvulkan *app)
+void						vulkan_create_image_views(t_vkrenderer *app)
 {
 	size_t					i;
 	VkImageViewCreateInfo	view_info;
@@ -57,7 +57,7 @@ void						vulkan_create_image_views(t_cvulkan *app)
 	}
 }
 
-void						vulkan_create_texture_image_view(t_cvulkan *app)
+void						vulkan_create_texture_image_view(t_vkrenderer *app)
 {
 	VkImageViewCreateInfo	view_info;
 

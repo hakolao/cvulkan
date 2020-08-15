@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 12:23:55 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/13 15:31:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static void			sdl_image_to_buffers_and_image_info(t_cvulkan *app,
+static void			sdl_image_to_buffers_and_image_info(t_vkrenderer *app,
 					t_image_info *image_info, VkBuffer *staging_buffer,
 					VkDeviceMemory *staging_buffer_memory)
 {
@@ -40,7 +40,7 @@ static void			sdl_image_to_buffers_and_image_info(t_cvulkan *app,
 	SDL_FreeSurface(image);
 }
 
-void				vulkan_create_texture_sampler(t_cvulkan *app)
+void				vulkan_create_texture_sampler(t_vkrenderer *app)
 {
 	VkSamplerCreateInfo	sampler_info;
 
@@ -66,7 +66,7 @@ void				vulkan_create_texture_sampler(t_cvulkan *app)
 		"Failed to create texture sampler!");
 }
 
-void				vulkan_create_texture_image(t_cvulkan *app,
+void				vulkan_create_texture_image(t_vkrenderer *app,
 					const char *filename)
 {
 	VkBuffer			staging_buffer;
@@ -94,7 +94,7 @@ void				vulkan_create_texture_image(t_cvulkan *app,
 	vulkan_generate_mipmaps(app, &image_info);
 }
 
-void				vulkan_create_image(t_cvulkan *app, t_image_info *info)
+void				vulkan_create_image(t_vkrenderer *app, t_image_info *info)
 {
 	VkImageCreateInfo		image_info;
 

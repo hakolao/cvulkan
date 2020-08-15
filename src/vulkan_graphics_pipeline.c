@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 15:10:45 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 00:02:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static void								create_pipeline_layout(t_cvulkan *app)
+static void								create_pipeline_layout(t_vkrenderer *app)
 {
 	VkPipelineLayoutCreateInfo				pipelineLayoutInfo;
 
@@ -27,7 +27,7 @@ static void								create_pipeline_layout(t_cvulkan *app)
 }
 
 static void								free_graphics_pipeline_info(
-										t_cvulkan *app,
+										t_vkrenderer *app,
 										VkGraphicsPipelineCreateInfo
 										*pipeline_info)
 {
@@ -43,7 +43,7 @@ static void								free_graphics_pipeline_info(
 }
 
 void									vulkan_create_graphics_pipeline(
-										t_cvulkan *app)
+										t_vkrenderer *app)
 {
 	VkGraphicsPipelineCreateInfo			pipeline_info;
 

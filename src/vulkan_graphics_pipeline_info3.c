@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 23:57:37 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 00:02:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static VkShaderModule 					vulkan_create_shader_module(t_cvulkan
+static VkShaderModule 					vulkan_create_shader_module(t_vkrenderer
 										*app,
 										t_file_contents *code)
 {
@@ -30,7 +30,7 @@ static VkShaderModule 					vulkan_create_shader_module(t_cvulkan
 }
 
 VkPipelineShaderStageCreateInfo			*vulkan_create_shader_stages_info(
-										t_cvulkan *app,
+										t_vkrenderer *app,
 										uint32_t *stage_count)
 {
 	VkPipelineShaderStageCreateInfo	*shader_stages;
@@ -56,7 +56,7 @@ VkPipelineShaderStageCreateInfo			*vulkan_create_shader_stages_info(
 }
 
 void									vulkan_destroy_shader_modules(
-										t_cvulkan *app,
+										t_vkrenderer *app,
 										uint32_t stage_count,
 										const VkPipelineShaderStageCreateInfo
 										*shader_stages)

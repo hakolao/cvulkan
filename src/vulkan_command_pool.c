@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 11:56:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 12:16:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-void	vulkan_create_command_pool(t_cvulkan *app)
+void	vulkan_create_command_pool(t_vkrenderer *app)
 {
 	t_queue_family_indices	queue_family_indices;
 	VkCommandPoolCreateInfo	pool_info;

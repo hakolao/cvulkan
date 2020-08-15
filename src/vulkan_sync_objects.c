@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 14:32:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/14 20:56:57 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-void	vulkan_create_sync_objects(t_cvulkan *app)
+void	vulkan_create_sync_objects(t_vkrenderer *app)
 {
 	size_t					i;
 	VkSemaphoreCreateInfo	semaphore_info;

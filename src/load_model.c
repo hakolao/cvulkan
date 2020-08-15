@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 13:07:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 20:53:11 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void		get_file_data(const char *filename, char **data, size_t *len)
 	free_file_contents(contents);
 }
 
-static void		set_face_vertices_and_indices(t_cvulkan *app,
+static void		set_face_vertices_and_indices(t_vkrenderer *app,
 				tinyobj_attrib_t attrib)
 {
 	size_t		i;
@@ -65,7 +65,7 @@ static void		set_face_vertices_and_indices(t_cvulkan *app,
 ** ToDo: Vertex dedup
 */
 
-void			vulkan_load_model(t_cvulkan *app, const char *filename)
+void			vulkan_load_model(t_vkrenderer *app, const char *filename)
 {
 
 	tinyobj_attrib_t		attrib;

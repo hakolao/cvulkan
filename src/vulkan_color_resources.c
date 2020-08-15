@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 12:17:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 16:52:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-void	vulkan_create_color_resources(t_cvulkan *app)
+void	vulkan_create_color_resources(t_vkrenderer *app)
 {
 	VkFormat				color_format;
 	VkImageViewCreateInfo	view_info;

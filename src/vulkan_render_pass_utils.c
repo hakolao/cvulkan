@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 12:54:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 12:55:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static VkFormat				find_supported_format(t_cvulkan *app,
+static VkFormat				find_supported_format(t_vkrenderer *app,
 							VkFormat *candidates, VkImageTiling tiling,
 							VkFormatFeatureFlags features)
 {
@@ -37,7 +37,7 @@ static VkFormat				find_supported_format(t_cvulkan *app,
 	return (VK_FORMAT_UNDEFINED);
 }
 
-VkFormat					vulkan_find_depth_format(t_cvulkan *app)
+VkFormat					vulkan_find_depth_format(t_vkrenderer *app)
 {
 	return (find_supported_format(
 		app, (VkFormat[4]){VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT,

@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 13:05:47 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 16:53:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static VkFormat		find_supported_format(t_cvulkan *app,
+static VkFormat		find_supported_format(t_vkrenderer *app,
 					VkFormat *candidates, VkImageTiling tiling,
 					VkFormatFeatureFlags features)
 {
@@ -35,7 +35,7 @@ static VkFormat		find_supported_format(t_cvulkan *app,
 	return (0);
 }
 
-static VkFormat		find_depth_format(t_cvulkan *app)
+static VkFormat		find_depth_format(t_vkrenderer *app)
 {
 	return (find_supported_format(app,
 		(uint32_t[3]){VK_FORMAT_D32_SFLOAT,
@@ -44,7 +44,7 @@ static VkFormat		find_depth_format(t_cvulkan *app)
 		VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT));
 }
 
-void				vulkan_create_depth_resources(t_cvulkan *app)
+void				vulkan_create_depth_resources(t_vkrenderer *app)
 {
 	VkFormat				depth_format;
 	VkImageViewCreateInfo	view_info;

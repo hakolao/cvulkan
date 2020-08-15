@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 17:35:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:27:25 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void									vulkan_populate_debug_messenger_create_info(
 	create_info->pUserData = NULL;
 }
 
-void									vulkan_setup_debug_messenger(t_cvulkan
+void									vulkan_setup_debug_messenger(t_vkrenderer
 										*app)
 {
 	VkDebugUtilsMessengerCreateInfoEXT create_info;

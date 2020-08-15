@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/10 13:29:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 19:31:15 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	populate_descriptor_writes(VkDescriptorBufferInfo *bufferInfo,
 	descriptorWrites[1].pImageInfo = imageInfo;
 }
 
-static void	create_descriptor_set(t_cvulkan *app, size_t i)
+static void	create_descriptor_set(t_vkrenderer *app, size_t i)
 {
 	VkDescriptorBufferInfo			bufferInfo;
 	VkDescriptorImageInfo			imageInfo;
@@ -54,7 +54,7 @@ static void	create_descriptor_set(t_cvulkan *app, size_t i)
 		NULL);
 }
 
-void		vulkan_create_descriptor_set_layout(t_cvulkan *app)
+void		vulkan_create_descriptor_set_layout(t_vkrenderer *app)
 {
 	VkDescriptorSetLayoutBinding	ubo_layout_binding;
 	VkDescriptorSetLayoutBinding	sampler_layout_binding;
@@ -82,7 +82,7 @@ void		vulkan_create_descriptor_set_layout(t_cvulkan *app)
 				"Failed to create descriptor set layout!");
 }
 
-void		vulkan_create_descriptor_pool(t_cvulkan *app)
+void		vulkan_create_descriptor_pool(t_vkrenderer *app)
 {
 	VkDescriptorPoolSize		poolSizes[2];
 	VkDescriptorPoolCreateInfo	poolInfo;
@@ -101,7 +101,7 @@ void		vulkan_create_descriptor_pool(t_cvulkan *app)
 			"Failed to create descriptor pool!");
 }
 
-void		vulkan_create_descriptor_sets(t_cvulkan *app)
+void		vulkan_create_descriptor_sets(t_vkrenderer *app)
 {
 	VkDescriptorSetLayout			layouts[app->vk_swap_chain_images_count];
 	size_t							i;

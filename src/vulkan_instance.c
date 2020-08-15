@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 18:04:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/10 15:58:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static bool			check_available_layers(t_cvulkan *app,
+static bool			check_available_layers(t_vkrenderer *app,
 					VkLayerProperties *available_layers,
 					size_t found_layer_count)
 {
@@ -40,7 +40,7 @@ static bool			check_available_layers(t_cvulkan *app,
 	return (true);
 }
 
-static bool			check_validation_layer_support(t_cvulkan *app)
+static bool			check_validation_layer_support(t_vkrenderer *app)
 {
 	uint32_t			layer_count;
 	VkLayerProperties	*available_layers;
@@ -56,7 +56,7 @@ static bool			check_validation_layer_support(t_cvulkan *app)
 	return (result);
 }
 
-static void			get_required_extensions(t_cvulkan *app) {
+static void			get_required_extensions(t_vkrenderer *app) {
 	app->vk_enabled_extension_count = 0;
 	error_check(
 		!SDL_Vulkan_GetInstanceExtensions(app->window,
@@ -72,7 +72,7 @@ static void			get_required_extensions(t_cvulkan *app) {
 	}
 }
 
-static bool			valid_vulkan_extensions(t_cvulkan *app) {
+static bool			valid_vulkan_extensions(t_vkrenderer *app) {
 	uint32_t				available_ext_count;
 	uint32_t				match_count;
 	VkExtensionProperties	*available_extensions;
@@ -100,7 +100,7 @@ static bool			valid_vulkan_extensions(t_cvulkan *app) {
 	return match_count == app->vk_enabled_extension_count;
 }
 
-void					vulkan_create_instance(t_cvulkan *app) {
+void					vulkan_create_instance(t_vkrenderer *app) {
 	VkApplicationInfo					app_info;
 	VkInstanceCreateInfo				create_info;
 	VkDebugUtilsMessengerCreateInfoEXT	debug_create_info;

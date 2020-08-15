@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 17:26:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 18:14:53 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void		pipeline_barrier_after_mipmaps(VkCommandBuffer command_buffer,
 		barrier);
 }
 
-static void		validate_mipmap_format_properties(t_cvulkan *app,
+static void		validate_mipmap_format_properties(t_vkrenderer *app,
 				t_image_info *info)
 {
 	VkFormatProperties		format_properties;
@@ -81,7 +81,7 @@ static void		pipeline_barrier_after_blit_cmd(VkCommandBuffer
 ** in the loop, i should begin from 1. Thus i = 0
 */
 
-void			vulkan_generate_mipmaps(t_cvulkan *app, t_image_info *info)
+void			vulkan_generate_mipmaps(t_vkrenderer *app, t_image_info *info)
 {
 	VkCommandBuffer			command_buffer;
 	VkImageMemoryBarrier	barrier;

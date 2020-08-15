@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 21:01:12 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 22:46:23 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-static void					populate_queue_family_dependent_info(t_cvulkan *app,
+static void					populate_queue_family_dependent_info(t_vkrenderer *app,
 							VkSwapchainCreateInfoKHR *create_info)
 {
 	t_queue_family_indices			indices;
@@ -30,7 +30,7 @@ static void					populate_queue_family_dependent_info(t_cvulkan *app,
 	}
 }
 
-static void					populate_swap_chain_create_info(t_cvulkan *app,
+static void					populate_swap_chain_create_info(t_vkrenderer *app,
 							uint32_t *image_count,
 							t_swap_chain_support_details *swap_chain_support,
 							VkSwapchainCreateInfoKHR *create_info)
@@ -62,7 +62,7 @@ static void					populate_swap_chain_create_info(t_cvulkan *app,
 	create_info->clipped = VK_TRUE;
 }
 
-void						vulkan_create_swap_chain(t_cvulkan *app)
+void						vulkan_create_swap_chain(t_vkrenderer *app)
 {
 	VkSwapchainCreateInfoKHR		create_info;
 	uint32_t						image_count;
@@ -83,7 +83,7 @@ void						vulkan_create_swap_chain(t_cvulkan *app)
 	app->vk_swap_chain_images_count = image_count;
 }
 
-void						vulkan_recreate_swapchain(t_cvulkan *app)
+void						vulkan_recreate_swapchain(t_vkrenderer *app)
 {
 	while (app->window_info.is_hidden)
 		SDL_PollEvent(NULL);

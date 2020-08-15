@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 17:52:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 18:17:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-void	vulkan_create_vertex_buffer(t_cvulkan *app)
+void	vulkan_create_vertex_buffer(t_vkrenderer *app)
 {
 	VkDeviceSize	buffer_size;
 	VkBuffer		staging_buffer;

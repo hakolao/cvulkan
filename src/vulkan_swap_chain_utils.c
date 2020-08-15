@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 21:54:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/12 23:22:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-void					vulkan_cleanup_swap_chain(t_cvulkan *app)
+void					vulkan_cleanup_swap_chain(t_vkrenderer *app)
 {
 	size_t	i;
 
@@ -49,7 +49,7 @@ void					vulkan_cleanup_swap_chain(t_cvulkan *app)
 		app->vk_descriptor_pool, NULL);
 }
 
-void					vulkan_choose_swap_extent(t_cvulkan *app,
+void					vulkan_choose_swap_extent(t_vkrenderer *app,
 						VkSurfaceCapabilitiesKHR *capabilities,
 						VkExtent2D *actualExtent)
 {

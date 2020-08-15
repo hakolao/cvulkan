@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 18:39:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/11 12:15:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 22:49:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cvulkan.h"
 
-void							vulkan_find_queue_families(t_cvulkan *app,
+void							vulkan_find_queue_families(t_vkrenderer *app,
 								VkPhysicalDevice device,
 								t_queue_family_indices *indices)
 {
@@ -43,7 +43,7 @@ void							vulkan_find_queue_families(t_cvulkan *app,
 	}
 }
 
-static int 						rate_device_suitability(t_cvulkan *app,
+static int 						rate_device_suitability(t_vkrenderer *app,
 								VkPhysicalDevice device)
 {
 	VkPhysicalDeviceProperties		deviceProperties;
@@ -73,7 +73,7 @@ static int 						rate_device_suitability(t_cvulkan *app,
 			swap_chain_support.present_mode_count > 0 ? score : 0;
 }
 
-static VkPhysicalDevice			select_best_device(t_cvulkan *app,
+static VkPhysicalDevice			select_best_device(t_vkrenderer *app,
 								uint32_t device_count,
 								VkPhysicalDevice devices[64],
 								int *score)
@@ -96,7 +96,7 @@ static VkPhysicalDevice			select_best_device(t_cvulkan *app,
 	return best;
 }
 
-void							vulkan_pick_physical_device(t_cvulkan *app)
+void							vulkan_pick_physical_device(t_vkrenderer *app)
 {
 	uint32_t			device_count;
 	VkPhysicalDevice	devices[64];

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/12 13:07:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/15 20:11:55 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 20:46:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ static void		set_face_vertices_and_indices(t_cvulkan *app,
 {
 	size_t		i;
 	size_t		f;
+	size_t		k;
 	size_t		vi;
 	size_t		face_offset;
 
-	i = -1; (void)app;
+	i = -1;
 	face_offset = 0;
 	vi = 0;
 	while (++i < attrib.num_face_num_verts)
@@ -39,46 +40,30 @@ static void		set_face_vertices_and_indices(t_cvulkan *app,
 		f = -1;
 		while (++f < (size_t)attrib.face_num_verts[i] / 3)
 		{
-			tinyobj_vertex_index_t idx0 = attrib.faces[face_offset + 3 * f + 0];
-			tinyobj_vertex_index_t idx1 = attrib.faces[face_offset + 3 * f + 1];
-			tinyobj_vertex_index_t idx2 = attrib.faces[face_offset + 3 * f + 2];
-			// for (k = 0; k < 3; k++) {
-			int f0 = idx0.v_idx;
-			int f1 = idx1.v_idx;
-			int f2 = idx2.v_idx;
-			app->vertices[vi + 0].pos[0] =
-				attrib.vertices[3 * (size_t)f0 + 0];
-			app->vertices[vi + 0].pos[1] =
-				attrib.vertices[3 * (size_t)f0 + 1];
-			app->vertices[vi + 0].pos[2] =
-				attrib.vertices[3 * (size_t)f0 + 2];
-			app->vertices[vi + 1].pos[0] =
-				attrib.vertices[3 * (size_t)f1 + 0];
-			app->vertices[vi + 1].pos[1] =
-				attrib.vertices[3 * (size_t)f1 + 1];
-			app->vertices[vi + 1].pos[2] =
-				attrib.vertices[3 * (size_t)f1 + 2];
-			app->vertices[vi + 2].pos[0] =
-				attrib.vertices[3 * (size_t)f2 + 0];
-			app->vertices[vi + 2].pos[1] =
-				attrib.vertices[3 * (size_t)f2 + 1];
-			app->vertices[vi + 2].pos[2] =
-				attrib.vertices[3 * (size_t)f2 + 2];
-				vi += 3;
-			// }
+			k = -1;
+			while (++k < 3)
+			{
+				app->vertices[vi + k].pos[0] = attrib.vertices[3 *
+					(size_t)attrib.faces[face_offset + 3 * f + k].v_idx + 0];
+				app->vertices[vi + k].pos[1] = attrib.vertices[3 *
+					(size_t)attrib.faces[face_offset + 3 * f + k].v_idx + 1];
+				app->vertices[vi + k].pos[2] = attrib.vertices[3 *
+					(size_t)attrib.faces[face_offset + 3 * f + k].v_idx + 2];
+				app->vertices[vi + k].color[0] = 1.0f;
+				app->vertices[vi + k].color[1] = 1.0f;
+				app->vertices[vi + k].color[2] = 1.0f;
+				app->vertices[vi + k].tex_coord[0] = attrib.texcoords[2 *
+					(size_t)attrib.faces[face_offset + 3 * f + k].vt_idx + 0];
+				app->vertices[vi + k].tex_coord[1] = 1.0f - attrib.texcoords[2 *
+					(size_t)attrib.faces[face_offset + 3 * f + k].vt_idx + 1];
+				app->indices[vi + k] = vi + k;
+			}
+			vi += 3;
 		}
 		face_offset += (size_t)attrib.face_num_verts[i];
 	}
 	app->num_vertices = vi;
 	app->num_indices = app->num_vertices;
-	for (size_t i = 0; i < vi; i++)
-	{
-		ft_printf("%d: %f %f %f\n", i,
-			app->vertices[i].pos[0],
-			app->vertices[i].pos[1],
-			app->vertices[i].pos[2]);
-	}
-
 }
 
 /*

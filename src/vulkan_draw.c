@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 15:33:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/14 21:03:32 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/15 20:55:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,9 @@ void			vulkan_draw(t_cvulkan *app)
 	presentInfo.pSwapchains = (VkSwapchainKHR[1]){app->vk_swap_chain};
 	presentInfo.pImageIndices = &imageIndex;
 	res = vkQueuePresentKHR(app->vk_present_queue, &presentInfo);
-	if (res == VK_ERROR_OUT_OF_DATE_KHR || res == VK_SUBOPTIMAL_KHR ||
-		app->frame_buffer_resized)
-	{
-		app->frame_buffer_resized = false;
+	if ((res == VK_ERROR_OUT_OF_DATE_KHR || res == VK_SUBOPTIMAL_KHR ||
+		app->frame_buffer_resized) && !(app->frame_buffer_resized = false))
 		vulkan_recreate_swapchain(app);
-	}
 	else
 		error_check(res != VK_SUCCESS, "Failed to present swap chain image!");
 	app->vk_current_frame = (app->vk_current_frame + 1) % MAXFRAMESINFLIGHT;

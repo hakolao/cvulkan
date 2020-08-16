@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 18:03:43 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 23:53:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/17 00:27:31 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void			ml_matrix4_lookat(t_vec3 eye, t_vec3 center, t_vec3 up,
 	t_vec3			yaxis;
 	t_vec3			axes[3];
 
-	ft_memset(&res, 0, sizeof(t_mat4));
+	ft_memset(res, 0, sizeof(t_mat4));
 	ml_vector3_sub(center, eye, zaxis);
 	ml_vector3_normalize(zaxis, zaxis);
 	ml_vector3_cross(zaxis, up, xaxis);
@@ -72,8 +72,8 @@ void			ml_matrix4_fps(t_vec3 eye, float pitch, float yaw, t_mat4 res)
 	yaxis[0] = sin(yaw) * sin(pitch);
 	yaxis[1] = cos(pitch);
 	yaxis[2] = cos(yaw) * sin(pitch);
-	ft_memcpy(&axes[0], &xaxis, sizeof(t_vec3));
-	ft_memcpy(&axes[1], &yaxis, sizeof(t_vec3));
-	ft_memcpy(&axes[2], &zaxis, sizeof(t_vec3));
+	ft_memcpy(axes[0], xaxis, sizeof(t_vec3));
+	ft_memcpy(axes[1], yaxis, sizeof(t_vec3));
+	ft_memcpy(axes[2], zaxis, sizeof(t_vec3));
 	view_matrix(axes, eye, res);
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:37:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/17 00:22:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/17 00:56:24 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ const char	*test_matrix_ops()
 {
 	t_mat4	id;
 	t_mat4	rot;
+	t_mat4	persp;
 	char	res1[256];
 	char	res2[256];
+	char	res3[256];
 
 	ft_printf("Testing Matrix operations\n");
 	ml_matrix4_id(id);
@@ -45,5 +47,25 @@ const char	*test_matrix_ops()
 		"| 1.000 |-0.000 | 0.000 | 0.000 |\n"
 		"| 0.000 | 0.000 | 1.000 | 0.000 |\n"
 		"| 0.000 | 0.000 | 0.000 | 1.000 |\n"));
+	ml_matrix4_projection(ML_ORTHOGRAPHIC, (t_canvas){.fov = 45.0f,
+		.width = 1280, .height = 720, .near = 0.1f, .far = 10.0f}, persp);
+	ml_matrix4_to_str(persp, res3);
+	mu_assert("orth matrix is wrong",
+		ft_strequ(res3,
+		"Matrix4:\n"
+		"| 0.002 | 0.000 | 0.000 |-1.000 |\n"
+		"| 0.000 | 0.003 | 0.000 |-1.000 |\n"
+		"| 0.000 | 0.000 |-0.202 |-1.020 |\n"
+		"| 0.000 | 0.000 | 0.000 | 1.000 |\n"));
+	ml_matrix4_projection(ML_PERSPECTIVE, (t_canvas){.fov = 45.0f,
+		.width = 1280, .height = 720, .near = 0.1f, .far = 10.0f}, persp);
+	ml_matrix4_to_str(persp, res3);
+	mu_assert("persp matrix is wrong",
+		ft_strequ(res3,
+		"Matrix4:\n"
+		"| 1.358 | 0.000 | 0.000 | 0.000 |\n"
+		"| 0.000 | 2.414 | 0.000 | 0.000 |\n"
+		"| 0.000 | 0.000 |-1.020 |-0.202 |\n"
+		"| 0.000 | 0.000 |-1.000 | 0.000 |\n"));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:32:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 23:53:08 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/17 00:48:20 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ static void		ml_matrix4_orthographic(t_canvas c, t_mat4 res)
 {
 	ft_memset(res, 0, sizeof(t_mat4));
 	res[0][0] = 2.0f / c.width;
-	res[1][1] = 2 / c.height;
-	res[2][2] = 1 / (c.far - c.near);
-	res[3][2] = -c.near / (c.far - c.near);
-	res[3][3] = 1;
+	res[1][1] = 2.0f / c.height;
+	res[2][2] = -2.0f / (c.far - c.near);
+	res[3][2] = (c.near + c.far) / (c.near - c.far);
+	res[3][0] = -1.0f;
+	res[3][1] = -1.0f;
+	res[3][3] = 1.0f;
 }
 
 static void		ml_matrix4_perspective(t_canvas c, t_mat4 res)
@@ -32,8 +34,8 @@ static void		ml_matrix4_perspective(t_canvas c, t_mat4 res)
 	ar = c.width / c.height;
 	res[0][0] = 1 / (ar * tan(angle / 2));
 	res[1][1] = 1 / tan(angle / 2);
-	res[2][2] = (-c.near - c.far) / (c.near - c.far);
-	res[2][3] = 1;
+	res[2][2] = (c.near + c.far) / (c.near - c.far);
+	res[2][3] = -1;
 	res[3][2] = (2 * c.near * c.far) / (c.near - c.far);
 }
 

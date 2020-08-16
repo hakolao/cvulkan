@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:24:58 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:07:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 23:34:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void		ml_matrix4_mul_vec3(t_mat4 m, t_vec3 v, t_vec3 res)
 	{
 		r = -1;
 		while (++r < 4)
-			res[c] += m[c][r] * v4[c];
+			res[r] += m[r][c] * v4[r];
 	}
 	i = -1;
 	while (++i < 3)
@@ -42,6 +42,6 @@ void		ml_matrix4_mul_vec4(t_mat4 m, t_vec4 v, t_vec4 res)
 	{
 		r = -1;
 		while (++r < 4)
-			res[c] += m[c][r] * v[c];
+			res[r] += m[r][c] * v[r];
 	}
 }

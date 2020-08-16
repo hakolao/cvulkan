@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:23:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 20:16:17 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 20:47:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_test_state test_states[MAX_TESTS];
 
 static void all_tests() {
 	mu_run_test(test_vector_ops);
+	mu_run_test(test_matrix_ops);
 }
 
 int main(void) {

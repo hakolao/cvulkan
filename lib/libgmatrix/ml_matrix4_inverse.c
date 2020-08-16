@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:19:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:06:44 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 23:35:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	set_inverse(t_mat4 m1, float m[16], float inv[16])
 	{
 		r = -1;
 		while (++r < 4)
-			m[c + r] = m1[c][r];
+			m[c + r] = m1[r][c];
 	}
 	set_inverse_half1(m, inv);
 	set_inverse_half2(m, inv);
@@ -85,6 +85,6 @@ void		ml_matrix4_inverse(t_mat4 m1, t_mat4 res)
 	{
 		r = -1;
 		while (++r < 4)
-			res[c][r] = inv[c + r] * det;
+			res[r][c] = inv[c + r] * det;
 	}
 }

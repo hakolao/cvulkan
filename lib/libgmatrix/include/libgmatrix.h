@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 13:11:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:49:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 20:57:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef enum		e_projection_type
 	ML_PERSPECTIVE = 2,
 }					t_projection_type;
 
+typedef float		t_vec2[2];
 typedef float		t_vec3[3];
 typedef float		t_vec4[4];
 typedef t_vec4		t_mat4[4];
@@ -68,11 +69,14 @@ void		ml_matrix4_projection(t_projection_type type,
 			t_canvas c, t_mat4 res);
 void		ml_matrix4_lookat(t_vec3 eye, t_vec3 center, t_vec3 up, t_mat4 res);
 void		ml_matrix4_fps(t_vec3 eye, float pitch, float yaw, t_mat4 res);
-void		ml_matrix4_rotate_x(float rad, t_mat4 res);
-void		ml_matrix4_rotate_y(float rad, t_mat4 res);
-void		ml_matrix4_rotate_z(float rad, t_mat4 res);
-void		ml_matrix4_rotate(float rad_x, float rad_y, float rad_z,
+void		ml_matrix4_rotation_x(float rad, t_mat4 res);
+void		ml_matrix4_rotation_y(float rad, t_mat4 res);
+void		ml_matrix4_rotation_z(float rad, t_mat4 res);
+void		ml_matrix4_rotation(float rad_x, float rad_y, float rad_z,
 			t_mat4 res);
+void		ml_matrix4_rotate_x(t_mat4 m, float rad, t_mat4 res);
+void		ml_matrix4_rotate_y(t_mat4 m, float rad, t_mat4 res);
+void		ml_matrix4_rotate_z(t_mat4 m, float rad, t_mat4 res);
 
 /*
 ** Utils
@@ -81,5 +85,8 @@ float		ml_rad(float angle);
 void		ml_matrix4_print(t_mat4 v);
 void		ml_vector3_print(t_vec3 v);
 void		ml_vector4_print(t_vec3 v);
+void		ml_vector4_to_str(t_vec3 v, char *res);
+void		ml_matrix4_to_str(t_mat4 m, char *res);
+void		ml_vector3_to_str(t_vec3 v, char *res);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/17 13:09:18 by ohakola           #+#    #+#              #
-#    Updated: 2020/08/16 19:01:49 by ohakola          ###   ########.fr        #
+#    Updated: 2020/08/16 19:05:54 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,8 @@ SOURCES = ml_matrix4_id.c \
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
-INCLUDES = -I ./ -I $(LIBFT)/incl
-FLAGS = -Wall -Wextra -Werror -03
+INCLUDES = -I ./include -I $(LIBFT)/incl
+FLAGS = -Wall -Wextra -Werror
 
 all: $(DIR_OBJ) $(NAME)
 

@@ -101,12 +101,14 @@ $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 
 clean:
 	@make -C $(LIBFT) clean
+	@make -C $(LIBGMATRIX) clean
 	@/bin/rm -f $(OBJS)
 	@/bin/rm -rf $(DIR_OBJ)
 	@/bin/rm -f shaders/*.spv
 
 fclean: clean
 	@make -C $(LIBFT) fclean
+	@make -C $(LIBGMATRIX) fclean
 	@/bin/rm -f $(NAME)
 
 re: fclean all

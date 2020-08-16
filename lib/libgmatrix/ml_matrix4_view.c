@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 18:03:43 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 18:46:18 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 19:10:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,15 @@ static void		view_matrix(t_vec3 axes[3], t_vec3 eye, t_mat4 res)
 	res[3][3] = 1.0f;
 }
 
-void			ml_matrix4_lookat(t_vec3 eye, t_vec3 center, t_vec3 up, t_mat4 res)
+void			ml_matrix4_lookat(t_vec3 eye, t_vec3 center, t_vec3 up,
+				t_mat4 res)
 {
 	t_vec3			zaxis;
 	t_vec3			xaxis;
 	t_vec3			yaxis;
 	t_vec3			axes[3];
 
-	ft_memset(&res, 0, sizeof(res));
+	ft_memset(&res, 0, sizeof(t_mat4));
 	ml_vector3_sub(center, eye, zaxis);
 	ml_vector3_normalize(zaxis, zaxis);
 	ml_vector3_cross(zaxis, up, xaxis);
@@ -59,7 +60,7 @@ void			ml_matrix4_fps(t_vec3 eye, float pitch, float yaw, t_mat4 res)
 	t_vec3			yaxis;
 	t_vec3			axes[3];
 
-	ft_memset(&res, 0, sizeof(res));
+	ft_memset(&res, 0, sizeof(t_mat4));
 	pitch *= M_PI / 180;
 	yaw *= M_PI / 180;
 	zaxis[0] = -1 * sin(yaw) * cos(pitch);

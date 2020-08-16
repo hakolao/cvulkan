@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:43:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 17:51:36 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 19:10:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void		ml_matrix4_rotate_x(float rad, t_mat4 res)
 {
-	ft_memset(&res, 0, sizeof(res));
+	ft_memset(&res, 0, sizeof(t_mat4));
 	res[0][0] = 1;
 	res[3][3] = 1;
 	res[1][1] = cos(rad);
@@ -26,7 +26,7 @@ void		ml_matrix4_rotate_x(float rad, t_mat4 res)
 
 void		ml_matrix4_rotate_y(float rad, t_mat4 res)
 {
-	ft_memset(&res, 0, sizeof(res));
+	ft_memset(&res, 0, sizeof(t_mat4));
 	res[1][1] = 1;
 	res[3][3] = 1;
 	res[0][0] = cos(rad);
@@ -37,7 +37,7 @@ void		ml_matrix4_rotate_y(float rad, t_mat4 res)
 
 void		ml_matrix4_rotate_z(float rad, t_mat4 res)
 {
-	ft_memset(&res, 0, sizeof(res));
+	ft_memset(&res, 0, sizeof(t_mat4));
 	res[2][2] = 1;
 	res[3][3] = 1;
 	res[0][0] = cos(rad);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:54:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 18:06:08 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 20:21:50 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,7 @@
 */
 # define TINYOBJ_LOADER_C_IMPLEMENTATION
 
-/*
-** cGLM
-** ToDo: Don't use cglm, but own library...
-*/
-# include <cglm/cglm.h>
+# include "libgmatrix.h"
 
 # define MODEL_PATH "models/viking_room.obj"
 # define TEXTURE_PATH "textures/viking_room.png"
@@ -75,16 +71,16 @@ VkDeviceMemory						*buffer_memory;
 
 typedef struct						s_vulkan_vertex
 {
-	vec3				pos;
-	vec3				color;
-	vec2				tex_coord;
+	t_vec3				pos;
+	t_vec3				color;
+	t_vec2				tex_coord;
 }									t_vulkan_vertex;
 
 typedef struct						s_uniform_buffer_object
 {
-	mat4				model;
-	mat4				view;
-	mat4				proj;
+	t_mat4				model;
+	t_mat4				view;
+	t_mat4				proj;
 }									t_uniform_buffer_object;
 
 typedef struct						s_file_contents

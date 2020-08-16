@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:43:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 20:43:15 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/17 00:18:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void		ml_matrix4_rotation_x(float rad, t_mat4 res)
 {
-	ft_memset(&res, 0, sizeof(t_mat4));
+	ft_memset(res, 0, sizeof(t_mat4));
 	res[0][0] = 1;
 	res[3][3] = 1;
 	res[1][1] = cos(rad);
@@ -26,7 +26,7 @@ void		ml_matrix4_rotation_x(float rad, t_mat4 res)
 
 void		ml_matrix4_rotation_y(float rad, t_mat4 res)
 {
-	ft_memset(&res, 0, sizeof(t_mat4));
+	ft_memset(res, 0, sizeof(t_mat4));
 	res[1][1] = 1;
 	res[3][3] = 1;
 	res[0][0] = cos(rad);
@@ -37,7 +37,7 @@ void		ml_matrix4_rotation_y(float rad, t_mat4 res)
 
 void		ml_matrix4_rotation_z(float rad, t_mat4 res)
 {
-	ft_memset(&res, 0, sizeof(t_mat4));
+	ft_memset(res, 0, sizeof(t_mat4));
 	res[2][2] = 1;
 	res[3][3] = 1;
 	res[0][0] = cos(rad);
@@ -54,6 +54,7 @@ void		ml_matrix4_rotation(float rad_x, float rad_y, float rad_z,
 	t_mat4	rotz;
 	t_mat4	tmp;
 
+	ft_memset(res, 0, sizeof(t_mat4));
 	ml_matrix4_rotation_x(rad_x, rotx);
 	ml_matrix4_rotation_y(rad_y, roty);
 	ml_matrix4_rotation_z(rad_z, rotz);
@@ -65,7 +66,7 @@ void		ml_matrix4_rotate_x(t_mat4 m, float rad, t_mat4 res)
 {
 	t_mat4	rotation;
 
-	ft_memset(&res, 0, sizeof(t_mat4));
+	ft_memset(res, 0, sizeof(t_mat4));
 	ml_matrix4_rotation_x(rad, rotation);
 	ml_matrix4_mul(m, rotation, res);
 }
@@ -74,7 +75,7 @@ void		ml_matrix4_rotate_y(t_mat4 m, float rad, t_mat4 res)
 {
 	t_mat4	rotation;
 
-	ft_memset(&res, 0, sizeof(t_mat4));
+	ft_memset(res, 0, sizeof(t_mat4));
 	ml_matrix4_rotation_y(rad, rotation);
 	ml_matrix4_mul(m, rotation, res);
 }
@@ -83,10 +84,7 @@ void		ml_matrix4_rotate_z(t_mat4 m, float rad, t_mat4 res)
 {
 	t_mat4	rotation;
 
-	ft_memset(&res, 0, sizeof(t_mat4));
-	ml_matrix4_print(m);
+	ft_memset(res, 0, sizeof(t_mat4));
 	ml_matrix4_rotation_z(rad, rotation);
-	ft_printf("LOL1\n");
 	ml_matrix4_mul(m, rotation, res);
-	ft_printf("LOL2\n");
 }

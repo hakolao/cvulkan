@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 18:03:43 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:10:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 23:53:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void			ml_matrix4_fps(t_vec3 eye, float pitch, float yaw, t_mat4 res)
 	t_vec3			yaxis;
 	t_vec3			axes[3];
 
-	ft_memset(&res, 0, sizeof(t_mat4));
+	ft_memset(res, 0, sizeof(t_mat4));
 	pitch *= M_PI / 180;
 	yaw *= M_PI / 180;
 	zaxis[0] = -1 * sin(yaw) * cos(pitch);

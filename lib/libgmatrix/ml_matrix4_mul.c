@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:29:06 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 23:35:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/17 00:20:08 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void		ml_matrix4_mul(t_mat4 m1, t_mat4 m2, t_mat4 res)
 	size_t		i;
 
 	c = -1;
-	while (c < 4)
+	while (++c < 4)
 	{
 		r = -1;
 		while (++r < 4)

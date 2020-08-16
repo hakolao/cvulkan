@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:32:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 20:35:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 23:53:08 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void		ml_matrix4_orthographic(t_canvas c, t_mat4 res)
 {
-	ft_memset(&res, 0, sizeof(t_mat4));
+	ft_memset(res, 0, sizeof(t_mat4));
 	res[0][0] = 2.0f / c.width;
 	res[1][1] = 2 / c.height;
 	res[2][2] = 1 / (c.far - c.near);
@@ -27,7 +27,7 @@ static void		ml_matrix4_perspective(t_canvas c, t_mat4 res)
 	float		ar;
 	float		angle;
 
-	ft_memset(&res, 0, sizeof(t_mat4));
+	ft_memset(res, 0, sizeof(t_mat4));
 	angle = ml_rad(c.fov);
 	ar = c.width / c.height;
 	res[0][0] = 1 / (ar * tan(angle / 2));

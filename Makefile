@@ -6,6 +6,7 @@ LIBVULKAN = ./lib/vulkan
 LIBSDL2 = ./lib/SDL2
 TINYOBJLOADER = ./lib/tinyobjloader
 LIBFT = ./lib/libft
+LIBGMATRIX = ./lib/libgmatrix
 
 # USE THESE AT SCHOOL
 # VULKAN_SDK_PATH = /Users/ohakola/goinfre/vulkan/macOS
@@ -14,6 +15,7 @@ LIBFT = ./lib/libft
 # ===
 
 LIBFTFLAGS = -L$(LIBFT) -lft
+LIBGMATRIXFLAGS = -L$(LIBGMATRIX) -lgmatrix
 
 VULKAN_FLAGS =  -rpath $(LIBVULKAN) \
 				-framework vulkan -F$(LIBVULKAN)/
@@ -25,6 +27,7 @@ SDL_FLAGS = -rpath $(LIBSDL2) \
 
 INCL = -I ./include \
 		-I$(LIBFT)/incl \
+		-I$(LIBGMATRIX)/include \
 		-I$(TINYOBJLOADER) \
 		-I$(LIBVULKAN)/vulkan.framework/Headers \
 		-I$(LIBSDL2)/SDL2.framework/Headers \
@@ -83,10 +86,11 @@ all: $(DIR_OBJ) $(NAME)
 $(NAME): $(OBJS)
 	@printf "\033[32;1mCompiling libs...\n\033[0m"
 	make -C $(LIBFT)
+	make -C $(LIBGMATRIX)
 	@printf "\033[32;1mCompiling shaders...\n\033[0m"
 	cd shaders && /bin/sh compile.sh && cd ..
 	@printf "\033[32;1mCompiling app...\n\033[0m"
-	$(CC) $(FLAGS) $(LIBFTFLAGS) $(VULKAN_FLAGS) $(SDL_FLAGS) -o $@ $^
+	$(CC) $(FLAGS) $(LIBFTFLAGS) $(LIBGMATRIXFLAGS) $(VULKAN_FLAGS) $(SDL_FLAGS) -o $@ $^
 	@printf "\033[32;1mDone. Run: ./$(NAME)\n\033[0m"
 
 $(DIR_OBJ):

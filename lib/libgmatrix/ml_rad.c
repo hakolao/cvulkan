@@ -1,29 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vector_dup.c                                    :+:      :+:    :+:   */
+/*   ml_rad.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.helsinki.fi>      +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/29 13:14:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/01/29 13:16:44 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 17:40:05 by ohakola           #+#    #+#             */
+/*   Updated: 2020/08/16 17:40:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libmatrix.h"
+#include "libgmatrix.h"
 
-t_vector	*ft_vector_dup(t_vector *v)
+float		ml_rad(float angle)
 {
-	t_vector	*new;
-	size_t		i;
-
-	if ((new = ft_vector_new(v->size)) == NULL)
-		return (NULL);
-	i = 0;
-	while (i < v->size)
-	{
-		new->v[i] = v->v[i];
-		i++;
-	}
-	return (new);
+	return (angle * M_PI / 180);
 }

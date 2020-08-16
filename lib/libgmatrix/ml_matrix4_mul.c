@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vector_set_all.c                                :+:      :+:    :+:   */
+/*   ml_matrix4_mul.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.helsinki.fi>      +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/17 17:38:34 by ohakola           #+#    #+#             */
-/*   Updated: 2019/12/22 16:25:17 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 17:29:06 by ohakola           #+#    #+#             */
+/*   Updated: 2020/08/16 17:31:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libmatrix.h"
+#include "libgmatrix.h"
 
-int		ft_vector_set_all(t_vector *vec, double d)
+void		ml_matrix4_mul(t_mat4 m1, t_mat4 m2, t_mat4 res)
 {
-	size_t i;
+	size_t		r;
+	size_t		c;
+	size_t		i;
 
-	if (!vec)
+	c = -1;
+	while (r < 4)
 	{
-		ft_puterror("Invalid input in ft_vector_set_all.\n");
-		return (0);
+		r = -1;
+		while (++r < 4)
+		{
+			res[c][r] = 0;
+			i = -1;
+			while (++i < 4)
+				res[c][r] += m1[i][r] * m2[c][i];
+		}
 	}
-	i = 0;
-	while (i < vec->size)
-		vec->v[i++] = d;
 	return (1);
 }

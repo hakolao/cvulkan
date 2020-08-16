@@ -1,18 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_dimensions_equal.c                              :+:      :+:    :+:   */
+/*   ml_matrix4_id.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/17 14:30:44 by ohakola           #+#    #+#             */
-/*   Updated: 2019/12/17 15:26:42 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 17:08:23 by ohakola           #+#    #+#             */
+/*   Updated: 2020/08/16 17:19:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libmatrix.h"
+#include "libgmatrix.h"
 
-int		ft_dimensions_equal(const t_matrix *m1, const t_matrix *m2)
+void		ml_matrix4_id(t_mat4 res)
 {
-	return ((m1->cols == m2->cols && m1->rows == m2->rows));
+	size_t		r;
+	size_t		c;
+
+	c = -1;
+	while (++c < 4)
+	{
+		r = -1;
+		while (++r < 4)
+			res[c][r] = 0;
+	}
+	res[0][0] = 1;
+	res[1][1] = 1;
+	res[2][2] = 1;
+	res[3][3] = 1;
 }

@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/17 13:09:18 by ohakola           #+#    #+#              #
-#    Updated: 2020/08/16 19:05:54 by ohakola          ###   ########.fr        #
+#    Updated: 2020/08/16 19:35:52 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ CC = clang
 NAME = libgmatrix.a
 LIBFT = ../libft
 DIR_SRC = ./
+DIR_TESTS = ./tests
 DIR_OBJ = temp
 SOURCES = ml_matrix4_id.c \
 			ml_matrix4_inverse.c \
@@ -50,12 +51,16 @@ $(DIR_OBJ):
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@$(CC) $(FLAGS) $(INCLUDES) -c -o $@ $<
 
-test:
-	@make -C ./
-	@$(CC) $(FLAGS) -o test test.c $(OBJS)
-	./test
-	@/bin/rm test
+TEST_SRCS =$(wildcard $(DIR_TESTS)/*.c)
+
+test: all
+	@make -C $(LIBFT)
+	$(CC) -o test_run $(TEST_SRCS) -L$(LIBFT) -lft $(FLAGS) $(INCLUDES) $(NAME)
+	./test_run
+	@/bin/rm -f main.o
+	@/bin/rm -f test_run
 	@make fclean
+	@make -C $(LIBFT) fclean
 
 clean:
 	@/bin/rm -f $(OBJS)

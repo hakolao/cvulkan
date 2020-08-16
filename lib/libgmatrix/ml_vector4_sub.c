@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.h                                            :+:      :+:    :+:   */
+/*   ml_vector4_sub.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 19:23:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:57:04 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 16:51:45 by ohakola           #+#    #+#             */
+/*   Updated: 2020/08/16 19:48:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_H
-# define TESTS_H
+#include "libgmatrix.h"
 
-/*
-** Vector
-*/
-const char	*test_vector_ops();
+void		ml_vector4_sub(t_vec4 v1, t_vec4 v2, t_vec4 res)
+{
+	size_t		i;
 
-/*
-** Matrix
-*/
-
-
-#endif
+	i = -1;
+	while (++i < 4)
+		res[i] = v1[i] - v2[i];
+}

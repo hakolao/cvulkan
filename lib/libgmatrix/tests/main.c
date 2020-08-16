@@ -6,34 +6,36 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:23:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:31:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 20:16:17 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mu_test.h"
 #include "tests.h"
 
-static void all_tests() {
+int tests_run = 0;
+t_test_state test_states[MAX_TESTS];
 
+static void all_tests() {
+	mu_run_test(test_vector_ops);
 }
 
 int main(void) {
-	bool			success;
-	int				failures;
-	int				i;
-	int				tests_run;
-	t_test_state	test_states[MAX_TESTS];
+	bool				success;
+	int					failures;
+	int					i;
 
-	tests_run = 0;
 	all_tests();
 	success = true;
 	failures = 0;
 	i = -1;
 	while (++i < tests_run)
-	if (!test_states[i].success)
 	{
-		success = false;
-		failures++;
+		if (!test_states[i].success)
+		{
+			success = false;
+			failures++;
+		}
 	}
 	ft_printf("===========\n");
 	if (!success) {

@@ -1,26 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.h                                            :+:      :+:    :+:   */
+/*   matrix.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 19:23:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:57:04 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 19:37:03 by ohakola           #+#    #+#             */
+/*   Updated: 2020/08/16 20:08:09 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_H
-# define TESTS_H
-
-/*
-** Vector
-*/
-const char	*test_vector_ops();
-
-/*
-** Matrix
-*/
-
-
-#endif
+#include "libgmatrix.h"
+#include "mu_test.h"

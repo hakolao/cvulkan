@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/17 13:09:18 by ohakola           #+#    #+#              #
-#    Updated: 2020/08/16 19:35:52 by ohakola          ###   ########.fr        #
+#    Updated: 2020/08/16 19:48:59 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,14 @@ SOURCES = ml_matrix4_id.c \
 			ml_vector3_mul.c \
 			ml_vector3_normalize.c \
 			ml_vector3_sub.c \
-			ml_vector3_to_vec4.c
+			ml_vector3_to_vec4.c \
+			ml_vector4_add.c \
+			ml_vector4_cross.c \
+			ml_vector4_dot.c \
+			ml_vector4_mag.c \
+			ml_vector4_mul.c \
+			ml_vector4_normalize.c \
+			ml_vector4_sub.c \
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

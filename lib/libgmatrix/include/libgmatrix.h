@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 13:11:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 18:40:11 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/16 19:49:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,14 @@ void		ml_vector3_forward(t_vec3 eye, t_vec3 target, t_vec3 res);
 float		ml_vector3_dot(t_vec3 v1, t_vec3 v2);
 void		ml_vector3_cross(t_vec3 v1, t_vec3 v2, t_vec3 res);
 void		ml_vector3_to_vec4(t_vec3 v1, t_vec4 res);
+
+void		ml_vector4_add(t_vec4 v1, t_vec4 v2, t_vec4 res);
+void		ml_vector4_sub(t_vec4 v1, t_vec4 v2, t_vec4 res);
+void		ml_vector4_mul(t_vec4 v1, float k, t_vec4 res);
+void		ml_vector4_normalize(t_vec4 v, t_vec4 res);
+float		ml_vector4_mag(t_vec4 v);
+float		ml_vector4_dot(t_vec4 v1, t_vec4 v2);
+void		ml_vector4_cross(t_vec4 v1, t_vec4 v2, t_vec4 res);
 
 /*
 ** Matrix

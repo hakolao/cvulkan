@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.h                                            :+:      :+:    :+:   */
+/*   ml_vector4_cross.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 19:23:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:57:04 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 17:02:09 by ohakola           #+#    #+#             */
+/*   Updated: 2020/08/16 19:47:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_H
-# define TESTS_H
+#include "libgmatrix.h"
 
-/*
-** Vector
-*/
-const char	*test_vector_ops();
-
-/*
-** Matrix
-*/
-
-
-#endif
+void		ml_vector4_cross(t_vec4 v1, t_vec4 v2, t_vec4 res)
+{
+	res[0] = v1[1] * v2[2] - v2[1] * v1[2];
+	res[1] = v1[2] * v2[0] - v2[2] * v1[0];
+	res[2] = v1[0] * v2[1] - v2[0] * v1[1];
+	res[4] = 1;
+}

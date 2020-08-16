@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.h                                            :+:      :+:    :+:   */
+/*   test_state.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 19:23:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:57:04 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 19:58:24 by ohakola           #+#    #+#             */
+/*   Updated: 2020/08/16 20:01:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_H
-# define TESTS_H
+#include "mu_test.h"
 
-/*
-** Vector
-*/
-const char	*test_vector_ops();
+t_test_state	test_state_create(bool success, const char *result, int id)
+{
+	t_test_state	state;
 
-/*
-** Matrix
-*/
-
-
-#endif
+	state = (t_test_state){.success = success, .result = result, .id = id};
+	return (state);
+}
